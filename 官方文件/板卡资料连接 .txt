@@ -1,0 +1,19 @@
+
+赛题1：  平台 1：【淘宝】https://e.tb.cn/h.RCybNupsDxZyAtX?tk=r6A3gmG0er7 CA381  (注意连接中间有空格)
+	HX4S20_Contest_202606
+		链接: https://pan.baidu.com/s/1ysv_FmmgZKuM0rBiHfSv8w 提取码：M5N1 
+
+				**HX4S20 开发板 Win11 下载驱动安装说明**
+
+		1. 安装驱动前，请进入 Windows 11 系统设置，关闭「内存完整性」项下的所有功能；
+		2. 驱动安装完成后，若设备管理器中对应驱动显示黄色感叹号，请临时禁用驱动程序强制签名，具体操作方法可自行搜索获取。
+
+
+赛题2：  平台 2：【淘宝】https://e.tb.cn/h.RCyY8Gxi8MFdN6k?tk=1WnegmG1624  
+	HX1P35A_Contest_202606
+		链接: https://pan.baidu.com/s/12hjB7BiAxT3CIVqzh4Amnw 提取码：Q614 
+
+				**HX1P35 开发板 Win11 下载驱动安装说明**
+
+		1. 使用 HX1P35 开发板参赛的同学，在进行驱动相关操作前，请务必先查阅文档：`/1_安路工具和软件/（必看）PH1P35烧写程序的使用方法.pdf`
+		2. 重要提示：HX1P35 开发板无需在设备管理器中安装任何驱动，只需连接好开发板，通过烧写工具执行一次驱动烧写即可，详细操作步骤请参考上述文档
