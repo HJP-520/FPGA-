@@ -1,0 +1,14 @@
+Model Technology ModelSim SE-64 vlog 10.4 Compiler 2014.12 Dec  3 2014
+Start time: 15:02:32 on Oct 05,2026
+vlog -sv C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\project\user_source\hdl_source\uics520_cfg\uicfgcs520.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\project\user_source\hdl_source\uics520_cfg\uics520reg_720p60.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\project\user_source\hdl_source\uics520_cfg\SC520GainTbl.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\project\user_source\hdl_source\uics520_cfg\uics520regAE.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\tb_sensor_snapshot.sv 
+-- Compiling module uicfgcs520
+-- Compiling module uics520reg_720p60
+-- Compiling module SC520GainTbl
+-- Compiling module uics520regAE
+-- Compiling module uii2c
+-- Compiling module tb_sensor_snapshot
+
+Top level modules:
+	tb_sensor_snapshot
+End time: 15:02:32 on Oct 05,2026, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0

@@ -1,0 +1,98 @@
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -onfinish exit tb_isp_integration -do "onbreak {quit -code 1 -f}; onerror {quit -code 1 -f}; run -all; quit -f" 
+# Start time: 16:11:59 on Oct 05,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\isp\demosaic_4x_2_0\raw_matrix_3x3_buffer.v(136): (vopt-2241) Connection width does not match width of port 'O_raw_tready'. The port definition is at: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\isp\demosaic_4x_2_0\mipi_to_raw_converter.v(37).
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\isp\demosaic_4x_2_0\blk_mem_gen_zhenghe\RTL\ram_d32970204f32.v(91): (vopt-2241) Connection width does not match width of port 'ecc_sbiterrinj'. The port definition is at: D:\SC520_display_burnpack\04_codex_validation\support\ph1p_logic_eram_stub.v(71).
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\isp\demosaic_4x_2_0\blk_mem_gen_zhenghe\RTL\ram_d32970204f32.v(91): (vopt-2241) Connection width does not match width of port 'ecc_dbiterrinj'. The port definition is at: D:\SC520_display_burnpack\04_codex_validation\support\ph1p_logic_eram_stub.v(72).
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\isp\demosaic_4x_2_0\blk_mem_gen_demosaic\RTL\ram_c36c2ca3b3a7.v(91): (vopt-2241) Connection width does not match width of port 'ecc_sbiterrinj'. The port definition is at: D:\SC520_display_burnpack\04_codex_validation\support\ph1p_logic_eram_stub.v(71).
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\isp\demosaic_4x_2_0\blk_mem_gen_demosaic\RTL\ram_c36c2ca3b3a7.v(91): (vopt-2241) Connection width does not match width of port 'ecc_dbiterrinj'. The port definition is at: D:\SC520_display_burnpack\04_codex_validation\support\ph1p_logic_eram_stub.v(72).
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\isp\demosaic_4x_2_0\blk_mem_gen_demosaic\RTL\ram_c36c2ca3b3a7.v(91): (vopt-2241) Connection width does not match width of port 'ecc_sbiterrinj'. The port definition is at: D:\SC520_display_burnpack\04_codex_validation\support\ph1p_logic_eram_stub.v(71).
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\isp\demosaic_4x_2_0\blk_mem_gen_demosaic\RTL\ram_c36c2ca3b3a7.v(91): (vopt-2241) Connection width does not match width of port 'ecc_dbiterrinj'. The port definition is at: D:\SC520_display_burnpack\04_codex_validation\support\ph1p_logic_eram_stub.v(72).
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\ip_source\blk_mem_gen_awb_delay_signal\ram_f84573da5ab5.v(60): (vopt-2241) Connection width does not match width of port 'ecc_sbiterrinj'. The port definition is at: D:\SC520_display_burnpack\04_codex_validation\support\ph1p_logic_eram_stub.v(71).
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\ip_source\blk_mem_gen_awb_delay_signal\ram_f84573da5ab5.v(60): (vopt-2241) Connection width does not match width of port 'ecc_dbiterrinj'. The port definition is at: D:\SC520_display_burnpack\04_codex_validation\support\ph1p_logic_eram_stub.v(72).
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\isp\demosaic_4x_2_0\zhenghe.v(167): (vopt-2685) [TFMPC] - Too few port connections for 'blk_mem_gen_zhenghe_d1'.  Expected 10, found 7.
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\isp\demosaic_4x_2_0\zhenghe.v(167): (vopt-2718) [TFMPC] - Missing connection for port 'doa'.
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\isp\demosaic_4x_2_0\zhenghe.v(167): (vopt-2718) [TFMPC] - Missing connection for port 'web'.
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\isp\demosaic_4x_2_0\zhenghe.v(167): (vopt-2718) [TFMPC] - Missing connection for port 'dib'.
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\isp\demosaic_4x_2_0\line_buffer_demosaic.v(98): (vopt-2685) [TFMPC] - Too few port connections for 'blk_mem_gen_demosaic_r0'.  Expected 10, found 7.
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\isp\demosaic_4x_2_0\line_buffer_demosaic.v(98): (vopt-2718) [TFMPC] - Missing connection for port 'doa'.
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\isp\demosaic_4x_2_0\line_buffer_demosaic.v(98): (vopt-2718) [TFMPC] - Missing connection for port 'web'.
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\isp\demosaic_4x_2_0\line_buffer_demosaic.v(98): (vopt-2718) [TFMPC] - Missing connection for port 'dib'.
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\signal_delay.v(120): (vopt-2685) [TFMPC] - Too few port connections for 'blk_mem_gen_awb_delay_signal_d'.  Expected 10, found 7.
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\signal_delay.v(120): (vopt-2718) [TFMPC] - Missing connection for port 'web'.
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\signal_delay.v(120): (vopt-2718) [TFMPC] - Missing connection for port 'dib'.
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\signal_delay.v(120): (vopt-2718) [TFMPC] - Missing connection for port 'doa'.
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\awb.v(182): (vopt-2685) [TFMPC] - Too few port connections for 'div_gen_G_R_r1'.  Expected 8, found 7.
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\awb.v(182): (vopt-2718) [TFMPC] - Missing connection for port 'remainder'.
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\awb.v(192): (vopt-2685) [TFMPC] - Too few port connections for 'divide_G_B_r1'.  Expected 8, found 7.
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\work_build\jtag\lab_ex1\user_source\hdl_source\awb.v(192): (vopt-2718) [TFMPC] - Missing connection for port 'remainder'.
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\tb_isp_integration.sv(7): (vopt-2685) [TFMPC] - Too few port connections for 'dut'.  Expected 18, found 14.
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\tb_isp_integration.sv(7): (vopt-2718) [TFMPC] - Missing connection for port 'O_debug_total_beats'.
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\tb_isp_integration.sv(7): (vopt-2718) [TFMPC] - Missing connection for port 'O_debug_stat_beats'.
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\tb_isp_integration.sv(7): (vopt-2718) [TFMPC] - Missing connection for port 'O_debug_b_gain'.
+# 
+# ** Warning: D:\SC520_display_burnpack\04_codex_validation\tb_isp_integration.sv(7): (vopt-2718) [TFMPC] - Missing connection for port 'O_debug_r_gain'.
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# Loading sv_std.std
+# Loading work.tb_isp_integration(fast)
+# onbreak {quit -code 1 -f}
+#  Warning: onbreak command for use within macro
+#  onerror {quit -code 1 -f}
+#  Warning: onerror command for use within macro
+#  run -all
+# ERAM_STUB_WARN: unknown (X/Z) on addr/enable pins @ tb_isp_integration.dut.u_demosaic.raw_matrix_3x3_buffer_d.zhenghe_d.blk_mem_gen_zhenghe_d1.ram_d32970204f32_Inst.username_inst (t=5000)
+# ERAM_STUB_WARN: unknown (X/Z) on addr/enable pins @ tb_isp_integration.dut.u_demosaic.raw_matrix_3x3_buffer_d.two_line_buffer[1].line_buffer_demosaic_r1.blk_mem_gen_demosaic_r0.ram_c36c2ca3b3a7_Inst.username_inst (t=5000)
+# ERAM_STUB_WARN: unknown (X/Z) on addr/enable pins @ tb_isp_integration.dut.u_demosaic.raw_matrix_3x3_buffer_d.two_line_buffer[2].line_buffer_demosaic_r1.blk_mem_gen_demosaic_r0.ram_c36c2ca3b3a7_Inst.username_inst (t=5000)
+# ERAM_STUB_WARN: unknown (X/Z) on addr/enable pins @ tb_isp_integration.dut.u_awb.signal_delay_d.blk_mem_gen_awb_delay_signal_d.ram_f84573da5ab5_Inst.username_inst (t=5000)
+# TB_RESULT: PASS isp post-repack words=518400 lines=2160 resets=3 raw_beats=691200
+# ** Note: $finish    : D:/SC520_display_burnpack/04_codex_validation/tb_isp_integration.sv(61)
+#    Time: 50169680 ns  Iteration: 1  Instance: /tb_isp_integration
+# End time: 16:12:08 on Oct 05,2026, Elapsed time: 0:00:09
+# Errors: 0, Warnings: 30

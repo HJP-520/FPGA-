@@ -1,0 +1,43 @@
+===== tb_osd_track : FAIL =====
+-- compile --
+\tb_osd_track.v(95): Declarations not allowed in unnamed block.
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_osd_track.v(96): Declarations not allowed in unnamed block.
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_osd_track.v(97): Illegal declaration after the statement near line '92'.  Declarations must precede statements.  Look for stray semicolons.
+** Error: (vlog-13069) D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_osd_track.v(101): near "always": syntax error, unexpected always.
+
+** Warning: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_osd_track.v(105): (vlog-2643) Unterminated string literal continues onto next line.
+
+** Error: (vlog-13069) D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_osd_track.v(109): near "1": syntax error, unexpected INTEGER NUMBER.
+
+** Warning: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_osd_track.v(110): (vlog-2643) Unterminated string literal continues onto next line.
+
+** Warning: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_osd_track.v(115): (vlog-2643) Unterminated string literal continues onto next line.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_osd_track.v(122): (vlog-13161) unexpected '$fflush'
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_osd_track.v(122): (vlog-13161) unexpected '$fclose'
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_osd_track.v(123): (vlog-13161) unexpected '$fflush'
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_osd_track.v(123): (vlog-13161) unexpected '$fclose'
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_osd_track.v(124): (vlog-13161) unexpected '$fflush'
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_osd_track.v(124): (vlog-13161) unexpected '$fclose'
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_osd_track.v(125): (vlog-13161) unexpected '$display'
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_osd_track.v(126): (vlog-13161) unexpected '$display'
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_osd_track.v(127): (vlog-13161) unexpected '$finish'
+
+** Error: (vlog-13069) D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_osd_track.v(129): near "end": syntax error, unexpected end.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_osd_track.v(137): (vlog-13161) unexpected '$display'
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_osd_track.v(138): (vlog-13161) unexpected '$finish'
+
+** Error: (vlog-13069) D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_osd_track.v(139): near "end": syntax error, unexpected end.
+-- sim tail --
+
+

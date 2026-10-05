@@ -1,0 +1,291 @@
+% ============================================================
+% Step5 教程 · Part II：工程实现详解
+% 由 step5_tutorial.tex \input 引入（共用同一份导言区与主题色）
+% ============================================================
+
+\part{工程实现详解}
+
+\begin{tipbox}{这一部分写什么}
+Step5 的实现分两类：4 个新 RTL（边缘核接入、画质调节、运动检测、
+跑马灯字库）+ 3 个既有模块改造（detect\_top / osd\_track / vision\_top），
+外加 7 轮迭代与两处"仿真过、上板会翻车"的修复。
+对应目录：\code{03\_vision/step5\_expansion/}。
+\end{tipbox}
+
+% ============================================================
+\section{工程总览}
+
+\subsection{文件清单}
+
+\begin{center}
+\begin{tabular}{llr l}
+\toprule
+\rowcolor{rowtint}\textbf{文件} & \textbf{类型} & \textbf{行数} & \textbf{职责} \\
+\midrule
+\code{edge\_detect\_96.v} & 官方 & 149 & Sobel 边缘核（Lab2，零修改复用） \\
+\code{video\_adj.v} & RTL & 47 & 亮度/对比度（1 拍流水） \\
+\code{motion\_detect.v} & RTL & 117 & 帧差运动检测 v2（修正版） \\
+\code{marquee\_rom\_64.v} & 生成 & 1020 & 跑马灯 63 字符字库（脚本生成） \\
+\midrule
+\code{detect\_top.v} & 改造 & --- & +fid 计数器 +motion 分支挂载 \\
+\code{osd\_track.v} & 改造 & --- & v2 三行文本 + 双框（后升级 v3 双缓冲） \\
+\code{vision\_top.v} & 改造 & --- & v2 算法 mux + video\_adj + led\_buzzer \\
+\midrule
+\code{tb/tb\_motion\_detect.v} & 测试 & 117 & 5 帧场景逐字段比对 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{目标包 v1.0 到 v1.1.0}
+
+包从 68bit 扩到 \textbf{135bit}（IF-VISION v1.1.0），新增字段：
+algo(1) + fid(8) + mot\_valid(1) + mot\_cnt(14) + mot bbox(62)。
+老字段位置不动、新字段插在高位——osd\_track 解包代码按位段
+逐一对齐，保留位 bit0 强制补 0（Step4 事故的沉淀）。
+
+% ============================================================
+\section{模块详解：edge\_detect\_96（官方核）}
+
+\subsection{粒度对齐：4 像素进、4 像素出}
+
+官方核按 96bit 流的原生粒度工作：每拍 4 像素，Sobel 在灰度上算出
+2 个边缘判决，\textbf{复制}回 4 像素输出。这套粒度与我们整条链路一致，
+所以挂上即用：
+
+\begin{Verilog}
+edge_detect_96 #(.EDGE_TH(80)) u_edge (...);   // 官方默认阈值
+// tuser/tlast/tready 直通, 输出再接一个 ser96to24 降带宽
+\end{Verilog}
+
+\begin{keybox}{复用官方代码的三条纪律}
+1）\textbf{不改}（改动会破坏与官方链路的兼容性，出问题没参照）；\\
+2）\textbf{包一层}（阈值等可调参数从顶层传参，不在官方文件里改默认值）；\\
+3）\textbf{单独验证}（官方核在 Lab2 已验证，我们验证的是"接线正确"——
+tb\_vision\_top 的整帧比对顺带覆盖了边缘分支的 mux 路径）。
+\end{keybox}
+
+% ============================================================
+\section{模块详解：video\_adj}
+
+47 行的小模块，三处实现决定值得学：
+
+\subsection{Q6 公式的位精确实现}
+
+\begin{Verilog}
+function [7:0] adj_ch(input [7:0] c, input [6:0] bright, input [7:0] contrast);
+    reg signed [16:0] v;
+    begin
+        v = $signed({1'b0, c}) - 17'sd128;         // 居中(有符号!)
+        v = (v * $signed({1'b0, contrast})) >>> 6; // Q6 缩放(算术右移)
+        v = v + 17'sd128 + $signed({1'b0, bright});// 回中 + 亮度
+        if (v < 0)         adj_ch = 8'd0;
+        else if (v > 255)  adj_ch = 8'd255;
+        else               adj_ch = v[7:0];
+    end
+endfunction
+\end{Verilog}
+
+\code{c - 128} 必须有符号（暗部像素是负偏移），乘法后 \code{>>>6}
+与 Python 金标准的 floor 移位逐位一致——Step2 沉淀的
+"有符号纪律"第三次落地。
+
+\subsection{挂在哪条路上}
+
+\begin{Verilog}
+mux(algo_q) -> video_adj -> osd_track -> 显示
+                 ^
+      检测分支吃的是 mux 之前的原图, 不受调节影响
+\end{Verilog}
+
+注意顺序：调节在 \textbf{OSD 之前}——OSD 文字不受亮度调节影响
+（调到全黑时状态行依然清晰可读，演示不会"自残"）。
+
+% ============================================================
+\section{模块详解：motion\_detect v2}
+
+\subsection{存储与地址}
+
+\begin{Verilog}
+(* ram_style = "block" *) reg prev_mem [0:TOTAL-1];  // 1bit/像素, 115KB
+wire [20:0] addr = I_sof ? 21'd0 : (row_base + {10'd0, x});
+wire        old  = prev_mem[addr];
+wire        diff = I_mask ^ old;
+// 同地址读旧写新(与 Step2 平滑行缓存同思想)
+\end{Verilog}
+
+\subsection{v2 修正的两处（都有实战故事）}
+
+\begin{warnbox}{修正 1：sof 拍写地址强制 0}
+帧尾 \code{row\_base += W} 滚动后，下一帧 sof 拍曾用遗留 row\_base：
+\textbf{仿真}越界写沉默忽略（(0,0) 参考停在旧值）；
+\textbf{综合}ERAM 地址回绕写 0 号单元。同一个 RTL，两种"物性"。
+修复：sof 拍地址强制 0——该拍像素恰是 (0,0)，语义本来就正确。
+\end{warnbox}
+
+\begin{warnbox}{修正 2：prev\_ready 门控}
+初版 \code{started} 在首帧 sof 拍置位，挡不住首帧后续像素：
+仿真靠"RAM 读 X 使 diff 恒假"\textbf{碰巧}不报；综合 RAM 初值 0 会
+把首帧误判为全帧运动。修复：改 \code{prev\_ready}（首帧末行置位），
+首帧不比对不输出。\textbf{门控靠显式状态位，绝不靠 X。}
+\end{warnbox}
+
+\subsection{接口语义（写进 IF-VISION）}
+
+每帧末锁存结果并输出 1 拍的 \code{O\_mot\_valid} 选通脉冲。
+\textbf{亚门限帧也更新 cnt/bbox 并出选通}，是否算运动由
+\code{valid=(cnt>=MOT\_TH)} 表达——下游 OSD 据此可以\textbf{清掉}
+运动指示，不会出现"橙色框赖着不走"。已知约定：(0,0) 像素每帧
+只写缓存不比对（sof 拍结构，影响 1/921600，金标准同语义）。
+
+% ============================================================
+\section{既有模块的改造}
+
+\subsection{detect\_top：+fid +motion 挂载}
+
+\begin{Verilog}
+// 进阶(3): 采集帧号, 每输入帧 sof 自增
+reg [7:0] fid;
+always @(posedge I_clk or negedge I_rst_n)
+    if (!I_rst_n) fid <= 8'd0;
+    else if (I_tvalid && I_tuser) fid <= fid + 8'd1;
+
+// 进阶(4): 运动分支, 与 centroid 共享平滑掩码流
+motion_detect #(.MOT_TH(64)) u_motion (.*, .I_mask(m_mask), ...);
+\end{Verilog}
+
+迭代 1 的教训：motion 块一开始插在 \code{m\_*} wire 声明之前，
+隐式声明与显式声明冲突编译错——\textbf{Verilog 隐式 wire 是事故之源}，
+新代码统一追加在文件尾部（本项目惯例）。
+
+\subsection{osd\_track v2：三行文本与双框}
+
+L1 加算法前缀（TRK/EDG 由包内 algo 位选择），L2 全新遥测行
+（D/B/C/M 四字段），L3 跑马灯（\code{marquee\_rom\_64} 生成字库，
+63 字符 x 16 行 case 表）。运动框橙色 \code{FF8000}，
+优先级插在目标框之后——它信息量最低，被遮挡时最先让路。
+
+\subsection{vision\_top v2：五合一顶层}
+
+\begin{Verilog}
+mux(帧首锁存 algo_q) -> video_adj -> osd_track -> OSD'd vpix 出
+     |             ^
+det 分支(常开)   edge 分支(常开)
+135bit pack = {...}  -> cdc -> osd_track
+led_buzzer(pix 域)   -> O_led_g/r, O_buzzer
+\end{Verilog}
+
+迭代 5：vision\_top 端口加了 3 个新输入（I\_algo\_edge/I\_bright/
+I\_contrast），上层 TB 没传——\textbf{端口变更必须同步所有实例化点}，
+run\_all 全量回归的价值就是让这类失配 5 分钟内暴露。
+
+% ============================================================
+\section{测试平台设计与回归}
+
+\subsection{tb\_motion\_detect：5 帧状态机全覆盖}
+
+64x48 迷你几何（与 centroid 向量同思路：小图跑全逻辑）。
+期望值由金标准函数 \code{frame\_diff\_motion}（位于
+\code{golden\_model.py}）逐位生成，打包格式为 15 个十六进制字符
+（cnt/valid/bbox 六字段移位拼接）。5 帧场景与期望值见
+Part I 阶段 6 的表——注意 f4 的\textbf{亚门限拒报}
+（cnt=5，valid=0，但 bbox 照常输出）是单独设计的边界用例。
+
+\subsection{回归现状：18 项全绿（本册时点为 16 项 + 一处待办，该待办已补齐）}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\rowcolor{rowtint}\textbf{状态} & \textbf{说明} \\
+\midrule
+18/18 PASS & 含 tb\_motion\_detect（Step5 新增第 16 项；闭环/算法切换补强后共 18 项） \\
+tb\_osd\_track & 功能断言 + 整帧逐像素比对全过（v2 渲染器补齐后启用） \\
+tb\_vision\_top & 直通/云台断言 + 整帧比对全过（同上） \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{warnbox}{曾经的诚实待办：金标准渲染器 v2（已闭环）}
+RTL 的 OSD 已升级到"三行文本+跑马灯"，但 Python 端
+\code{render\_osd()} 还是 v1（单行无跑马灯）——比对自然失败。
+工程选择\textbf{先禁用帧比对并在 run\_all.py 里标注 pending}，
+而不是让回归长期红着。上板前必须补齐 v2 渲染器并恢复比对；
+\textbf{功能断言（文字内容/坐标/云台方向）目前由 TB 内部断言承担}。
+这条待办写进了迭代记录与结语，不藏不瞒。
+\textbf{2026-10-03 更新：v2 渲染器已补齐，逐像素比对全面恢复，全量 18/18 全绿。}
+\end{warnbox}
+
+\subsection{Step5 迭代复盘（7 轮）}
+
+\begin{center}
+\begin{tabular}{llp{5.2cm}l}
+\toprule
+\rowcolor{rowtint}\textbf{轮} & \textbf{现象} & \textbf{根因} & \textbf{类型} \\
+\midrule
+1 & detect\_top 编译错 & motion 块插在声明前，隐式/显式冲突 & RTL \\
+2 & started 双重驱动 & 底部残留占位行 & RTL \\
+3 & TB 找不到 dut.txt & 重命名 txt 后层次引用未同步 & TB \\
+4 & TB 结构性语法错 & 多轮正则改坏 & TB（备份恢复） \\
+5 & 上层 TB 编译失败 & 顶层加端口 TB 未传 & TB \\
+6 & STEP5\_RTL 未定义 & 脚本变量顺序 & 脚本 \\
+7 & 帧比对失败 & 金标准 v1 未跟上 RTL v2 & 流程（已闭环） \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{keybox}{迭代 4 的处置值得单独学}
+TB 被多轮自动修改改坏后，\textbf{从备份恢复原始版本，只重新应用}
+必要的 pack/端口改动——"改坏了就回到最后已知好点，重放最小 diff"，
+比在废墟上继续打补丁快一个数量级。备份目录
+（\code{fpga-ptz-tracker\_backup\_*}）不是摆设。
+\end{keybox}
+
+% ============================================================
+\section{上板挂载说明（给上板组）}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\rowcolor{rowtint}\textbf{按键/输入} & \textbf{功能} \\
+\midrule
+KEY0..2 / 拨码 & preset\_idx 阈值组（0 红 1 绿 2 蓝...） \\
+拨码 & track\_en（0 = 云台回中位） \\
+按键 & algo\_edge（1 = 边缘显示，帧边界无缝切换） \\
+按键x2 & 亮度 -/+（对比度固定或再加两键） \\
+GPIO & O\_led\_g / O\_led\_r / O\_buzzer（声光） \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+上板三步：
+\begin{enumerate}
+  \item 4 个新 RTL + 3 个改造模块加入 TD 工程（edge\_detect\_96 原样复制，
+    \textbf{不许改}）；
+  \item vision\_top 替换原有顶层实例化位置，端口对照 IF-VISION v1.1.0；
+  \item 先空载跑通显示与 OSD，再接舵机与声光，最后现场标定。
+\end{enumerate}
+
+\begin{tipbox}{答辩素材提示}
+三行 OSD 是"评分表自证屏"（Step4 讲过）；运动检测演示建议安排
+"静止 3 秒 - 挥手 - 静止"的节奏，橙色框出现/消失清晰可辨；
+声光反馈让"锁定瞬间"可听——三个感官通道同时确认，演示效果拉满。
+\end{tipbox}
+
+% ============================================================
+\section{小结：Step5 的可复用产出}
+
+\begin{itemize}
+  \item \textbf{4 个新模块 + 3 处改造}，进阶（1）（3）（4）与
+    扩展（1）（4）全部落地并有验证；
+  \item \textbf{两条上板铁律}：帧首地址显式覆盖、门控不靠 X——
+    来源于真实的仿真/综合行为差，写进方法论；
+  \item \textbf{16 项回归体系}：新增功能的验证模板（迷你几何 + 位精确
+    金标准 + 场景覆盖状态机）；
+  \item \textbf{一处诚实标注的待办}：渲染器 v2 补齐后恢复整帧比对，
+    上板前完成。
+\end{itemize}
+
+\begin{okbox}{五步全部完成}
+至此视觉方向软件层收官：看（Step1）- 认（Step2）- 动（Step3）-
+显（Step4）- 全（Step5），16 项回归全绿，接口文档 v1.1.0，
+五册教程 + 全部迭代记录可交付答辩。
+\end{okbox}

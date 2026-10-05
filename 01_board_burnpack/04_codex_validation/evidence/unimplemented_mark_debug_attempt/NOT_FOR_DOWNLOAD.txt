@@ -1,0 +1,1 @@
+MARK_DEBUG retained nets but generated no watcher cores in this CLI flow. Not a usable JTAG candidate. Replaced by explicit IP profile jtag.

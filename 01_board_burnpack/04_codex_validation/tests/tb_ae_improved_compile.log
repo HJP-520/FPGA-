@@ -1,0 +1,10 @@
+Model Technology ModelSim SE-64 vlog 10.4 Compiler 2014.12 Dec  3 2014
+Start time: 15:27:12 on Oct 05,2026
+vlog -sv D:\SC520_display_burnpack\02_TD_project_rebuild\lab_ex1\user_source\hdl_source\uiisp_beta\ae_set.v D:\SC520_display_burnpack\04_codex_validation\tb_ae_improved.sv 
+-- Compiling module ae_set
+-- Compiling module tb_ae_improved
+
+Top level modules:
+	tb_ae_improved
+End time: 15:27:13 on Oct 05,2026, Elapsed time: 0:00:01
+Errors: 0, Warnings: 0

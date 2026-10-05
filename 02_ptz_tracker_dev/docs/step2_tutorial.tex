@@ -1,0 +1,755 @@
+\documentclass[11pt]{ctexart}
+\usepackage[a4paper,top=2cm,bottom=2cm,left=2.2cm,right=2.2cm]{geometry}
+\usepackage{fancyvrb}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{fontspec}
+\usepackage[most]{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{hyperref}
+
+\setmonofont{Consolas}
+\setCJKmonofont{SimHei}
+\setlength{\parindent}{0pt}
+\setlist{nosep,leftmargin=1.4em}
+
+% ── Step2 主题色（与 Step1 深蓝同族、换为深紫罗兰） ──
+\definecolor{deep}{RGB}{58,32,96}        % 主色：深紫罗兰
+\definecolor{accent}{RGB}{126,60,168}    % 强调：紫罗兰
+\definecolor{keyline}{RGB}{90,130,200}   % 知识点：蓝
+\definecolor{keybg}{RGB}{238,244,255}
+\definecolor{warnline}{RGB}{200,120,60}  % 警告：橙
+\definecolor{warnbg}{RGB}{255,243,235}
+\definecolor{okline}{RGB}{26,116,88}     % 成果：绿
+\definecolor{okbg}{RGB}{240,252,244}
+\definecolor{tipline}{RGB}{140,110,180}  % 提示：紫
+\definecolor{tipbg}{RGB}{246,242,252}
+\definecolor{codebg}{RGB}{249,249,252}   % 代码底
+\definecolor{huered}{RGB}{220,60,60}
+\definecolor{huegrn}{RGB}{60,180,90}
+\definecolor{hueblu}{RGB}{70,110,220}
+\definecolor{rowtint}{RGB}{240,236,248}  % 表头浅紫
+
+\titleformat{\section}{\large\bfseries\color{deep}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{accent}}{\thesubsection}{0.5em}{}
+\titleformat{\part}[display]{\centering\Huge\bfseries\color{deep}}{}{0pt}{\Huge}
+\titlespacing{\section}{0pt}{14pt}{6pt}
+\titlespacing{\subsection}{0pt}{10pt}{4pt}
+
+\newtcolorbox{keybox}[1]{enhanced, colback=keybg, colframe=keyline,
+  boxrule=0.6pt, arc=1.5mm, left=3mm, right=3mm, top=2mm, bottom=2mm,
+  title={\bfseries #1}, fonttitle=\small\bfseries, coltitle=white,
+  colbacktitle=keyline}
+\newtcolorbox{warnbox}[1]{enhanced, colback=warnbg, colframe=warnline,
+  boxrule=0.6pt, arc=1.5mm, left=3mm, right=3mm, top=2mm, bottom=2mm,
+  title={\bfseries #1}, fonttitle=\small\bfseries, coltitle=white,
+  colbacktitle=warnline}
+\newtcolorbox{okbox}[1]{enhanced, colback=okbg, colframe=okline,
+  boxrule=0.6pt, arc=1.5mm, left=3mm, right=3mm, top=2mm, bottom=2mm,
+  title={\bfseries #1}, fonttitle=\small\bfseries, coltitle=white,
+  colbacktitle=okline}
+\newtcolorbox{tipbox}[1]{enhanced, colback=tipbg, colframe=tipline,
+  boxrule=0.5pt, arc=1.5mm, left=3mm, right=3mm, top=1.5mm, bottom=1.5mm,
+  title={\bfseries #1}, fonttitle=\small\bfseries, coltitle=white,
+  colbacktitle=tipline}
+
+\newcommand{\code}[1]{\texttt{#1}}
+\DefineVerbatimEnvironment{Verilog}{Verbatim}{frame=single,fontsize=\small}
+
+\begin{document}
+
+% ==================== 封面 ====================
+\begin{titlepage}
+\centering
+\vspace*{2.2cm}
+{\color{deep}\Huge\bfseries 颜色识别与质心}\\[6pt]
+{\color{deep}\Large\bfseries 从零手搓 Step2 教程}\\[14pt]
+{\large 2026 FPGA 创新设计赛道（安路）赛题二}\\[6pt]
+{\large 视觉方向 · Step2\_color\_centroid}\\[20pt]
+
+\begin{tcolorbox}[enhanced, colback=codebg, colframe=accent, boxrule=0.8pt,
+  arc=2mm, width=12.5cm, left=4mm, right=4mm, top=3mm, bottom=3mm]
+\centering
+{\small 读者：零基础队员（建议先读完 Step1 教程）\\
+目标：理解并手搓视觉检测链——从像素流里"认出"目标并算出坐标\\
+前置要求：会 Verilog 基础语法、跑过 ModelSim 仿真\\
+预计学习时间：12～16 天（每天 2～3 小时）}
+\end{tcolorbox}
+
+\vspace{8mm}
+\begin{tcolorbox}[enhanced, colback=tipbg, colframe=tipline, boxrule=0.5pt,
+  arc=2mm, width=12.5cm, left=4mm, right=4mm, top=2mm, bottom=2mm]
+\centering
+{\small\color{deep} \textbf{本教程与你手上的代码是什么关系}\\
+Step1 学会了"把像素接住"；Step2 要做的，是从这些像素里\textbf{认出颜色目标}\\
+并算出它的\textbf{画面坐标}——这是自动跟踪的"眼睛"。}
+\end{tcolorbox}
+
+\vfill
+{\small\color{black!50} fpga-ptz-tracker 教程系列 · 2026-09-19}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ============================================================
+\part{从零学习教程}
+
+\section{你在造什么}
+
+\subsection{一句话}
+
+\textbf{从每秒 5500 万个像素里，实时找出"红色目标"在哪里，并给出坐标。}
+
+上一份教程（Step1）你学会了"把摄像头的数据接住"；这一份要在这条像素流上做三件事：
+
+\begin{keybox}{Step2 要回答的三个问题}
+\begin{enumerate}
+  \item \textbf{这个像素是什么颜色？}\quad 把 RGB 换算成"人更容易判定的颜色描述"（HSV）
+  \item \textbf{它是不是我们要的目标色？}\quad 用一个"阈值窗"把画面上属于目标的像素挑出来（掩码）
+  \item \textbf{目标在画面哪里？}\quad 把所有目标像素的坐标平均，得到"重心"（质心）；顺带算包围框
+\end{enumerate}
+\end{keybox}
+
+\subsection{整条检测链}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+ 96bit 像素流 ──> ser96to24 ──> rgb2hsv ──> hsv_threshold
+ （Step1 已做）    1 像素/拍     RGB→HSV      挑出目标"红色"像素
+                                                       │
+                                                       ▼
+ 目标坐标 <── centroid_accum <── bin_smooth3x3 <── 掩码（1 像素 1 bit）
+（cx, cy）     帧内累加求质心      3×3 多数表决去噪
+\end{Verbatim}
+
+整条链每拍处理 1 个像素，74MHz 时钟下每秒能过 5500 万像素——
+和摄像头 720p60 的像素率完全匹配，不多不少。
+
+\subsection{做完是什么效果}
+
+屏幕上：红色目标上出现绿色十字准星和红色包围框，左上角状态行显示坐标：
+\begin{Verbatim}[frame=single,fontsize=\small]
+TRK0 LOCK X0560Y0320     ← 认出目标（LOCK），坐标 (560, 320)
+TRK0 LOST  X----Y----    ← 画面里没有目标（LOST）
+\end{Verbatim}
+
+\begin{okbox}{学完 Step2 你能做到}
+\begin{itemize}
+  \item 解释 RGB 和 HSV 的区别，说清为什么判颜色要用 HSV
+  \item 手算一个像素的 HSV 值和阈值判决结果
+  \item 理解"查表代替除法"“移位代替乘除"这些 FPGA 常用技巧
+  \item 看懂行缓存、3×3 窗口、质心累加器的电路结构
+  \item 跑通检测链的 5 个测试，并知道每个测试在验什么
+\end{itemize}
+\end{okbox}
+
+% ============================================================
+\section{阶段 0：图像与颜色基础（1～2 天）}
+
+\subsection{像素：三个数描述一个颜色}
+
+屏幕上每个小格子叫一个\textbf{像素}（pixel），由三个数字组成：
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+像素 = (R, G, B)    每项 0～255
+
+(255,   0,   0) = 纯红        (  0, 255,   0) = 纯绿
+(  0,   0, 255) = 纯蓝        (255, 255, 255) = 白
+(128, 128, 128) = 中灰        (  0,   0,   0) = 黑
+(224,  32,  32) = 暗一点的红  ← 本项目要跟踪的目标色
+\end{Verbatim}
+
+一个 1280×720 的画面有 92 万个这样的三元组，每秒刷新 60 次。
+FPGA 要在 16.7 毫秒内把每一帧全部处理完——这就是"实时"的含义。
+
+\subsection{RGB 判颜色的麻烦}
+
+想找出"红色目标"，最直接的想法：
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+if (R > 150) && (G < 80) && (B < 80) then 是红色
+\end{Verbatim}
+
+这个写法在实验室灯光下能工作，但一换环境就崩：
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{llll}
+\toprule
+\rowcolor{rowtint}\textbf{场景} & \textbf{同一块红布的颜色} & \textbf{R>150？} & \textbf{判定结果} \\
+\midrule
+室内正常光 & (224, 32, 32) & 是 & 正确识别 \\
+室外强光 & (255, 120, 120) & 是 & 勉强正确（G/B 已超标） \\
+阴影下 & (90, 12, 12) & 否 & \textcolor{huered}{漏检！} \\
+白炽灯偏黄 & (240, 110, 60) & 是 & 勉强正确 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{问题根源：RGB 三个数字里，"有多亮"和"是什么颜色"是混在一起的。}
+光照变强时三个数一起变大；光照变弱时一起变小。
+你想判断"是不是红色"，却不得不同时应付亮度的干扰。
+
+\subsection{HSV：换个说法描述颜色}
+
+把"三个混在一起的数"换成"三个各管一事的数"：
+
+\begin{keybox}{HSV 三个分量}
+\begin{itemize}
+  \item \textbf{H（Hue，色相）}：这是\textbf{什么颜色}。0\textasciitilde 360 度一圈
+  \item \textbf{S（Saturation，饱和度）}：颜色\textbf{有多纯}。0 = 灰，越大越鲜艳
+  \item \textbf{V（Value，明度）}：颜色\textbf{有多亮}。0 = 黑，越大越亮
+\end{itemize}
+\end{keybox}
+
+色相环（H 的取值）：
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+                        0° 红
+                 330° ──┐  ┌── 30°
+                       │  │
+            300° 品红 ──┤  ├── 60° 黄
+                       │  │
+            270°     ──┤  ├── 90°
+                       │  │
+            240° 蓝  ──┤  ├── 120° 绿
+                       │  │
+                 210° ──┘  └── 150°
+                       180° 青
+
+ 判"红"只需：H 在 335°～360° 或 0°～25°（红色在环上是跨 0 度的一段）
+ 光照变化主要影响 S 和 V，对 H 的影响小得多——这就是 HSV 的好处
+\end{Verbatim}
+
+\begin{tipbox}{一句话记住}
+RGB 是"三盏灯的亮度"；HSV 是"什么颜色 + 多纯 + 多亮"。
+要和光照变化对抗，就用后者。
+\end{tipbox}
+
+\subsection{练习}
+
+\begin{enumerate}
+  \item 打开 Python，装好 \code{opencv-python}，运行：
+\begin{Verbatim}[fontsize=\small]
+import cv2, numpy as np
+rgb = np.uint8([[[224, 32, 32]]])        # 一个红色像素（注意 cv2 要 BGR！）
+hsv = cv2.cvtColor(np.uint8([[[32, 32, 224]]]), cv2.COLOR_BGR2HSV)
+print(hsv)   # 看看输出的 H/S/V 是多少
+\end{Verbatim}
+  \item 找一张照片，看"红色物体"和"白色墙"的 HSV 分别是什么样
+  \item 思考题：白色的 H 和 S 应该是多少？（提示：白色的"颜色"是什么？）
+\end{enumerate}
+
+% ============================================================
+\section{阶段 1：定点算术——FPGA 的数学（2～3 天）}
+
+\subsection{FPGA 不会做小数}
+
+FPGA 里没有"浮点数"概念（至少本项目不用）。所有数都是整数。
+那"除以 delta"这种运算怎么办？两个办法：\textbf{移位}和\textbf{查表}。
+
+\begin{keybox}{技巧 1：移位代替乘除 2 的幂}
+\begin{Verbatim}[fontsize=\small]
+x << 1  等于  x × 2
+x << 2  等于  x × 4
+x >> 1  等于  x ÷ 2（向下取整）
+x >> 6  等于  x ÷ 64
+\end{Verbatim}
+移位在电路里几乎不花资源（就是接线方式变了），硬件里是"免费"的。
+\end{keybox}
+
+\begin{keybox}{技巧 2：查表代替除法}
+色相计算需要"除以 delta"（delta 是 1\textasciitilde 255 之间某个数）。
+除法的电路很大很慢——但我们可以在\textbf{设计阶段}把 256 个可能的商全算出来，
+预先放进一张小表（ROM），运行时"查一下"就行：
+
+\begin{Verbatim}[fontsize=\small]
+inv[1] = 3840, inv[2] = 1920, inv[3] = 1280, ...
+inv[d] = floor(3840 / d)      d = 1～255
+
+表大小：256 项 × 12 bit ≈ 3.8 Kbit（一块小 ROM 就装下）
+运行时：查表只要 1 拍，比除法器又快又省
+\end{Verbatim}
+\end{keybox}
+
+\subsection{截断陷阱：>> 是"向下取整"}
+
+\begin{warnbox}{负数右移会变小}
+\begin{Verilog}
+-7 >> 1  =  -4     （不是 -3！向下取整：-3.5 → -4）
+\end{Verilog}
+本项目的色相计算里有负数（G−B 可能为负），右移的取整方向必须和
+Python 金标准模型完全一致，否则 RTL 和模型会差 1，验证不通过。\\[4pt]
+\textbf{规则}：Python 的 \code{>>} 和 Verilog 的带符号 \code{>>>} 都是向下取整——
+两边写法对齐，就能逐位一致。
+\end{warnbox}
+
+\subsection{定点验证的重要性}
+
+\begin{okbox}{本项目的工作方式：金标准模型}
+\begin{enumerate}
+  \item 先用 Python 写一个"标准答案"版本（\code{tools/golden\_model.py}）
+  \item 再让 RTL 实现同样的算法，要求\textbf{逐位一致}（不是"差不多"）
+  \item 用 1 万条随机向量测试，任何一位不同都算失败
+\end{enumerate}
+这叫"位精确（bit-exact）验证"。因为 FPGA 里没有"约等于"，
+差 1 就可能让阈值判决翻转，目标时有时无。
+\end{okbox}
+
+\subsection{练习}
+
+\begin{enumerate}
+  \item 手算：\code{5 >> 1}、\code{-5 >> 1}、\code{7 >> 2}、\code{-7 >> 2}
+  \item 用 Python 验证你的答案（注意 Python 的负数是无限精度，\code{-5 >> 1 = -3}——想想为什么和 Verilog 不同）
+  \item 打开 \code{tools/golden\_model.py}，找到 \code{build\_inv\_lut()} 函数，看看倒数表怎么建的
+\end{enumerate}
+
+% ============================================================
+\section{阶段 2：RGB→HSV 的电路原理（3～4 天）}
+
+这一节是整个 Step2 的核心。跟着五步走，你就能手推任意像素的 HSV。
+
+\subsection{第 1 步：找最大、最小、差值}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+输入：R, G, B（各 8 bit）
+
+max   = max(R, G, B)      三个数里最大的
+min   = min(R, G, B)      三个数里最小的
+delta = max - min         最大最小之差（"颜色的纯不纯"）
+
+例子：(224, 32, 32)  →  max=224, min=32,  delta=192
+\end{Verbatim}
+
+电路实现：三个数两两比较，找最大最小各需 2 次比较（比较器很便宜）。
+
+\subsection{第 2 步：明度 V 和饱和度 S}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+V = max          有多亮（纯红的 V=224，说明它挺亮）
+S = delta        有多纯（纯红 delta=192；灰色三个数相等 → delta=0）
+
+注意：标准 HSV 里 S 要除以 max 归一化（S = delta/max × 255），
+本项目为了省掉一次除法，直接用 delta 代替——效果够用（详见 Part II）。
+\end{Verbatim}
+
+\subsection{第 3 步：色相 H——判断在哪个扇区}
+
+看哪个分量最大：
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+R 最大 → 颜色在 0°～60° 附近（红～黄）
+G 最大 → 颜色在 120°～180° 附近（绿～青）
+B 最大 → 颜色在 240°～300° 附近（蓝～品红）
+
+本项目简化版：三个扇区，基值 0° / 120° / 240°，
+    优先级 R > G > B（两个相等时算前者）
+
+例子：(224, 32, 32)：R 最大 → 基值 0°
+\end{Verbatim}
+
+\subsection{第 4 步：扇区内插值}
+
+在扇区里还要细分"偏移多少度"，公式：
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+R 最大时：  h = (G - B) × 3840 / delta / 64     ← 用到查表！
+（其他扇区换分子：G 最大用 B-R，B 最大用 R-G）
+
+为什么是 3840？  因为 3840/64 = 60，正好是一个扇区的宽度（60°）
+除以 64 用 >>6 移位实现
+
+例子：(224, 32, 32)：G-B = 0  →  h = 0  →  H = 0° + 0 = 0°（就是纯红，对上了）
+\end{Verbatim}
+
+\begin{keybox}{查表怎么用}
+\code{inv[delta]} 查到 \code{3840/delta} 的预计算值（12 bit），然后：\\[3pt]
+\code{h = (G-B) × inv[delta] >> 6}\\[3pt]
+一次乘法 + 一次移位，没有任何除法——这就是定点技巧的威力。
+\end{keybox}
+
+\subsection{第 5 步：拼装完整公式}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+H = 扇区基值 + clamp(h, 0, 60)
+
+clamp 的原因：h 由差值算出，理论上在 0～60 之间，
+    但数值误差可能溢出边界，钳一下保险
+
+最终输出：
+    H：9 bit（0～359）    S：8 bit（=delta）    V：8 bit（=max）
+\end{Verbatim}
+
+\begin{warnbox}{已知简化的代价（必须知道）}
+本项目用"3 扇区"简化，H 只能落在：
+\textbf{0～60°（红黄区）、120～180°（绿青区）、240～300°（蓝紫区）}。
+中间色（如品红 300°、黄绿 90°）会被并入相邻扇区。\\[4pt]
+\textbf{实际影响}：品红色（R=B>G）会被判成 H=0——和红色混在一起。
+对策：靠 S/V 门限过滤 + 演示时避免品红干扰物（详见 Part II 的实测场景）。\\[4pt]
+完整 6 扇区版本要多一次比较和更多逻辑，本项目为省资源选了 3 扇区。
+\end{warnbox}
+
+\subsection{2 级流水线}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+第 1 拍：算 max/min/delta，选好扇区差值，连同 RGB 一起存下来
+第 2 拍：查表（拿 delta 查 inv）→ 乘法 → 移位 → clamp → 出 H/S/V
+
+为什么分 2 拍？ 组合逻辑太长（比较+查表+乘法叠在一起），
+74MHz 时钟下时序过不去；拆成 2 拍每拍都轻松
+为什么不拆更多？ 延迟只为了让电路跑得动，多了没意义
+\end{Verbatim}
+
+\subsection{练习}
+
+\begin{enumerate}
+  \item 手算这 4 个像素的 HSV（用 \code{inv} 表近似）：
+        \code{(255,0,0)}、\code{(0,255,0)}、\code{(0,0,255)}、\code{(128,128,128)}
+  \item 和 Python 的答案对一下（\code{tools/golden\_model.py} 里有 \code{rgb\_to\_hsv}）
+  \item 想想：\code{(255, 255, 0)}（纯黄）的 H 是多少？为什么这个简化版本给不出 60°？
+\end{enumerate}
+
+% ============================================================
+\section{阶段 3：阈值分割（2 天）}
+
+\subsection{二值化：每个像素过一遍筛子}
+
+有了 HSV，判断"是不是目标色"就是三个条件同时成立：
+
+\begin{Verilog}
+mask = (H 在窗口内) && (S >= s_lo) && (V 在 [v_lo, v_hi] 内)
+\end{Verilog}
+
+输出 \code{mask} 是 1 个 bit：1 = 目标像素，0 = 背景。
+整帧过完得到一张"黑白图"（掩码）。
+
+\subsection{H 窗口环绕——红色跨 0 度的坑}
+
+\begin{warnbox}{红色的窗口是"两段"}
+红色在色相环上跨 0°：335°～360° \textbf{和} 0°～25° 都算红色。\\[4pt]
+不能用简单的 \code{(H >= 335) \&\& (H <= 25)}——这个条件永远不成立（335 > 25）！\\[4pt]
+\textbf{正确写法}：判断 \code{h\_lo > h\_hi} 时改用"或"：
+\begin{Verilog}
+in_h = (h_lo > h_hi) ? ((H >= h_lo) || (H <= h_hi))
+                     : ((H >= h_lo) && (H <= h_hi));
+\end{Verilog}
+\end{warnbox}
+
+\subsection{S/V 门限各管什么}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{lll}
+\toprule
+\rowcolor{rowtint}\textbf{条件} & \textbf{挡住什么} & \textbf{例子} \\
+\midrule
+S $\geq$ s\_lo & 灰、白、黑（不纯的颜色） & 白墙 S=0，被挡掉 \\
+V $\geq$ v\_lo & 太暗的（阴影里的噪声） & 暗红阴影 V=40，被挡掉 \\
+V $\leq$ v\_hi & （可选）过曝的 & 反光高亮区 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{8 组预置：现场按键切换}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+组 0: 红   H在[335,25]  S>=80   V在[60,255]     ← 默认，跟踪红色目标
+组 1: 绿   H在[110,145] S>=60   V在[40,255]
+组 2: 蓝   H在[200,250] S>=60   V在[40,255]
+组 3: 橙黄 / 组 4: 青 / 组 5: 品红 / 组 6: 白 / 组 7: 黑
+\end{Verbatim}
+
+现场换目标颜色（比如评委拿个绿色球），按一下按键切到组 1 就行——
+不用改代码、不用重新烧板子。
+
+\subsection{练习}
+
+\begin{enumerate}
+  \item 手算：\code{(224,32,32)} 在组 0 → mask = ?（H=0, S=192, V=224）
+  \item 手算：\code{(128,128,128)} 在组 0 → mask = ?（想想 S）
+  \item 打开 \code{hsv\_threshold.v}，找到 case 语句里的 8 组参数
+\end{enumerate}
+
+% ============================================================
+\section{阶段 4：去噪——3×3 多数表决（3～4 天）}
+
+\subsection{噪声从哪来}
+
+掩码里会混进"假目标"：传感器噪点、边缘反光、压缩伪影……
+它们通常是零散的孤立点。看这张示意（1 = 目标像素）：
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+    有噪声的掩码                去噪后
+    0 0 0 0 0 0 0               0 0 0 0 0 0 0
+    0 1 1 1 0 0 0               0 1 1 1 0 0 0
+    0 1 1 1 0 1 0   ← 噪点      0 1 1 1 0 0 0
+    0 1 1 1 0 0 0               0 1 1 1 0 0 0
+    0 0 0 0 0 0 0               0 0 0 0 0 0 0
+\end{Verbatim}
+
+\subsection{3×3 窗口 + 多数表决}
+
+对每个像素，看它和周围 8 个邻居（共 9 个），数一数有几个是 1：
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+    邻居窗口（以中心像素 c 为核心）
+    ┌───┬───┬───┐
+    │ a │ b │ d │
+    ├───┼───┼───┤
+    │ e │ c │ f │     9 个格子里 1 的个数 >= 5  →  输出 1
+    ├───┼───┼───┤     否则                        →  输出 0
+    │ g │ h │ i │
+    └───┴───┴───┘
+\end{Verbatim}
+
+\textbf{为什么是"多数表决"而不是"平均数"？}\quad
+9 个里有 5 个以上是 1 才保留——孤立噪点（周围都是 0）被干掉，
+真实目标（成片都是 1）被保留。这就像投票：群众的眼睛是雪亮的。
+
+\subsection{边界怎么办：复制}
+
+画面最外圈像素没有完整邻居。本项目的策略：\textbf{复制边界}
+（画面外的像素按"最近的画面内像素"算）。
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+左上角 (0,0) 的实际窗口（复制边界后）：    画面外的位置一律复制最近像素
+    ┌───┬───┬───┐
+    │ c │ c │ d │
+    ├───┼───┼───┤
+    │ c │ c │ f │      这样 (0,0) 也能得到一个完整的 9 格窗口
+    ├───┼───┼───┤
+    │ g │ h │ i │
+    └───┴───┴───┘
+\end{Verbatim}
+
+\subsection{行缓存：怎么"看到上一行"}
+
+像素是一行一行流过来的。要组成 3×3 窗口，需要同时看到
+"上一行"和"上上一行"——但那些像素已经流走了。怎么办？
+
+\begin{keybox}{行缓存（line buffer）}
+用一个能存\textbf{一整行}的存储器，把流过去的像素留下来：\\
+\begin{itemize}
+  \item 当前行：正在流的像素
+  \item 行缓存 1：存上一行（1280 个 bit）
+  \item 行缓存 2：存上上一行
+\end{itemize}
+三个来源凑齐，3×3 窗口就齐了。
+\end{keybox}
+
+\begin{warnbox}{！本项目最难的坑（Part II 有完整复盘）}
+"怎么对齐三行"看起来简单，实际连踩 5 个坑（FIFO 收支差、移位方向、
+窗口取列差一拍、延迟线比设计短一格……）才做对。\\[4pt]
+最终方案：\textbf{索引行缓存}——读写用同一个列指针，
+"读到上一行的同一列"从结构上就成立，不需要手工推相位。\\[4pt]
+初学建议：先接受"最终版是对的"去看 Part II 的复盘，
+比试图自己从零推快得多。
+\end{warnbox}
+
+\subsection{练习}
+
+\begin{enumerate}
+  \item 给这张小掩码（5×5）手工做一遍 3×3 多数表决（边界复制）：
+\begin{Verbatim}[fontsize=\small]
+0 0 0 0 0
+0 1 1 1 0
+0 1 0 1 0     ← 中心有个洞，表决后会被填上吗？
+0 1 1 1 0
+0 0 0 0 0
+\end{Verbatim}
+  \item 用 Python 对同一张图跑 \code{golden\_model.smooth3x3\_majority}，对比你的答案
+\end{enumerate}
+
+% ============================================================
+\section{阶段 5：质心与包围框（3 天）}
+
+\subsection{质心：所有目标像素的"重心"}
+
+目标是一块由很多像素组成的区域。用哪一点代表它的位置？——\textbf{质心}
+（所有目标像素坐标的平均值）：
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+假如目标是这 3 个像素：(x, y) = (10, 4), (11, 4), (12, 4)
+
+cx = (10 + 11 + 12) / 3 = 11        ← x 的平均
+cy = ( 4 +  4 +  4) / 3 = 4         ← y 的平均
+目标位置 = (11, 4)
+\end{Verbatim}
+
+一般公式（m 为掩码：1 = 目标像素）：
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+对全画面的每个像素：
+    count = Σ m                目标像素总数
+    sum_x = Σ (x × m)          "x 的和"，m=1 时才累加
+    sum_y = Σ (y × m)
+
+帧末（一帧过完）算一次：
+    cx = sum_x / count
+    cy = sum_y / count
+\end{Verbatim}
+
+\subsection{为什么用质心，不用包围框中心}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{lll}
+\toprule
+\rowcolor{rowtint}\textbf{方案} & \textbf{优点} & \textbf{缺点} \\
+\midrule
+包围框中心 & 简单（4 个寄存器） & 目标形状不规则时偏离视觉中心 \\
+\textbf{质心（选定）} & 反映"质量分布"，更符合直觉 & 需要一次除法 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+本项目两个都算：质心用来画准星和控云台，包围框用来画红框。
+
+\subsection{帧累加器的电路结构}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+每个像素到来时（1 拍内完成）：
+    if (mask) begin
+        count <= count + 1;          // 21 bit 计数器
+        sum_x <= sum_x + x;          // 32 bit 累加器
+        sum_y <= sum_y + y;
+    end
+
+  x 计数器：每拍 +1，行尾清零（0～1279）
+  y 计数器：每行 +1，帧首清零（0～719）
+
+帧末（第 719 行的行尾）：
+    启动除法状态机：sum_x / count → cx
+                    sum_y / count → cy
+    除法大约 70 拍完成——一帧的消隐期有 7 万多拍，绰绰有余
+\end{Verbatim}
+
+\begin{keybox}{为什么除法要放到帧末？}
+除法器是"大电路"，如果每个像素都做除法（每拍一次），
+要么资源爆炸要么降频。\\[4pt]
+而质心只需要\textbf{每帧一个结果}——把除法安排在帧末的消隐期
+（画面不出像素的那段空档），慢慢地算，完全不影响像素流。
+\end{keybox}
+
+\subsection{除零保护与最小像素门限}
+
+\begin{warnbox}{两个必须处理的边界情况}
+\begin{enumerate}
+  \item \textbf{count = 0}（画面里没有目标）：除法除零会得到垃圾值——
+        必须判断"count 为 0 就直接输出无效"，不做除法
+  \item \textbf{count 很小}（比如 5 个杂点）：质心会被噪点带偏——
+        设一个最小门限（本项目 30 个像素），不够就当没目标
+\end{enumerate}
+\end{warnbox}
+
+\subsection{包围框：4 个极值寄存器}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+if (mask) begin
+    if (x < min_x) min_x <= x;      // 最左
+    if (x > max_x) max_x <= x;      // 最右
+    if (y < min_y) min_y <= y;      // 最上
+    if (y > max_y) max_y <= y;      // 最下
+end
+  （另外需要一个 seen 标志：帧内第一次见到目标时把四个值都设成当前坐标）
+\end{Verbatim}
+
+\subsection{练习}
+
+\begin{enumerate}
+  \item 手工算：三个目标像素 (10,4), (11,4), (12,4) 的质心和包围框
+  \item 思考：如果目标是 L 形（缺一角），质心会在图形的内部还是外部？
+  \item 读 \code{centroid\_accum.v} 的除法状态机部分，理解"恢复法除法"
+\end{enumerate}
+
+% ============================================================
+\section{阶段 6：跑通检测链测试（1～2 天）}
+
+\subsection{一键回归}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+cd D:\fpga-ptz-tracker\tools
+python run_all.py
+\end{Verbatim}
+
+检测链相关的 5 个测试：
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{lll}
+\toprule
+\rowcolor{rowtint}\textbf{测试} & \textbf{验证什么} & \textbf{规模} \\
+\midrule
+tb\_rgb2hsv & RGB→HSV 位精确 & 10010 条随机+角点向量 \\
+tb\_hsv\_threshold & 阈值判决位精确 & 4000 条 × 8 组预置 \\
+tb\_bin\_smooth & 3×3 平滑位精确 & 12288 像素 \\
+tb\_centroid & 质心/包围框/除零 & 3 帧迷你几何 \\
+tb\_detect\_chain & 全链端到端 & 3 帧真实场景（含干扰物） \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{怎么读测试结果}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+--- tb_rgb2hsv ...
+    ==> PASS                          ← 10010 条向量全部逐位一致
+
+--- tb_detect_chain ...
+    # FRAME0 OK v=1 cnt=8096 cx=604 cy=345
+    # FRAME1 OK v=1 cnt=32592 cx=644 cy=391
+    # FRAME2 OK v=1 cnt=221 cx=107 cy=108
+    ==> PASS                          ← 3 帧场景全部与金标准一致
+\end{Verbatim}
+
+每个 \code{OK} 行显示的是检测结果：有效性、像素数、质心坐标。
+和 \code{chain\_exp.txt}（Python 金标准算的期望值）逐字段对比。
+
+\begin{okbox}{Step2 学习清单（全部打勾就过关）}
+\begin{itemize}
+  \item 能解释 RGB 和 HSV 的区别，说清 S/V 门限各挡什么
+  \item 能手算一个像素的 HSV 和阈值判决
+  \item 能解释"查表代替除法"和"移位代替乘除"
+  \item 能画出行缓存 + 3×3 窗口的框图
+  \item 能解释质心公式和除零保护
+  \item 跑通 5 个测试，能说清每个测试在验什么
+\end{itemize}
+\end{okbox}
+
+\input{step2_impl}
+
+% ============================================================
+\clearpage
+\part*{结语}
+\section*{总结与下一步}
+\addcontentsline{toc}{section}{总结与下一步}
+
+\subsection*{Step2 学到了什么}
+\addcontentsline{toc}{subsection}{Step2 学到了什么}
+\begin{itemize}
+  \item 颜色空间变换：RGB 判颜色为什么不稳，HSV 怎么解决
+  \item 定点算术：查表代替除法、移位代替乘除、floor 与 signed 的坑
+  \item 阈值分割：H 窗口环绕（红色跨 0 度）与 S/V 门限的配合
+  \item 3x3 多数表决去噪：行缓存 + 窗口 + 边界复制
+  \item 质心/包围框：帧累加、快照除法、最小像素门限
+  \item 位精确验证方法学：金标准先行、向量生成、逐位比对
+\end{itemize}
+
+\subsection*{下一步学什么}
+\addcontentsline{toc}{subsection}{下一步学什么}
+\begin{itemize}
+  \item \textbf{Step3 云台闭环}：把坐标变成运动
+  \begin{itemize}
+    \item 误差计算与死区（目标在画面中心小范围不动）
+    \item Q8.8 定点比例控制（KP 增益整定，回路增益 < 1 才不振荡）
+    \item 舵机 PWM 生成与单帧限速
+    \item 振荡事故复盘：Kp=90 为什么跑飞 109 度
+  \end{itemize}
+  \item \textbf{Step4 OSD 与整链}：把结果画回画面（文字/框/延迟可视化）
+  \item 对应文档：\code{03\_vision/step3\_closed\_loop/}、\code{step4\_osd\_integration/}
+  \item 对应金标准：\code{tools/golden\_model.py::gimbal\_ctrl\_step}
+\end{itemize}
+
+\end{document}

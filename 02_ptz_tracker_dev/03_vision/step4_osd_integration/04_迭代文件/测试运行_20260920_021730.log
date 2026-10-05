@@ -1,0 +1,36 @@
+===== tb_motion_detect : FAIL =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_motion_detect -do "run -all; quit -f" 
+# Start time: 02:17:28 on Sep 20,2026
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# MISM frame=0 got=000000000000000 exp=002040501102811
+# MISM frame=1 got=002000501102811 exp=00404050250281b
+# MISM frame=2 got=00400050250281b exp=002040f0250501b
+# MISM frame=3 got=002000f0250501b exp=000280183c0142c
+# MISM frame=4 got=000280183c0142c exp=xxxxxxxxxxxxxxx
+# TB_RESULT: FAIL mism=5/5
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step5_expansion/03_project/tb/tb_motion_detect.v(104)
+#    Time: 215131 ns  Iteration: 1  Instance: /tb_motion_detect
+# End time: 02:17:30 on Sep 20,2026, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 0
+

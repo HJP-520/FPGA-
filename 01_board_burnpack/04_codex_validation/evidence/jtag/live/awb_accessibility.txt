@@ -1,0 +1,212 @@
+Window: "ChipWatcher - D:/SC520_display_burnpack/01_bitstream_flash_direct*", App: td.exe.
+	0 窗口 (settable, string) ChipWatcher - D:/SC520_display_burnpack/01_bitstream_flash_direct* Secondary Actions: Raise ID: watch_window
+		1 标题栏 (settable, string) Value: ChipWatcher - D:/SC520_display_burnpack/01_bitstream_flash_direct*
+			2 菜单栏 系统 ID: MenuBar
+				3 菜单项目 系统
+			4 按钮 最小化
+			5 按钮 最大化
+			6 按钮 关闭
+		7 组 (settable, string)
+			8 窗口 (settable, string) Secondary Actions: Raise ID: download_dockwgt
+				9 自定义 (settable, string)
+					10 文本 Device:
+					11 组合框 (settable, string) Value: 0:PH1P35MDG324
+						12 列表 (settable, string)
+							1101 列表项目 (selectable, settable, string) 0:PH1P35MDG324
+					14 文本 Current Device:
+					15 组合框 (settable, string) Value: 1 ID: device_index_comb
+						16 列表 (settable, string)
+							1102 列表项目 (selectable, settable, string) 1
+					18 按钮 (settable, string) ID: refresh_button
+					19 文本 Bit File:
+					20 编辑 ID: bit_file_edit
+					21 文本 Download Speed:
+					22 组合框 (settable, string) Value: 2Mbps ID: speed_comb
+						23 列表 (settable, string)
+							24 列表项目 (selectable, settable, string) 90Kbps
+							25 列表项目 (selectable, settable, string) 100Kbps
+							26 列表项目 (selectable, settable, string) 200Kbps
+							27 列表项目 (selectable, settable, string) 400Kbps
+							28 列表项目 (selectable, settable, string) 600Kbps
+							29 列表项目 (selectable, settable, string) 1Mbps
+							30 列表项目 (selectable, settable, string) 2Mbps
+							31 列表项目 (selectable, settable, string) 3Mbps
+							32 列表项目 (selectable, settable, string) 6Mbps
+					33 按钮 (settable, string) ID: download_button
+					34 文本 Debug Server:
+					35 按钮 (settable, string) AL-LINK-FT(Remote) ID: debug_server_button
+				36 按钮 (settable, string) Close ID: download_dockwgt.qt_dockwidget_closebutton
+			37 组 (settable, string) ID: insts_tabwgt
+				38 自定义 (settable, string) ID: insts_tabwgt.qt_tabwidget_stackedwidget
+					4440 组 (settable, string)
+						4441 自定义 (settable, string)
+							4442 组 (settable, string)
+								4443 自定义 (settable, string) ID: qt_tabwidget_stackedwidget
+									4444 组 (settable, string)
+										4445 自定义 (settable, string)
+											4446 组 (settable, string)
+												4447 自定义 (settable, string)
+													4448 工具栏 (settable, string)
+														4449 复选框 (settable, string)
+														4450 组 (settable, string)
+														4451 按钮 (settable, string)
+														4452 按钮 (disabled, settable, string)
+														4453 组 (settable, string)
+														4454 按钮 (settable, string)
+														4455 按钮 (settable, string)
+												4456 树 (settable, string) ID: u_sc520_watch_awb_trigger_tree
+													5343 标头 (settable, string) Name
+													5344 标头 (settable, string) Type
+													5345 标头 (settable, string) Data Enable
+													5346 标头 (settable, string) Trigger Enable
+													5347 标头 (settable, string) Operators
+													5348 标头 (settable, string) Trigger Condition
+													5349 标头 (settable, string) Value
+													5350 标头 (settable, string) Trigger Clock
+													5351 标头 (settable, string) Instance
+													5352 标头 (settable, string) 
+													5353 标头 (settable, string) Value
+													5354 标头 (settable, string) Action
+													5355 标头 (settable, string) Cycle Count
+													5356 标头 (settable, string) Activity
+													5357 标头 (settable, string) Direction
+													5358 标头 (settable, string) VIO
+											4473 自定义 (settable, string)
+												4474 沙网 (settable, float) Value: 1
+												4475 文本 [1-1024]
+												4476 沙网 (settable, float) Value: 1024
+												4477 文本 [1-1024]
+												4478 沙网 (settable, float) Value: 127
+												4479 文本 [0-1023]
+												4480 文本 Trigger Settings
+												4481 自定义 (settable, string)
+												4482 文本 Number of windows:
+												4483 文本 Window data depth:
+												4484 文本 Trigger position in window:
+												4485 组合框 (settable, string) Trigger Condition: Value: Basic AND
+													4486 列表 (settable, string)
+														4487 列表项目 (selectable, settable, string) Basic AND
+														4488 列表项目 (selectable, settable, string) Basic OR
+												4489 文本 General Settings
+												4490 自定义 (settable, string)
+												4491 文本 Trigger Condition:
+											4492 缩略图 (settable, string) ID: qt_splithandle_
+								4493 选项卡 (settable, string) Trigger Setup ID: qt_tabwidget_tabbar
+									4494 选项卡项目 (settable, string) Trigger Setup
+							4495 组 (settable, string)
+								4496 自定义 (settable, string)
+									4497 工具栏 (settable, string)
+										4498 复选框 (settable, string)
+										4499 组 (settable, string)
+										4500 按钮 (settable, string)
+										4501 按钮 (settable, string)
+										4502 按钮 (settable, string)
+										4503 按钮 (disabled, settable, string)
+										4504 组 (settable, string)
+										4505 按钮 (settable, string)
+										4506 按钮 (disabled, settable, string)
+										4507 组 (settable, string)
+										4508 按钮 (settable, string)
+										4509 按钮 (settable, string)
+										4510 组 (settable, string)
+										4511 按钮 (disabled, settable, string)
+										4512 按钮 (disabled, settable, string)
+										4513 组 (settable, string)
+										4514 按钮 (disabled, settable, string)
+										4515 按钮 (disabled, settable, string)
+										4516 组 (settable, string)
+										4517 按钮 (settable, string)
+										4518 按钮 (disabled, settable, string)
+										4519 按钮 (disabled, settable, string)
+										4520 按钮 (disabled, settable, string)
+										4521 组 (settable, string)
+										4522 复选框 (settable, string)
+										4523 组 (settable, string)
+										4524 按钮 (settable, string)
+									4525 工具栏 (settable, string)
+										4526 复选框 (settable, string)
+								4527 自定义 (settable, string)
+									4528 自定义 (settable, string)
+										4529 组 (settable, string)
+										4530 滚动条 (settable, float) Value: 1120
+										4531 滚动条 (settable, float) Value: 0
+									4532 组 (settable, string)
+										4533 自定义 (settable, string)
+											4534 组 (settable, string)
+											4535 组 (settable, string)
+											4536 组 (settable, string)
+											4537 组 (settable, string)
+											4538 文本 Status
+											4539 文本 Idle
+										4540 自定义 (settable, string)
+											4541 树 (settable, string) ID: u_sc520_watch_awb_value_table
+												5359 标头 (settable, string) Name
+												5360 标头 (settable, string) Type
+												5361 标头 (settable, string) Data Enable
+												5362 标头 (settable, string) Trigger Enable
+												5363 标头 (settable, string) Operators
+												5364 标头 (settable, string) Trigger Condition
+												5365 标头 (settable, string) Value
+												5366 标头 (settable, string) Trigger Clock
+												5367 标头 (settable, string) Instance
+												5368 标头 (settable, string) 
+												5369 标头 (settable, string) Value
+												5370 标头 (settable, string) Action
+												5371 标头 (settable, string) Cycle Count
+												5372 标头 (settable, string) Activity
+												5373 标头 (settable, string) Direction
+												5374 标头 (settable, string) VIO
+												5375 树项目 (settable, string) 00010001010111011101
+												5376 树项目 (settable, string) 00010000010111111001
+												5377 树项目 (settable, string) 00000000000000111000010000000000
+												5378 树项目 (settable, string) 00000000000000111000010000000000
+											4558 树 (settable, string) ID: u_sc520_watch_awb_data_tree
+												5379 标头 (settable, string) Name
+												5380 标头 (settable, string) Type
+												5381 标头 (settable, string) Data Enable
+												5382 标头 (settable, string) Trigger Enable
+												5383 标头 (settable, string) Operators
+												5384 标头 (settable, string) Trigger Condition
+												5385 标头 (settable, string) Value
+												5386 标头 (settable, string) Trigger Clock
+												5387 标头 (settable, string) Instance
+												5388 标头 (settable, string) 
+												5389 标头 (settable, string) Value
+												5390 标头 (settable, string) Action
+												5391 标头 (settable, string) Cycle Count
+												5392 标头 (settable, string) Activity
+												5393 标头 (settable, string) Direction
+												5394 标头 (settable, string) VIO
+												5395 树项目 (settable, string) dbg_awb_b_gain[19:0]
+												5396 树项目 (settable, string) 1
+												5397 树项目 (settable, string) dbg_awb_r_gain[19:0]
+												5398 树项目 (settable, string) 2
+												5399 树项目 (settable, string) dbg_awb_stat_beats[31:0]
+												5400 树项目 (settable, string) 3
+												5401 树项目 (settable, string) dbg_awb_total_beats[31:0]
+												5402 树项目 (settable, string) 4
+											4575 缩略图 (settable, string) ID: qt_splithandle_
+									4576 缩略图 (settable, string) ID: qt_splithandle_
+							4577 缩略图 (settable, string) ID: qt_splithandle_
+				177 选项卡 (settable, string) u_sc520_watch_awb
+					178 选项卡项目 (settable, string) u_sc520_watch_awb
+					179 选项卡项目 (settable, string) u_sc520_watch_camera
+					180 选项卡项目 (settable, string) u_sc520_watch_ddr
+					181 选项卡项目 (settable, string) u_sc520_watch_mipi
+					182 选项卡项目 (settable, string) u_sc520_watch_read
+					183 选项卡项目 (settable, string) u_sc520_watch_write
+					184 选项卡项目 (settable, string)
+		185 菜单栏 (settable, string)
+			186 菜单项目 (settable, string) File
+			187 菜单项目 (settable, string) View
+		188 状态栏
+			189 缩略图 (settable, string)
+			190 进度栏 Value: 0
+
+Document text: ```
+Device:
+Current Device:
+Bit File:
+Download Speed:
+Debug Server:
+```

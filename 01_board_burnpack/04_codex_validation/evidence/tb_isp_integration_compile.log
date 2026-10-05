@@ -1,0 +1,35 @@
+Model Technology ModelSim SE-64 vlog 10.4 Compiler 2014.12 Dec  3 2014
+Start time: 14:47:37 on Oct 05,2026
+vlog -sv C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\project\user_source\hdl_source\isp\isp_top.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\project\user_source\hdl_source\awb.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\project\user_source\hdl_source\signal_delay.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\project\user_source\hdl_source\isp\data128_96\data128_96.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\project\user_source\hdl_source\isp\data96_128\data96_128.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\project\user_source\hdl_source\isp\demosaic_4x_2_0\bilinear_interpolation.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\project\user_source\hdl_source\isp\demosaic_4x_2_0\demosaic.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\project\user_source\hdl_source\isp\demosaic_4x_2_0\line_buffer_demosaic.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\project\user_source\hdl_source\isp\demosaic_4x_2_0\mipi_to_raw_converter.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\project\user_source\hdl_source\isp\demosaic_4x_2_0\raw_matrix_3x3_buffer.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\project\user_source\hdl_source\isp\demosaic_4x_2_0\zhenghe.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\project\user_source\hdl_source\isp\demosaic_4x_2_0\blk_mem_gen_demosaic\blk_mem_gen_demosaic.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\project\user_source\hdl_source\isp\demosaic_4x_2_0\blk_mem_gen_demosaic\RTL\ram_c36c2ca3b3a7.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\project\user_source\hdl_source\isp\demosaic_4x_2_0\blk_mem_gen_demosaic\RTL\include\define.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\project\user_source\hdl_source\isp\demosaic_4x_2_0\blk_mem_gen_zhenghe\blk_mem_gen_zhenghe.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\project\user_source\hdl_source\isp\demosaic_4x_2_0\blk_mem_gen_zhenghe\RTL\ram_d32970204f32.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\project\user_source\hdl_source\isp\demosaic_4x_2_0\blk_mem_gen_zhenghe\RTL\include\define.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\project\user_source\ip_source\blk_mem_gen_awb_delay_signal\blk_mem_gen_awb_delay_signal.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\project\user_source\ip_source\blk_mem_gen_awb_delay_signal\ram_f84573da5ab5.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\tests\support\divider_gate_sim.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\tests\support\ph1p_logic_eram_stub.v C:\Users\35941\Documents\Codex\2026-10-05\d-sc520-display-burnpack\work\tb_isp_integration.sv 
+-- Compiling module isp_top
+-- Compiling module axis_gamma_rgb96
+-- Compiling module axis_crop_rgb96
+-- Compiling module axis_saturation_rgb96
+-- Compiling module awb
+-- Compiling module signal_delay
+-- Compiling module data128_96
+-- Compiling module data_96bit_to_128bit
+-- Compiling module bilinear_interpolation
+-- Compiling module demosaic
+-- Compiling module line_buffer_demosaic
+-- Compiling module mipi_to_raw_converter
+-- Compiling module raw_matrix_3x3_buffer
+-- Compiling module zhenghe
+-- Compiling module blk_mem_gen_demosaic
+-- Compiling module ram_c36c2ca3b3a7
+-- Compiling module blk_mem_gen_zhenghe
+-- Compiling module ram_d32970204f32
+-- Compiling module blk_mem_gen_awb_delay_signal
+-- Compiling module ram_f84573da5ab5
+-- Compiling module divider
+-- Compiling module PH1P_LOGIC_ERAM
+-- Compiling module PH1_LOGIC_ERAM
+-- Compiling module tb_isp_integration
+
+Top level modules:
+	axis_gamma_rgb96
+	axis_crop_rgb96
+	PH1_LOGIC_ERAM
+	tb_isp_integration
+End time: 14:47:37 on Oct 05,2026, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0

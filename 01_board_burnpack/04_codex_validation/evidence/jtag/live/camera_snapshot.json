@@ -1,0 +1,24 @@
+{
+  "export_radix": "binary",
+  "raw_fields": {
+    "dbg_ae": 1991,
+    "dbg_ag": 80,
+    "dbg_cam_flags": 27,
+    "dbg_sensor_id": 61003
+  },
+  "csv_sources": [
+    {
+      "file": "C:\\Users\\35941\\Documents\\Codex\\2026-10-05\\d-sc520-display-burnpack\\outputs\\jtag_live\\camera_capture.csv",
+      "mtime": "2026-10-05T16:49:19.013510"
+    }
+  ],
+  "note": "Separate clock-domain captures are not an atomic board-wide snapshot. AE/AG are FPGA control values, not sensor register readback.",
+  "gain_table_x": 4.0,
+  "dbg_cam_flags_decoded": {
+    "i2c_error": true,
+    "sensor_id_ok": true,
+    "ae_request": false,
+    "ae_done": true,
+    "sensor_config_done": true
+  }
+}

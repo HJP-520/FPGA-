@@ -1,0 +1,72 @@
+==== 视觉软件包整体测试  2026-10-03 20:09:23 ====
+--- tb_ser96to24 ...
+    ==> PASS
+--- tb_tpg ...
+    ==> PASS
+        
+        [frame] tpg_act_0.hex 与金标准逐像素一致
+--- tb_pulse_sync ...
+    ==> PASS
+--- tb_cdc4phase ...
+    ==> PASS
+--- tb_cdc_reset_skew ...
+    ==> PASS
+--- tb_rgb2hsv ...
+    ==> PASS
+--- tb_hsv_threshold ...
+    ==> PASS
+--- tb_bin_smooth ...
+    ==> PASS
+--- tb_centroid ...
+    ==> PASS
+        # FRAME0 OK v=1 cnt=3600 cx=74 cy=39 lost=0
+        # FRAME1 OK v=1 cnt=444 cx=91 cy=21 lost=0
+        # FRAME2 OK v=0 cnt=9 cx=0 cy=0 lost=1
+--- tb_detect_chain ...
+    ==> PASS
+        # FRAME0 OK v=1 cnt=8096 cx=604 cy=345
+        # FRAME1 OK v=1 cnt=32592 cx=644 cy=391
+        # FRAME2 OK v=1 cnt=221 cx=107 cy=108
+--- tb_gimbal ...
+    ==> PASS
+        # STEP0 OK x=1515 y=1500 lost=0
+        # STEP1 OK x=1530 y=1500 lost=0
+        # STEP2 OK x=1550 y=1495 lost=0
+        # STEP3 OK x=1554 y=1483 lost=0
+        # STEP4 OK x=1554 y=1483 lost=0
+        # STEP5 OK x=1554 y=1483 lost=1
+        # STEP6 OK x=1554 y=1483 lost=2
+        # STEP7 OK x=1511 y=1499 lost=0
+        # STEP8 OK x=1511 y=1499 lost=0
+        # STEP9 OK x=1511 y=1499 lost=0
+--- tb_pwm ...
+    ==> PASS
+        # MEAS tick=2 OK x=75000 y=75000 len=1000000
+        # MEAS tick=6 OK x=60000 y=100000 len=1000000
+--- tb_osd_track ...
+    ==> PASS
+        
+        [frame] osd_act_f0.hex 与金标准逐像素一致
+        [frame] osd_act_f1.hex 与金标准逐像素一致
+        [frame] osd_act_f2.hex 与金标准逐像素一致
+--- tb_vision_top ...
+    ==> PASS
+        # DUTY_REPORT: x=1476 y=1500 lost=0 status=00000010 passthru_mism=0
+--- tb_closed_loop ...
+    ==> PASS
+        # LOCKED: settle_frame=12
+--- tb_algo_switch ...
+    ==> PASS
+--- tb_uart_telemetry ...
+    ==> PASS
+--- tb_motion_detect ...
+    ==> PASS
+        # MEAS f0: cnt=0 valid=0 bbox=(0,0)-(0,0)
+        # MEAS f1: cnt=64 valid=1 bbox=(10,10)-(17,17)
+        # MEAS f2: cnt=128 valid=1 bbox=(10,10)-(37,27)
+        # MEAS f3: cnt=64 valid=1 bbox=(30,20)-(37,27)
+        # MEAS f4: cnt=5 valid=0 bbox=(3,5)-(60,44)
+        # MEAS f5: cnt=6 valid=0 bbox=(3,5)-(63,47)
+
+==== 汇总: 18/18 PASS ====
+日志已写入 04_迭代文件/测试运行_20261003_201302.log

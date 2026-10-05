@@ -1,0 +1,512 @@
+\documentclass[11pt]{ctexart}
+\usepackage[a4paper,top=2cm,bottom=2cm,left=2.2cm,right=2.2cm]{geometry}
+\usepackage{fancyvrb}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{fontspec}
+\usepackage[most]{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{hyperref}
+
+\setmonofont{Consolas}
+\setCJKmonofont{SimHei}
+\setlength{\parindent}{0pt}
+\setlist{nosep,leftmargin=1.4em}
+
+% ── Step3 主题色（与 Step1/2 同族、换为深青） ──
+\definecolor{deep}{RGB}{14,84,88}        % 主色：深青
+\definecolor{accent}{RGB}{28,128,120}    % 强调：青绿
+\definecolor{keyline}{RGB}{90,130,200}   % 知识点：蓝
+\definecolor{keybg}{RGB}{238,244,255}
+\definecolor{warnline}{RGB}{200,120,60}  % 警告：橙
+\definecolor{warnbg}{RGB}{255,243,235}
+\definecolor{okline}{RGB}{26,116,88}     % 成果：绿
+\definecolor{okbg}{RGB}{240,252,244}
+\definecolor{tipline}{RGB}{88,158,148}   % 提示：青
+\definecolor{tipbg}{RGB}{238,248,246}
+\definecolor{codebg}{RGB}{249,249,252}   % 代码底
+\definecolor{rowtint}{RGB}{236,246,244}  % 表头浅青
+
+\titleformat{\section}{\large\bfseries\color{deep}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{accent}}{\thesubsection}{0.5em}{}
+\titleformat{\part}[display]{\centering\Huge\bfseries\color{deep}}{}{0pt}{\Huge}
+\titlespacing{\section}{0pt}{14pt}{6pt}
+\titlespacing{\subsection}{0pt}{10pt}{4pt}
+
+\newtcolorbox{keybox}[1]{enhanced, colback=keybg, colframe=keyline,
+  boxrule=0.6pt, arc=1.5mm, left=3mm, right=3mm, top=2mm, bottom=2mm,
+  title={\bfseries #1}, fonttitle=\small\bfseries, coltitle=white,
+  colbacktitle=keyline}
+\newtcolorbox{warnbox}[1]{enhanced, colback=warnbg, colframe=warnline,
+  boxrule=0.6pt, arc=1.5mm, left=3mm, right=3mm, top=2mm, bottom=2mm,
+  title={\bfseries #1}, fonttitle=\small\bfseries, coltitle=white,
+  colbacktitle=warnline}
+\newtcolorbox{okbox}[1]{enhanced, colback=okbg, colframe=okline,
+  boxrule=0.6pt, arc=1.5mm, left=3mm, right=3mm, top=2mm, bottom=2mm,
+  title={\bfseries #1}, fonttitle=\small\bfseries, coltitle=white,
+  colbacktitle=okline}
+\newtcolorbox{tipbox}[1]{enhanced, colback=tipbg, colframe=tipline,
+  boxrule=0.5pt, arc=1.5mm, left=3mm, right=3mm, top=1.5mm, bottom=1.5mm,
+  title={\bfseries #1}, fonttitle=\small\bfseries, coltitle=white,
+  colbacktitle=tipline}
+
+\newcommand{\code}[1]{\texttt{#1}}
+\DefineVerbatimEnvironment{Verilog}{Verbatim}{frame=single,fontsize=\small}
+
+\begin{document}
+
+% ==================== 封面 ====================
+\begin{titlepage}
+\centering
+\vspace*{2.2cm}
+{\color{deep}\Huge\bfseries 云台闭环控制}\\[6pt]
+{\color{deep}\Large\bfseries 从零手搓 Step3 教程}\\[14pt]
+{\large 2026 FPGA 创新设计赛道（安路）赛题二}\\[6pt]
+{\large 视觉方向 · Step3\_closed\_loop}\\[20pt]
+
+\begin{tcolorbox}[enhanced, colback=codebg, colframe=accent, boxrule=0.8pt,
+  arc=2mm, width=12.5cm, left=4mm, right=4mm, top=3mm, bottom=3mm]
+\centering
+{\small 读者：零基础队员（建议先读完 Step1、Step2 教程）\\
+目标：让云台自己把目标"追"回画面中心——从坐标到运动\\
+前置要求：会 Verilog 基础语法、跑过 ModelSim、懂 Step2 的输出\\
+预计学习时间：10～14 天（每天 2～3 小时）}
+\end{tcolorbox}
+
+\vspace{8mm}
+\begin{tcolorbox}[enhanced, colback=tipbg, colframe=tipline, boxrule=0.5pt,
+  arc=2mm, width=12.5cm, left=4mm, right=4mm, top=2mm, bottom=2mm]
+\centering
+{\small\color{deep} \textbf{本教程与你手上的代码是什么关系}\\
+Step2 的输出是"目标坐标"；Step3 把它变成云台的\textbf{转动}——\\
+误差计算、比例控制、死区、限速限幅、舵机 PWM，一套闭环。}
+\end{tcolorbox}
+
+\vfill
+{\small\color{black!50} fpga-ptz-tracker 教程系列 · 2026-09}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ============================================================
+\part{从零学习教程}
+
+% ============================================================
+\section{你在造什么}
+
+\subsection{一句话}
+
+\textbf{把"目标在画面哪里"变成"云台往哪转多少"，让镜头自动追着目标走。}
+
+Step2 每帧告诉你：目标中心在 \code{(cx, cy)}。Step3 要回答：舵机脉宽该加
+多少微秒——左偏 100 像素，脉宽该从 1500 变成多少？
+
+\subsection{闭环长什么样}
+
+\begin{Verbatim}
+        +----------+     误差(px)    +----------+   脉宽(us)   +----------+
+画面 -->| 检测链   | -------------> | 控制律   | ----------> | PWM 舵机 |
+        | (Step2)  |                | (本步)   |             | (本步)   |
+        +----------+                +----------+             +----+-----+
+             ^                                                   |
+             |            云台带着相机转，目标回到中心             |
+             +---------------------------------------------------+
+\end{Verbatim}
+
+这是一个\textbf{反馈闭环}：误差决定动作，动作改变误差。这一节教你写
+"大脑"（\code{gimbal\_ctrl}，控制律）和"肌肉"（\code{pwm\_servo}，舵机驱动）。
+
+\subsection{做完是什么效果}
+
+上电后云台在中位静止 → 屏幕角落看到红色目标偏左 → 云台\textbf{平滑地}
+转过去，几秒内目标稳稳停在画面中心小方框里，不再抖动。
+配合 Step4 的 OSD，画面上还能显示当前状态（LOCK / LOST、坐标、误差）。
+
+\begin{okbox}{学完 Step3 你能做到}
+\begin{itemize}
+  \item 说清闭环的四个要素：测量、误差、控制、执行
+  \item 手算 Q8.8 定点比例控制的一帧步进
+  \item 解释死区、限速、限幅各防什么事故
+  \item 用增益公式判断一组 Kp 会不会振荡
+  \item 跑通 3 个测试（步进表、PWM 测量、闭环在环收敛）
+\end{itemize}
+\end{okbox}
+
+% ============================================================
+\section{阶段 0：反馈控制入门（1～2 天）}
+
+\subsection{开环 vs 闭环}
+
+\begin{keybox}{两种控制方式}
+\textbf{开环}：只发命令不看结果。像蒙着眼走路——步子迈出去就收不回来，
+地面稍有起伏就摔。\\
+\textbf{闭环}：先看结果和目标的差距（误差），再决定下一步动作。
+误差大就大步走，误差小就小步走，到了就停。
+\end{keybox}
+
+云台跟踪天生就是闭环：目标会动、云台有机械误差、装配有偏差，
+这些都不用精确知道——只要每帧看一眼"偏了多少"，闭环自己会修正。
+
+\subsection{一个生活类比：调淋浴水温}
+
+你想把水温调到 40 度（目标），手拧阀门（执行），皮肤测温（测量）：
+
+\begin{itemize}
+  \item 水太凉 → 往热拧一点；太烫 → 往冷拧一点（比例控制）
+  \item 快到 40 度了 → 只敢轻轻拧（误差小，步子小）
+  \item 在 39～41 度之间 → 不动了（死区，防止来回抖）
+  \item 阀门拧到底了 → 不再硬拧（限幅，行程保护）
+\end{itemize}
+
+\begin{warnbox}{新手最常见的直觉错误}
+"误差大就猛打"——听起来合理，实际会\textbf{振荡}：你猛拧到 40 度，
+但热水管道有延迟，过两秒温度冲到 45 度；你又猛拧回来，又冲到 35 度……
+永远停不下来。\textbf{闭环里的"延迟"决定了你敢用多大的步子}，
+这是本教程最重要的一个知识点（阶段 3 展开）。
+\end{warnbox}
+
+\subsection{练习}
+
+\begin{enumerate}
+  \item 用"调水温"的类比，说出测量、误差、控制、执行分别对应什么
+  \item 想一个开环控制会失败、闭环能救回来的场景
+  \item 思考：为什么"步子大"在无延迟时很好、有延迟时会振荡？
+\end{enumerate}
+
+% ============================================================
+\section{阶段 1：舵机与 PWM（2 天）}
+
+\subsection{舵机怎么听话}
+
+本项目用 SG90/MG90S 级别的位置舵机：三根线（电源、地、信号），
+信号是一路 50Hz 的 PWM 脉冲，\textbf{脉冲宽度}决定转角：
+
+\begin{Verbatim}
+0.5ms ----- 0 度
+1.0ms ----- 45 度
+1.5ms ----- 90 度（中位）
+2.0ms ----- 135 度
+2.5ms ----- 180 度
+周期固定 20ms（50Hz），每个周期只发一个脉冲
+\end{Verbatim}
+
+换算成比例：180 度 / 1000us = \textbf{0.18 度/us}。这个数后面算增益要用，
+先记住。
+
+\subsection{PWM 怎么生成：计数器 + 比较}
+
+FPGA 生成 PWM 只需要一个计数器和一个比较器：
+
+\begin{Verilog}
+// 50MHz 时钟：20ms = 1,000,000 拍；1us = 50 拍
+period_cnt <= (period_cnt >= PERIOD-1) ? 0 : period_cnt + 1;
+pwm = (period_cnt < duty_us * 50);   // 前 duty 微秒输出高电平
+\end{Verilog}
+
+想输出 1500us 脉冲？让 \code{pwm} 在计数器前 75000 拍为高。
+分辨率是 1 拍 = 20ns = 0.02us，比舵机的机械精度高两个数量级，绰绰有余。
+
+\begin{keybox}{为什么"共周期"是硬要求}
+水平、垂直两个舵机\textbf{必须共用同一个周期计数器}。如果各用各的，
+两个计数器相位慢慢漂移，X 轴脉宽落点和 Y 轴错开，供电电流互相拉扯，
+舵机抖动。\code{pwm\_servo} 里一个计数器出两路比较，结构性杜绝。
+\end{keybox}
+
+\subsection{上电安全：默认中位}
+
+复位后 duty 寄存器就是 1500——云台上电即指向正前方，不会猛甩。
+这是比赛硬约束"冷启动直接跟踪"的一部分：固化进 bit 流的参数
+让板子一上电就处于可演示状态。
+
+\subsection{练习}
+
+\begin{enumerate}
+  \item 手算：想让云台转到 120 度，脉宽多少 us？对应多少拍（50MHz）？
+  \item 手算：1500us 脉宽 = 多少拍？
+  \item 思考：如果时钟是 100MHz，1us 等于多少拍？分辨率提升多少？
+\end{enumerate}
+
+% ============================================================
+\section{阶段 2：比例控制与定点算术（2～3 天）}
+
+\subsection{控制律：一帧只做五步}
+
+每个"帧拍"（每秒 60 次）执行一遍，以水平轴为例：
+
+\begin{Verilog}
+1) err  = cx - 640                    // 误差：目标偏离中心多少像素
+2) s    = (err * KP) >>> 8            // 比例：像素 -> us，Q8.8
+3) 死区：|err| <= 25  ->  s = 0        // 目标在中心附近不动
+4) 限速：|s| > 100    ->  s = ±100     // 单帧最多加 100us
+5) 限幅：duty+s 超出 700~2300 -> 截断   // 行程硬保护
+最终：duty = duty_old + s
+\end{Verilog}
+
+五个步骤的顺序不能乱：先死区（免算）、再限速（防猛）、后限幅（防越界）。
+
+\subsection{Q8.8：用移位代替小数}
+
+KP 想表达"每像素动 0.078 微秒"这种小数，FPGA 不做浮点。
+约定：参数里存的是\textbf{真值 × 256}（高 8 位整数、低 8 位小数）：
+
+\begin{Verilog}
+KP = 20                    // 参数值（寄存器里存的数）
+真值 = 20 / 256 ≈ 0.078 us/px
+s = (err * KP) >> 8        // 先乘大数，再右移 8 位除掉 256
+\end{Verilog}
+
+\begin{keybox}{为什么右移必须用 >>>（算术右移）}
+err 是\textbf{有符号}数（目标可以在中心左边）。Python 的 \code{>>}
+对负数是向下取整，Verilog 的 \code{>>>} 配合 \code{signed} 才是同一语义。
+用 \code{>>} 或漏 \code{signed}，目标在左半边时行为就错——
+Step2 里 rgb2hsv 已经吃过一次这个亏，这里原样复用纪律。
+\end{keybox}
+
+\subsection{手算一遍（本阶段练习核心）}
+
+取 KP=20、死区 25、限速 100、限幅 700～2300、当前 duty=1500：
+
+\begin{Verilog}
+例 A：cx = 840      err = 200
+      s = (200*20)>>8 = 4000>>8 = 15   duty: 1500 -> 1515
+例 B：cx = 660      err = 20   （死区内）
+      s = 0                            duty 不动
+例 C：cx = 1240     err = 600
+      s = (600*20)>>8 = 46             duty: 1500 -> 1546
+例 D：cx 在极远处   err = 20000（假设）
+      s 本应 1562，限速截到 100        duty: 1500 -> 1600
+\end{Verilog}
+
+\begin{warnbox}{中间量位宽}
+\code{err(13bit 有符号) × KP(16bit)} 的积最多 29 bit——
+task 里中间量显式声明 \code{signed [28:0]}。位宽不够会静默截断，
+误差大的时候步进值直接变成垃圾。
+\end{warnbox}
+
+\subsection{练习}
+
+\begin{enumerate}
+  \item 手算：err = -150（目标在左），KP=20，duty=1500，新的 duty？
+  \item 手算：err = 500 时若 KP=90，s 是多少？和 KP=20 差几倍？
+  \item 用 Python 验证你的答案（注意负数 >> 的行为）
+\end{enumerate}
+
+% ============================================================
+\section{阶段 3：延迟与稳定性——为什么 Kp 不能大（3 天）}
+
+这一阶段是 Step3 的灵魂。控制律本身 20 行就写完，
+\textbf{参数选错，云台当场表演抽搐}——我们在闭环仿真里真的复现了一次
+（跑飞到 109 度），这里教你提前算出来。
+
+\subsection{延迟从哪来}
+
+从"目标偏了"到"画面反映云台已转"，要经过：
+
+\begin{Verilog}
+帧 N:   检测链算出 err（1 帧流水）           -> 帧末锁存坐标
+帧 N:   控制律算出 step，写 duty              -> 执行
+帧 N+1: 舵机转到新角度，画面已变              -> 采集
+帧 N+1: 检测链才看到"转完之后"的画面          -> 下一次误差
+\end{Verilog}
+
+合计约 \textbf{2 帧延迟}（1 帧检测 + 1 帧执行）。延迟期间你是在
+"闭着眼睛"继续输出——这是振荡的根源。
+
+\subsection{手推一次振荡（不用任何公式）}
+
+假设 Kp 很大，看误差怎么一步步演化（每帧 2 帧延迟，比例全量响应）：
+
+\begin{Verilog}
+帧:   0     1     2     3     4     5     6     7
+err:  200   200   -200  -200  +200  +200  -200  -200
+      ^^^^^^^^^^^ 误差永远在 ±200 之间来回跳 —— 等幅振荡！
+\end{Verilog}
+
+Kp 小一点呢？每次只修正误差的一半：200 → 100 → 50 → 25 → 死区，收敛。
+\textbf{Kp 大到什么程度会开始振荡？}下面用增益算。
+
+\subsection{增益公式（现场换硬件后要重算的唯一样子）}
+
+三个系数连乘：
+
+$$L = \underbrace{KP/256}_{\text{us/px}} \times \underbrace{0.18}_{\text{度/us}} \times \underbrace{20.6}_{\text{px/度}} \approx KP \times 0.0144 \quad (\text{度/度/帧})$$
+
+再乘延迟放大（2 帧延迟约 ×2），得到\textbf{有效增益}，稳定判据：
+
+\begin{Verilog}
+2 × L < 1    即    KP < 256 / (2 × 0.18 × 20.6) ≈ 34
+\end{Verilog}
+
+代入我们整定时的三组参数验证：
+
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+\rowcolor{rowtint}\textbf{KP} & \textbf{单帧增益 L} & \textbf{有效增益 2L} & \textbf{实测结果} \\
+\midrule
+90   & 1.30 & 2.60 & 发散：角度单调跑飞到 109 度 \\
+40   & 0.58 & 1.16 & 慢发散振荡（>1，越振越大） \\
+\textbf{20}   & \textbf{0.29} & \textbf{0.58} & \textbf{12 帧锁定，无极限环} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textit{修订注记（2026-10-03）：上表三组实验是初版结构的整定记录（回路按 2 帧延迟）。
+后续控制节拍修正（tick 改为"新目标包到达拍"，即 T1）把回路延迟降到 1 帧，
+判据相应放宽为 $L<1$；\textbf{默认 KP=20 不变，实测 settle\_frame 由 36 改善到 12}。
+下面的 ×2 推导保留原样，作为"延迟决定可用增益"的完整示范。}
+
+\begin{keybox}{为什么是"×2"而不是"×1"或"×3"}
+2 帧延迟的离散比例反馈，每周期误差翻转一次并放大 L 倍，
+两个帧才完成一个往返——所以是 ×2。若延迟是 1 帧（比如云台响应极快），
+判据放宽到 L<1；延迟 3 帧则收紧到 L<1/3。
+\textbf{延迟越大，可用增益越小}——这也解释了为什么"检测链要快"。
+\end{keybox}
+
+\begin{warnbox}{限速救不了错误的 Kp}
+有人想"Kp 大了加限速就行"。限速能压住单帧冲击，但压不住
+符号交替的振荡（每次都 ±100us 来回摆）。先保证 2L<1，再谈限速。
+\end{warnbox}
+
+\subsection{练习}
+
+\begin{enumerate}
+  \item 手算：KP=30 时的 L 和 2L，判断稳不稳
+  \item 若换一个 FOV 90 度的相机（px/度 = 1280/90 约 14.2），KP 上限变多少？
+  \item 思考：检测链流水加深 1 帧，KP 上限怎么变？
+\end{enumerate}
+
+% ============================================================
+\section{阶段 4：安全设计与状态字（1～2 天）}
+
+\subsection{四道保险}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\rowcolor{rowtint}\textbf{保险} & \textbf{参数} & \textbf{防什么} \\
+\midrule
+死区   & \code{DZ=25px}      & 目标在中心附近时云台抖动 \\
+限速   & \code{SLEW=100us/帧} & 单帧猛打，机械冲击 \\
+软限位 & \code{700～2300us}  & 云台撞机械极限（控制律内） \\
+硬限位 & \code{500～2500us}  & 软限位失效后的第二道（PWM 内） \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{丢失目标怎么办}
+
+某帧检测失败（\code{target\_valid=0}）：\textbf{保持当前脉宽不动}，
+只把 \code{lost\_cnt} 加一。目标可能只是被遮挡了一瞬，
+猛回中或猛保持旧方向都可能错——保持是最安全的选择。
+连续丢失很多帧的应对策略（搜索/回中）留给上层，底层只报告。
+
+\subsection{状态字 O\_status}
+
+8 位状态字，每一位都给 OSD 或调试用：
+
+\begin{Verilog}
+O_status[0] = dz_x    水平在死区内（目标已在中心）
+O_status[1] = dz_y    垂直在死区内
+O_status[2] = lost    本帧丢失目标
+O_status[3] = lim_x   水平限幅命中（打到边界了）
+O_status[4] = lim_y   垂直限幅命中
+\end{Verilog}
+
+\code{track\_en} 拨码断开时：强制回中位（1500），用于演示复位/安全停车。
+
+\subsection{练习}
+
+\begin{enumerate}
+  \item 为什么要"双重限幅"？只有 PWM 里那道行不行？
+  \item 画出"丢失目标 3 帧后重新发现目标"时 duty 的时间线
+  \item 思考：lost 时保持脉宽，什么情况下这个策略会出问题？
+\end{enumerate}
+
+% ============================================================
+\section{阶段 5：跑通闭环测试（1～2 天）}
+
+\subsection{一键回归}
+
+\begin{Verbatim}
+cd D:\fpga-ptz-tracker\tools
+python run_all.py tb_gimbal tb_pwm tb_closed_loop
+\end{Verbatim}
+
+三个测试各管一层，从里到外：
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\rowcolor{rowtint}\textbf{测试} & \textbf{验证什么} & \textbf{规模} \\
+\midrule
+tb\_gimbal     & 控制律 10 步进表（死区/限速/限幅/丢失） & 10 帧 \\
+tb\_pwm        & PWM 波形逐拍测量 & 2 个完整周期 \\
+tb\_closed\_loop & 相机-舵机模型在环，60 帧内锁定 & 全闭环 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{怎么读结果}
+
+\begin{Verbatim}
+--- tb_gimbal ...
+    # STEP3 OK duty_x=05E6 duty_y=05D7 lost=0000 dz_x=0 dz_y=1
+    ==> PASS          ← 10 步全对（含死区、限速、限幅、丢失保持）
+
+--- tb_pwm ...
+    # PERIOD=1000000 pulse_x=75000 pulse_y=75000   ← 上电中位
+    ==> PASS          ← 周期与脉宽逐拍精确
+
+--- tb_closed_loop ...
+    TB_RESULT: PASS settle_frame=12 final_err=-8
+    ==> PASS          ← 12 帧锁定（±25px 死区内保持 10 帧）
+\end{Verbatim}
+
+\begin{okbox}{Step3 学习清单（全部打勾就过关）}
+\begin{itemize}
+  \item 能说清闭环四要素，以及"每帧一小步"为什么够用
+  \item 能手算一帧步进（含死区/限速/限幅三种截断）
+  \item 能解释 Q8.8 和 \code{>>>} 的配合
+  \item 能用增益公式判断一组 Kp 的稳定性，说出 KP 上限怎么来的
+  \item 能说出四道保险各防什么、丢失目标的策略
+  \item 跑通 3 个测试并读懂每一行输出
+\end{itemize}
+\end{okbox}
+
+\input{step3_impl}
+
+% ============================================================
+\part*{结语}
+\clearpage
+\section*{总结与下一步}
+\addcontentsline{toc}{section}{总结与下一步}
+
+\subsection*{Step3 学到了什么}
+\addcontentsline{toc}{subsection}{Step3 学到了什么}
+\begin{itemize}
+  \item 反馈闭环的思想：测量、误差、控制、执行
+  \item 舵机 PWM 规格（50Hz、0.5～2.5ms、0.18 度/us）与共周期生成
+  \item 控制律五步：误差、Q8.8 比例、死区、限速、限幅
+  \item 稳定性判据：增益公式与 2 帧延迟的 ×2 放大
+  \item 安全设计：四道保险、丢失保持、状态字、上电中位
+  \item 参数整定方法论：先极性、后增益、在环仿真验证
+\end{itemize}
+
+\subsection*{下一步学什么}
+\addcontentsline{toc}{subsection}{下一步学什么}
+\begin{itemize}
+  \item \textbf{Step4 OSD 与系统联调}：把检测结果画回画面
+  \begin{itemize}
+    \item 字库 ROM 与文字叠加（状态行直接显示 LOCK/坐标）
+    \item 68bit 目标包跨域（视觉域 → 显示域）
+    \item vision\_top 整链集成与全帧逐位比对
+  \end{itemize}
+  \item 对应文档：\code{03\_vision/step4\_osd\_integration/}
+  \item 对应金标准：\code{tools/golden\_model.py::gimbal\_ctrl\_step}
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,635 @@
+\documentclass[11pt]{ctexart}
+\usepackage[a4paper,top=2cm,bottom=2cm,left=2.2cm,right=2.2cm]{geometry}
+\usepackage{fancyvrb}
+\usepackage{xcolor}
+\usepackage{fontspec}
+\usepackage[most]{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{hyperref}
+
+\setmonofont{Consolas}
+\setCJKmonofont{SimHei}
+\setlength{\parindent}{0pt}
+\setlist{nosep,leftmargin=1.4em}
+
+\definecolor{deep}{RGB}{22,50,92}
+\definecolor{accent}{RGB}{26,116,88}
+\definecolor{cmt}{RGB}{124,134,150}
+\definecolor{core}{RGB}{192,86,24}
+\definecolor{boxbg}{RGB}{250,251,253}
+\definecolor{warm}{RGB}{255,248,240}
+\definecolor{keybg}{RGB}{240,248,255}
+\definecolor{keyline}{RGB}{100,150,200}
+\definecolor{warnbg}{RGB}{255,243,235}
+\definecolor{warnline}{RGB}{200,120,60}
+\definecolor{okbg}{RGB}{240,252,244}
+\definecolor{okline}{RGB}{26,116,88}
+\definecolor{tipbg}{RGB}{248,248,252}
+\definecolor{tipline}{RGB}{140,140,180}
+
+\titleformat{\section}{\large\bfseries\color{deep}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{accent}}{\thesubsection}{0.5em}{}
+\titlespacing{\section}{0pt}{14pt}{6pt}
+\titlespacing{\subsection}{0pt}{10pt}{4pt}
+
+% 常用盒子
+\newtcolorbox{keybox}[1]{enhanced, colback=keybg, colframe=keyline,
+  boxrule=0.6pt, arc=1.5mm, left=3mm, right=3mm, top=2mm, bottom=2mm,
+  title={\bfseries #1}, fonttitle=\small\bfseries, coltitle=white,
+  colbacktitle=keyline}
+\newtcolorbox{warnbox}[1]{enhanced, colback=warnbg, colframe=warnline,
+  boxrule=0.6pt, arc=1.5mm, left=3mm, right=3mm, top=2mm, bottom=2mm,
+  title={\bfseries #1}, fonttitle=\small\bfseries, coltitle=white,
+  colbacktitle=warnline}
+\newtcolorbox{okbox}[1]{enhanced, colback=okbg, colframe=okline,
+  boxrule=0.6pt, arc=1.5mm, left=3mm, right=3mm, top=2mm, bottom=2mm,
+  title={\bfseries #1}, fonttitle=\small\bfseries, coltitle=white,
+  colbacktitle=okline}
+\newtcolorbox{tipbox}[1]{enhanced, colback=tipbg, colframe=tipline,
+  boxrule=0.5pt, arc=1.5mm, left=3mm, right=3mm, top=1.5mm, bottom=1.5mm,
+  title={\bfseries #1}, fonttitle=\small\bfseries, coltitle=white,
+  colbacktitle=tipline}
+
+\begin{document}
+
+% ==================== 封面 ====================
+\begin{titlepage}
+\centering
+\vspace*{2.5cm}
+{\color{deep}\Huge\bfseries 视频链路基座}\\[6pt]
+{\color{deep}\Large\bfseries 从零手搓 Step1 教程}\\[14pt]
+{\large 2026 FPGA 创新设计赛道（安路）赛题二}\\[6pt]
+{\large 视觉方向 · Step1\_video\_link}\\[20pt]
+
+\begin{tcolorbox}[enhanced, colback=boxbg, colframe=accent, boxrule=0.8pt,
+  arc=2mm, width=12cm, left=4mm, right=4mm, top=3mm, bottom=3mm]
+\centering
+{\small 读者：零基础队员\\
+目标：理解并手搓视觉链路第一部分（Step1）\\
+前置要求：会开电脑、装了 ModelSim 和 TD\\
+预计学习时间：10～14 天（每天 2～3 小时）}
+\end{tcolorbox}
+
+\vfill
+{\small\color{black!50} fpga-ptz-tracker 教程系列 · 2026-09-19}
+\end{titlepage}
+
+% ==================== 目录 ====================
+\tableofcontents
+\newpage
+
+% ============================================================
+\section{你在造什么}
+
+\subsection{一句话}
+
+\textbf{把摄像头拍到的像素"接住"，把测试图案"生成"出来，把不同时钟的信号"安全传递"。}
+
+翻译成电路：计数器、比较器、小存储器、几根线。没有复杂数学，没有算法——这是整个项目里最简单的一步，也是最好的入门点。
+
+\subsection{在整个系统中的位置}
+
+摄像头拍到的画面要经过好几级处理才能到屏幕上。Step1 是这条路的"地基"——它不做人脸识别、不做跟踪，它只保证\textbf{像素数据能从 A 点流到 B 点而不丢、不错、不停}。
+
+\begin{keybox}{Step1 的三个模块}
+\begin{enumerate}
+  \item \textbf{ser96to24}：把摄像头送来的"4 像素一包"拆成"1 像素一拍"（串化器）
+  \item \textbf{tpg\_720p}：没有摄像头时，假装自己是摄像头，生成测试图案（测试源）
+  \item \textbf{pulse\_sync + cdc\_4phase}：把信号安全地从一个时钟域送到另一个时钟域（跨域桥）
+\end{enumerate}
+\end{keybox}
+
+\subsection{为什么要先做这个}
+
+后面的检测链（Step2：颜色识别）、闭环控制（Step3：云台转动）、OSD 叠加（Step4：屏幕画框），全都建立在这条"像素流"之上。如果像素流本身就有问题（丢数据、顺序错、帧同步乱），后面全部白搭。
+
+\begin{okbox}{学完 Step1 你能做到}
+\begin{itemize}
+  \item 解释像素流从摄像头到屏幕的完整路径
+  \item 看懂 Verilog 里的 always/assign/reg/wire
+  \item 在 ModelSim 里跑仿真并看波形
+  \item 手写一个计数器、一个串化器、一个测试图案发生器
+\end{itemize}
+\end{okbox}
+
+% ============================================================
+\section{阶段 0：三个数字电路概念（1～2 天）}
+
+你不需要学完整门数电课。只需要理解三个东西，就能看懂本项目 90\% 的代码。
+
+\subsection{时钟（clock）}
+
+一个不停 0→1→0→1 的方波信号。板上有个晶振每秒产生 5000 万个这样的方波（50MHz）。
+
+\textbf{关键点：所有动作都在时钟"从 0 变 1 的那一瞬间"发生。}就像军队的口令——喊"齐步走"的瞬间所有人同时迈步。时钟就是那个口令。
+
+\subsection{寄存器（D 触发器）}
+
+一个"在时钟上升沿锁存输入值的 1-bit 存储单元"。
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+时钟：  ──┐ ┌──┐ ┌──┐ ┌──┐ ┌──
+          └─┘  └─┘  └─┘  └─┘
+          ↑    ↑    ↑    ↑
+        上升沿 上升沿 上升沿 上升沿
+
+输入 d:   1    0    1    1    ...
+输出 q:   旧值  1    0    1    ...
+               ↑    ↑    ↑
+     q 在每个上升沿"记住"当时的 d
+\end{Verbatim}
+
+Verilog 写法：
+\begin{Verbatim}[frame=single,fontsize=\small]
+always @(posedge clk) begin
+    q <= d;    // 每个时钟上升沿，q 取 d 的值
+end
+\end{Verbatim}
+
+\subsection{组合逻辑}
+
+没有存储、没有时钟——输入变了输出\textbf{立刻}变（有微小延迟）。例如加法器、比较器、多路选择器。
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+wire [7:0] sum;
+assign sum = a + b;    // b 变了 sum 立刻跟着变（几纳秒后）
+\end{Verbatim}
+
+\begin{warnbox}{组合逻辑 vs 时序逻辑——一字之差，天壤之别}
+\textbf{时序逻辑}（有时钟，用 \texttt{always @(posedge clk)}）：输出在时钟沿才变，有"记忆"。\\
+\textbf{组合逻辑}（无时钟，用 \texttt{assign}）：输出立刻跟输入变，无记忆。\\[4pt]
+混淆的后果：仿真可能对但上板行为完全不同——这是新手最常踩的坑。
+\end{warnbox}
+
+\subsection{练习：写你的第一个 Verilog 计数器}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+// my_counter.v —— 一个 4 位计数器，0~15 循环
+module my_counter (
+    input  wire       clk,      // 时钟
+    input  wire       rst_n,    // 复位（低电平有效）
+    output reg  [3:0] count     // 4 位计数输出
+);
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n)
+            count <= 4'd0;           // 复位时清零
+        else
+            count <= count + 4'd1;   // 每拍加 1
+    end
+endmodule
+\end{Verbatim}
+
+\begin{tipbox}{怎么跑仿真}
+\begin{enumerate}
+  \item 创建一个文件 \texttt{my\_counter.v}，粘贴上面的代码
+  \item 再创建一个测试文件 \texttt{tb.v}：
+\begin{Verbatim}[fontsize=\small]
+module tb;
+    reg clk = 0, rst_n = 0;
+    always #5 clk = ~clk;          // 每 5ns 翻转 = 100MHz
+    my_counter u (.clk(clk), .rst_n(rst_n), .count());
+    initial begin
+        #20 rst_n = 1;             // 20ns 后释放复位
+        #200 $finish;              // 跑 200ns
+    end
+endmodule
+\end{Verbatim}
+  \item 在命令行：
+\begin{Verbatim}[fontsize=\small]
+vlib work
+vlog my_counter.v tb.v
+vsim -c tb -do "run -all; quit -f"
+\end{Verbatim}
+  \item 或用 GUI：\texttt{vsim tb} → 点 Run → 加波形看 count 从 0 数到 15
+\end{enumerate}
+\end{tipbox}
+
+% ============================================================
+\section{阶段 1：Verilog 最小语法集（3～5 天）}
+
+你不需要学完整 Verilog。以下是你看懂本项目所需的全部语法，大约 30 分钟过一遍。
+
+\subsection{必须会的 8 个语法}
+
+\begin{Verbatim}[frame=single,fontsize=\small,numbers=left]
+// 1. 模块声明（一个电路块）
+module 模块名 #(参数) (端口列表);
+  ...
+endmodule
+
+// 2. 端口类型
+input  wire [7:0]  data_in    // 8 位输入
+output reg  [23:0] data_out   // 24 位输出（reg 表示在 always 里赋值）
+output wire        ready      // 1 位输出（wire 表示在 assign 里赋值）
+inout  wire        sda        // 双向（如 I2C）
+
+// 3. 时序逻辑（有时钟）
+always @(posedge clk or negedge rst_n) begin
+    if (!rst_n)
+        q <= 0;
+    else
+        q <= d;
+end
+
+// 4. 组合逻辑
+assign sum = a + b;
+
+// 5. always 组合逻辑（多个条件时用这个代替多条 assign）
+always @(*) begin
+    if (sel) result = a;
+    else     result = b;
+end
+
+// 6. 位拼接（把多个信号拼在一起）
+wire [15:0] combined = {high_byte, low_byte};   // {8bit, 8bit} = 16bit
+
+// 7. 位选择
+wire bit3 = combined[3];          // 取第 3 位
+wire [3:0] nibble = combined[7:4]; // 取高 4 位
+
+// 8. 常量写法
+8'd42     // 8 位十进制 42
+8'h2A     // 8 位十六进制 2A
+4'b1010   // 4 位二进制 1010
+\end{Verbatim}
+
+\subsection{三条铁律（违反 = 仿真对但上板错）}
+
+\begin{warnbox}{铁律 1：时序逻辑用 \texttt{<=}，组合逻辑用 \texttt{=}}
+\begin{Verbatim}[fontsize=\small]
+// 正确
+always @(posedge clk) q <= d;         // 时序：<=
+assign sum = a + b;                    // 组合：不需要符号
+
+// 错误
+always @(posedge clk) q = d;          // 时序用了 = → 竞争冒险
+\end{Verbatim}
+\end{warnbox}
+
+\begin{warnbox}{铁律 2：每个寄存器都要有复位值}
+\begin{Verbatim}[fontsize=\small]
+// 正确：复位时给确定的值
+always @(posedge clk or negedge rst_n) begin
+    if (!rst_n) count <= 0;           // ← 复位值
+    else        count <= count + 1;
+end
+
+// 错误：没有复位 → 上电后寄存器是 X（未知态）
+// 本项目实际踩过：tpg 的 pres 计数器漏了复位 → 输出全是 X
+\end{Verbatim}
+\end{warnbox}
+
+\begin{warnbox}{铁律 3：有符号运算必须显式声明}
+\begin{Verbatim}[fontsize=\small]
+wire signed [12:0] err = $signed(cx) - $signed(center);
+// 缺 $signed → 当无符号 → 负数变成巨大正数 → 系统跑飞
+// 本项目实际踩过：闭环模型跑飞，查了半天是无符号减法
+\end{Verbatim}
+\end{warnbox}
+
+\subsection{练习：读懂本项目的一个模块}
+
+打开 \texttt{03\_vision/step1/03\_project/rtl/tpg\_720p.v}，找到以下结构并在旁边标注它们对应上面 8 个语法中的哪一个：
+
+\begin{itemize}
+  \item 模块声明和参数（第 1～10 行）
+  \item 内部寄存器声明（\texttt{beat\_x}, \texttt{y}, \texttt{pres}）
+  \item 颜色生成函数（\texttt{px\_color}）
+  \item 主时序逻辑块（\texttt{always @(posedge I\_clk ...)}）
+  \item 输出赋值（\texttt{O\_tdata <= ...}）
+\end{itemize}
+
+% ============================================================
+\section{阶段 2：视频流概念（2～3 天）}
+
+\subsection{像素流长什么样}
+
+想象一根水管，每秒流出 5500 万个像素。每个像素是 24 位（R 8bit + G 8bit + B 8bit）。像素排队通过，不能停、不能丢。
+
+\subsection{三个"路标"信号——全项目的通用语言}
+
+\begin{keybox}{valid / sof / eol——必须吃透}
+\begin{itemize}
+  \item \textbf{valid}：这拍的数据是真的（不是垃圾）。类比：传送带上有东西。
+  \item \textbf{sof}（Start of Frame）：这拍是\textbf{一帧的第一个像素}（左上角）。类比：新的一页纸开始了。
+  \item \textbf{eol}（End of Line）：这拍是\textbf{一行的最后一个像素}（最右边）。类比：这行写完了，换行。
+\end{itemize}
+\end{keybox}
+
+\subsection{一帧的完整结构}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+tuser=1, px(0,0), px(1,0), ..., px(1279,0), tlast=1   ← 第 0 行（320 拍）
+tuser=0, px(0,1), px(1,1), ..., px(1279,1), tlast=1   ← 第 1 行
+...
+tuser=0, px(0,719), ..., px(1279,719), tlast=1        ← 第 719 行
+
+一帧 = 1280 × 720 = 921,600 个像素
+帧率 60fps → 每秒 55,296,000 个像素流过
+\end{Verbatim}
+
+\begin{tipbox}{坐标系约定}
+\begin{itemize}
+  \item 原点 (0,0) 在\textbf{左上角}
+  \item x 向右增长（0..1279）
+  \item y 向下增长（0..719）
+  \item 这与 LCD/HDMI 扫描方向一致
+\end{itemize}
+\end{tipbox}
+
+\subsection{96bit 打包：4 像素一拍}
+
+为了减少布线，像素不是 1 个 1 个传的，而是 4 个打包成一拍：
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+I_tdata[95:72]  = 像素 0（最左边）  {R[7:0], G[7:0], B[7:0]}
+I_tdata[71:48]  = 像素 1
+I_tdata[47:24]  = 像素 2
+I_tdata[23:0]   = 像素 3（最右边）
+
+一帧 1280 像素 ÷ 4 = 320 拍/行
+一帧 = 320 拍 × 720 行 = 230,400 拍
+\end{Verbatim}
+
+\subsection{练习：跑仿真看波形}
+
+\begin{enumerate}
+  \item 在 ModelSim 里跑 \texttt{tb\_tpg}
+  \item 加波形：\texttt{add wave /tb\_tpg/u\_dut/*}
+  \item 跑 1 帧的时间（约 13ms），找：
+  \begin{itemize}
+    \item \texttt{tuser} 什么时候变高？（应该在帧的最开头，只出现一次）
+    \item \texttt{tlast} 什么时候变高？（应该每 320 拍出现一次）
+    \item \texttt{tdata} 在变化吗？（应该在不同竖条之间切换）
+  \end{itemize}
+\end{enumerate}
+
+% ============================================================
+\section{阶段 3：精读 ser96to24——你的第一个模块（3～5 天）}
+
+\subsection{它做什么（生活类比）}
+
+\begin{itemize}
+  \item \textbf{输入}：一辆卡车每 4 秒来一次，装 4 个箱子（96bit = 4 × 24bit 像素）
+  \item \textbf{输出}：每秒送走 1 个箱子（24bit 像素）
+  \item \textbf{本质}：一个"小仓库"（FIFO），卡车来了卸 4 个进去，出口每秒取 1 个
+\end{itemize}
+
+\subsection{为什么要这么做}
+
+后面的处理链（HSV/阈值/平滑）每个时钟周期只处理 1 个像素。如果不拆，就要写 4 份处理逻辑——资源翻 4 倍，调试难度翻 10 倍。
+
+\subsection{打开代码逐段读}
+
+文件：\texttt{03\_vision/step1/03\_project/rtl/ser96to24.v}（约 80 行）
+
+\subsection{第 1 段：端口声明}
+
+\begin{Verbatim}[frame=single,fontsize=\small,numbers=left]
+module ser96to24 (
+    input  wire        I_clk,       // 时钟
+    input  wire        I_rst_n,     // 复位
+    input  wire [95:0] I_tdata,     // 输入：4 像素打包
+    input  wire        I_tvalid,    // 输入有效
+    input  wire        I_tuser,     // 帧起始标记
+    input  wire        I_tlast,     // 行尾标记
+    output wire        O_tready,    // 永远 =1（"我随时能收"）
+    output reg         O_valid,     // 输出有效
+    output reg         O_sof,       // 输出帧起始
+    output reg         O_eol,       // 输出行尾
+    output reg  [23:0] O_data       // 输出：1 像素
+);
+\end{Verbatim}
+
+\begin{tipbox}{O\_tready 为什么恒 1？}
+这是"窃流"语义——视觉分支是旁路，不影响主链路。上游爱发多少发多少，我们只管"听"。
+\end{tipbox}
+
+\subsection{第 2 段：小仓库（FIFO）}
+
+\begin{Verbatim}[frame=single,fontsize=\small,numbers=left]
+reg [23:0] mem [0:7];      // 8 个格子，每个 24bit
+reg [2:0]  wp;              // 写指针（指向下一个空格子）
+reg [2:0]  rp;              // 读指针（指向最老的格子）
+reg [3:0]  cnt;             // 里面有几个
+\end{Verbatim}
+
+\begin{keybox}{FIFO 的本质}
+FIFO = First In, First Out（先进先出）。就像排队买奶茶：
+先来的人先买到。写指针往队尾加人，读指针从队头取人。
+\end{keybox}
+
+\subsection{第 3 段：写入逻辑}
+
+\begin{Verbatim}[frame=single,fontsize=\small,numbers=left]
+wire do_wr = I_tvalid;      // 输入有效就写入
+
+always @(posedge I_clk) begin
+    if (do_wr) begin
+        mem[wp]     <= I_tdata[95:72];  // 像素 0
+        mem[wp_n]   <= I_tdata[71:48];  // 像素 1
+        mem[wp_n2]  <= I_tdata[47:24];  // 像素 2
+        mem[wp_n3]  <= I_tdata[23:0];   // 像素 3
+        wp <= wp + 4;                    // 写指针跳 4 格
+        cnt <= cnt + 4;                  // 计数 +4
+    end
+end
+\end{Verbatim}
+
+\subsection{第 4 段：读出逻辑}
+
+\begin{Verbatim}[frame=single,fontsize=\small,numbers=left]
+wire do_rd = (cnt != 0);    // 里面有数据就读
+
+always @(posedge I_clk) begin
+    if (do_rd) begin
+        O_valid <= 1;
+        O_data  <= mem[rp];    // 取最老的
+        O_sof   <= sof_q[rp];  // 如果这是帧首像素
+        O_eol   <= eol_q[rp];  // 如果这是行尾像素
+        rp <= rp + 1;
+        cnt <= cnt - 1;
+    end else begin
+        O_valid <= 0;
+    end
+end
+\end{Verbatim}
+
+\subsection{第 5 段：为什么不会溢出}
+
+\begin{keybox}{收支平衡}
+\begin{itemize}
+  \item 输入：每 4 拍来 1 个 beat（含 4 像素）→ 平均 1 像素/拍
+  \item 输出：每拍最多读 1 像素 → 1 像素/拍
+  \item 平衡！缓冲峰值 7 < 深度 8，不会溢出
+  \item 如果输入全速（每拍 1 beat），缓冲会爆——所以源端必须按 1/4 占空发数据
+\end{itemize}
+\end{keybox}
+
+\subsection{练习}
+
+\begin{enumerate}
+  \item 画出 ser96to24 的框图（输入 → FIFO → 输出）
+  \item 在 ModelSim 跑 \texttt{tb\_ser96to24}，看波形确认：
+  \begin{itemize}
+    \item 输入 4 像素一拍 → 输出 1 像素一拍
+    \item sof 出现在帧的第一个像素
+    \item eol 出现在行的最后一个像素
+  \end{itemize}
+  \item 尝试：把 FIFO 深度从 8 改成 16（\texttt{mem [0:15]}，指针改 4bit），重新仿真
+\end{enumerate}
+
+% ============================================================
+\section{阶段 4：读懂 tpg\_720p——测试图案发生器（2～3 天）}
+
+\subsection{它做什么}
+
+没有摄像头时，TPG 假装自己是摄像头。它内部就是几个计数器驱动一个"查色表"：
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+x 计数器：0→1279 循环（列位置）
+y 计数器：0→719 循环（行位置）
+颜色 = f(x, y)  ← 一个函数，根据位置返回颜色
+\end{Verbatim}
+
+\subsection{它长什么样}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+┌────────────────────────────────────────────────┐
+│ 灰1  │ 灰2  │ 灰3  │ 灰4  │ 蓝  │ 绿  │ 深绿│ 深蓝│
+│      │      │      │      │     │     │     │     │
+│  ┌──────────────┐                               │
+│  │   红色方块   │  ← 这是目标跟踪的"目标"       │
+│  └──────────────┘                               │
+│      （方块位置由外部输入控制，可以移动）       │
+└────────────────────────────────────────────────┘
+     8 个竖条各 160px 宽，全部避开红色阈值
+\end{Verbatim}
+
+\subsection{为什么竖条要"避开红色"}
+
+因为后面的检测链在找红色目标。如果背景条也有红色，检测就会误识别。所以背景色选了灰阶（无饱和度）、蓝色（色相 240）、绿色（色相 120）——都不是红色（色相 0）。
+
+\subsection{精读要点}
+
+\begin{Verbatim}[frame=single,fontsize=\small,numbers=left]
+// 核心：一个函数根据 x 坐标返回颜色
+function [23:0] px_color;
+    if (在方块内)     px_color = 24'hE0_20_20;  // 红色
+    else if (px < 160)  px_color = 24'h40_40_40;  // 灰条 1
+    else if (px < 320)  px_color = 24'h80_80_80;  // 灰条 2
+    ...
+endfunction
+
+// 每拍输出 4 个像素（一个 beat）
+O_tdata <= {px_color(x×4+0, y), px_color(x×4+1, y),
+            px_color(x×4+2, y), px_color(x×4+3, y)};
+\end{Verbatim}
+
+\subsection{练习}
+
+\begin{enumerate}
+  \item 改一种条的颜色（如把蓝色改成紫色）→ 重新仿真 → 确认输出变化
+  \item 改方块位置（\texttt{I\_box\_x} 和 \texttt{I\_box\_y}）→ 确认方块移动
+  \item 思考：如果把一个条改成红色（E02020），检测链会怎么反应？
+\end{enumerate}
+
+% ============================================================
+\section{阶段 5：CDC 概念（可选，2～3 天）}
+
+\subsection{什么是跨时钟域}
+
+芯片里不同模块可能用不同的时钟。比如：摄像头数据用 74.25MHz，舵机控制用 50MHz。当一个信号从 74.25MHz 的模块传到 50MHz 的模块时，就会出问题——因为接收方可能在信号变化的"一半"时采样到不确定的值。
+
+\begin{warnbox}{为什么不能直接连线}
+如果 74.25MHz 信号在 50MHz 时钟上升沿的\textbf{同一时刻}变化，接收寄存器可能进入
+"亚稳态"（既不是 0 也不是 1），后续电路全部出错。
+\end{warnbox}
+
+\subsection{两根"安全桥"}
+
+\begin{keybox}{pulse\_sync（单 bit 脉冲跨域，12 行）}
+原理：源域每发一个脉冲，翻转一个寄存器。目标域用两个寄存器同步这个翻转，再检测"变化"产生脉冲。
+\end{keybox}
+
+\begin{keybox}{cdc\_4phase（多 bit 数据跨域，80 行）}
+原理：源域把数据放在总线上 + 翻转一个 req 信号。目标域发现 req 变化后，锁存数据，翻转 ack 回应。源域收到 ack 后可以发下一个。\\
+就像寄快递：你把包裹放门口（数据+req），对方取走后放个签收回执（ack），你看到回执才放下一个包裹。
+\end{keybox}
+
+\subsection{学习建议}
+
+先跳过这两个文件（不影响理解其他模块），等学完 Step2 的检测链后再回来看。只需要记住一条规则：\textbf{跨时钟域不能裸连，必须走这两个模块}。
+
+% ============================================================
+\section{完整验证：跑通 Step1 全部测试}
+
+\subsection{一键回归}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+cd D:\fpga-ptz-tracker\tools
+python run_all.py
+\end{Verbatim}
+
+期望输出：\texttt{汇总: 18/18 PASS}（仓库全量口径；本册阶段为 15 项，其后
+Step5/闭环补强又新增 3 项）
+
+其中 Step1 相关的 4 个测试：
+
+\begin{itemize}
+  \item \texttt{tb\_ser96to24}：随机数据 + 3 帧，队列自检（数据/sof/eol 逐像素）
+  \item \texttt{tb\_tpg}：几何计数断言 + 整帧 921600 像素与金标准比对
+  \item \texttt{tb\_pulse\_sync}：异步双钟 100 脉冲 1:1
+  \item \texttt{tb\_cdc4phase}：异步双钟 200 随机数据完整性
+\end{itemize}
+
+\subsection{单跑某个仿真}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+cd 03_vision/step1_video_link/03_project/sim
+
+# 编译
+vlib work
+vlog ../rtl/ser96to24.v ../tb/tb_ser96to24.v
+
+# 跑仿真（命令行模式）
+vsim -c tb_ser96to24 -do "run -all; quit -f"
+
+# 跑仿真（GUI 模式，可以看波形）
+vsim tb_ser96to24
+# 在 GUI 里: add wave /*  →  Run All
+\end{Verbatim}
+
+\input{step1_impl}
+
+% ============================================================
+\section{总结与下一步}
+
+\subsection{Step1 学到了什么}
+
+\begin{itemize}
+  \item Verilog 最小语法集（8 个结构 + 3 条铁律）
+  \item 视频流三路标（valid/sof/eol）与帧结构
+  \item FIFO 的原理和实现（写指针/读指针/计数器）
+  \item 串化器的思路（4 像素一包 → 1 像素一拍）
+  \item 测试图案发生器的思路（计数器驱动查色表）
+  \item CDC 的必要性和两种安全桥
+\end{itemize}
+
+\subsection{下一步学什么}
+
+\begin{itemize}
+  \item \textbf{Step2 颜色识别与质心}：在像素流上做实时图像处理
+  \begin{itemize}
+    \item RGB→HSV 颜色空间变换（查表+移位代替除法）
+    \item 阈值分割（"这个像素是不是目标颜色？"）
+    \item 3×3 平滑（去噪）
+    \item 质心计算（"目标在画面哪里？"）
+  \end{itemize}
+  \item 对应文档：\texttt{03\_vision/step2/02\_技术文档/}
+  \item 对应金标准：\texttt{tools/golden\_model.py}
+\end{itemize}
+
+\end{document}

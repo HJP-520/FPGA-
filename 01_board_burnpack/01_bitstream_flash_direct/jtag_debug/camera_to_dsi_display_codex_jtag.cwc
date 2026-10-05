@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- HMAC is: 3f59239c63de301cf809e466e308953b18be1ba622f266ab6879bd2de0ab09b6 -->
+<chipwatcher version="3.040000" project_name="camera_to_dsi_display" chip_name="PH1P35MDG324">
+	<watcher_nodes>
+		<bus name="dbg_awb_r_gain[19:0]" clock="S_csi_rx_clk" inst="u_sc520_watch_awb" type="IP_PROBE" is_enabled="yes">
+			<net name="dbg_awb_r_gain[19]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_r_gain[18]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_r_gain[17]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_r_gain[16]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_r_gain[15]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_r_gain[14]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_r_gain[13]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_r_gain[12]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_r_gain[11]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_r_gain[10]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_r_gain[9]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_r_gain[8]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_r_gain[7]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_r_gain[6]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_r_gain[5]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_r_gain[4]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_r_gain[3]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_r_gain[2]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_r_gain[1]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_r_gain[0]" const="false" data="enable" trig="enable"/>
+		</bus>
+		<bus name="dbg_awb_b_gain[19:0]" clock="S_csi_rx_clk" inst="u_sc520_watch_awb" type="IP_PROBE" is_enabled="yes">
+			<net name="dbg_awb_b_gain[19]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_b_gain[18]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_b_gain[17]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_b_gain[16]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_b_gain[15]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_b_gain[14]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_b_gain[13]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_b_gain[12]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_b_gain[11]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_b_gain[10]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_b_gain[9]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_b_gain[8]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_b_gain[7]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_b_gain[6]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_b_gain[5]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_b_gain[4]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_b_gain[3]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_b_gain[2]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_b_gain[1]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_b_gain[0]" const="false" data="enable" trig="enable"/>
+		</bus>
+		<bus name="dbg_awb_stat_beats[31:0]" clock="S_csi_rx_clk" inst="u_sc520_watch_awb" type="IP_PROBE" is_enabled="yes">
+			<net name="dbg_awb_stat_beats[31]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[30]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[29]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[28]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[27]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[26]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[25]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[24]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[23]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[22]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[21]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[20]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[19]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[18]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[17]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[16]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[15]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[14]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[13]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[12]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[11]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[10]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[9]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[8]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[7]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[6]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[5]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[4]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[3]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[2]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[1]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_stat_beats[0]" const="false" data="enable" trig="enable"/>
+		</bus>
+		<bus name="dbg_awb_total_beats[31:0]" clock="S_csi_rx_clk" inst="u_sc520_watch_awb" type="IP_PROBE" is_enabled="yes">
+			<net name="dbg_awb_total_beats[31]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[30]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[29]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[28]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[27]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[26]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[25]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[24]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[23]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[22]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[21]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[20]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[19]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[18]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[17]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[16]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[15]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[14]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[13]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[12]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[11]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[10]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[9]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[8]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[7]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[6]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[5]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[4]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[3]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[2]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[1]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_awb_total_beats[0]" const="false" data="enable" trig="enable"/>
+		</bus>
+		<bus name="dbg_ae[15:0]" clock="S_24m_clk" inst="u_sc520_watch_camera" type="IP_PROBE" is_enabled="yes">
+			<net name="dbg_ae[15]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ae[14]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ae[13]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ae[12]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ae[11]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ae[10]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ae[9]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ae[8]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ae[7]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ae[6]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ae[5]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ae[4]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ae[3]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ae[2]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ae[1]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ae[0]" const="false" data="enable" trig="enable"/>
+		</bus>
+		<bus name="dbg_ag[15:0]" clock="S_24m_clk" inst="u_sc520_watch_camera" type="IP_PROBE" is_enabled="yes">
+			<net name="dbg_ag[15]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ag[14]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ag[13]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ag[12]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ag[11]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ag[10]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ag[9]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ag[8]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ag[7]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ag[6]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ag[5]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ag[4]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ag[3]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ag[2]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ag[1]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ag[0]" const="false" data="enable" trig="enable"/>
+		</bus>
+		<bus name="dbg_sensor_id[15:0]" clock="S_24m_clk" inst="u_sc520_watch_camera" type="IP_PROBE" is_enabled="yes">
+			<net name="dbg_sensor_id[15]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_sensor_id[14]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_sensor_id[13]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_sensor_id[12]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_sensor_id[11]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_sensor_id[10]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_sensor_id[9]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_sensor_id[8]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_sensor_id[7]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_sensor_id[6]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_sensor_id[5]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_sensor_id[4]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_sensor_id[3]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_sensor_id[2]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_sensor_id[1]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_sensor_id[0]" const="false" data="enable" trig="enable"/>
+		</bus>
+		<bus name="dbg_cam_flags[4:0]" clock="S_24m_clk" inst="u_sc520_watch_camera" type="IP_PROBE" is_enabled="yes">
+			<net name="dbg_cam_flags[4]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_cam_flags[3]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_cam_flags[2]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_cam_flags[1]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_cam_flags[0]" const="false" data="enable" trig="enable"/>
+		</bus>
+		<bus name="dbg_ddr_flags[2:0]" clock="S_ddr_clk" inst="u_sc520_watch_ddr" type="IP_PROBE" is_enabled="yes">
+			<net name="dbg_ddr_flags[2]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ddr_flags[1]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_ddr_flags[0]" const="false" data="enable" trig="enable"/>
+		</bus>
+		<bus name="dbg_frames[31:0]" clock="S_csi_rx_clk" inst="u_sc520_watch_mipi" type="IP_PROBE" is_enabled="yes">
+			<net name="dbg_frames[31]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[30]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[29]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[28]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[27]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[26]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[25]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[24]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[23]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[22]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[21]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[20]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[19]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[18]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[17]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[16]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[15]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[14]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[13]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[12]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[11]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[10]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[9]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[8]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[7]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[6]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[5]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[4]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[3]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[2]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[1]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_frames[0]" const="false" data="enable" trig="enable"/>
+		</bus>
+		<bus name="dbg_lines[10:0]" clock="S_csi_rx_clk" inst="u_sc520_watch_mipi" type="IP_PROBE" is_enabled="yes">
+			<net name="dbg_lines[10]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_lines[9]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_lines[8]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_lines[7]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_lines[6]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_lines[5]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_lines[4]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_lines[3]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_lines[2]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_lines[1]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_lines[0]" const="false" data="enable" trig="enable"/>
+		</bus>
+		<bus name="dbg_mipi_flags[3:0]" clock="S_csi_rx_clk" inst="u_sc520_watch_mipi" type="IP_PROBE" is_enabled="yes">
+			<net name="dbg_mipi_flags[3]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_mipi_flags[2]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_mipi_flags[1]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_mipi_flags[0]" const="false" data="enable" trig="enable"/>
+		</bus>
+		<bus name="dbg_underflow_count[15:0]" clock="S_hdmi_pixel_clk" inst="u_sc520_watch_read" type="IP_PROBE" is_enabled="yes">
+			<net name="dbg_underflow_count[15]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_underflow_count[14]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_underflow_count[13]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_underflow_count[12]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_underflow_count[11]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_underflow_count[10]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_underflow_count[9]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_underflow_count[8]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_underflow_count[7]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_underflow_count[6]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_underflow_count[5]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_underflow_count[4]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_underflow_count[3]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_underflow_count[2]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_underflow_count[1]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_underflow_count[0]" const="false" data="enable" trig="enable"/>
+		</bus>
+		<net name="dbg_read_corrupt" clock="S_hdmi_pixel_clk" inst="u_sc520_watch_read" type="IP_PROBE" is_enabled="yes" const="false" trig="enable" data="enable"/>
+		<bus name="dbg_overflow_count[15:0]" clock="S_csi_rx_clk" inst="u_sc520_watch_write" type="IP_PROBE" is_enabled="yes">
+			<net name="dbg_overflow_count[15]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_overflow_count[14]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_overflow_count[13]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_overflow_count[12]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_overflow_count[11]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_overflow_count[10]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_overflow_count[9]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_overflow_count[8]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_overflow_count[7]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_overflow_count[6]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_overflow_count[5]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_overflow_count[4]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_overflow_count[3]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_overflow_count[2]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_overflow_count[1]" const="false" data="enable" trig="enable"/>
+			<net name="dbg_overflow_count[0]" const="false" data="enable" trig="enable"/>
+		</bus>
+		<net name="dbg_frame_overflow" clock="S_csi_rx_clk" inst="u_sc520_watch_write" type="IP_PROBE" is_enabled="yes" const="false" trig="enable" data="enable"/>
+		<net name="dbg_previous_overflow" clock="S_csi_rx_clk" inst="u_sc520_watch_write" type="IP_PROBE" is_enabled="yes" const="false" trig="enable" data="enable"/>
+	</watcher_nodes>
+	<instance name="u_sc520_watch_awb" id="0" ipgen="true" inst_enable="true">
+		<clock clk_name="S_csi_rx_clk"/>
+		<config bram_name="u_sc520_watch_awb/core/wrapper_cwc_top/U_cwc_ram" debughub_name="u_sc520_watch_awb/core/wrapper_debughub" input_pipe_num="1" output_pipe_num="0" pwr_on_trigger="disable" capture_mode="disable" sample_depth="1024"/>
+		<signal_vec>
+			<watcher_nodes>
+				<bus name="dbg_awb_r_gain[19:0]" op="dont_care" capture_op="dont_care">
+					<net name="dbg_awb_r_gain[19]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_r_gain[18]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_r_gain[17]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_r_gain[16]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_r_gain[15]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_r_gain[14]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_r_gain[13]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_r_gain[12]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_r_gain[11]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_r_gain[10]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_r_gain[9]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_r_gain[8]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_r_gain[7]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_r_gain[6]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_r_gain[5]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_r_gain[4]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_r_gain[3]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_r_gain[2]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_r_gain[1]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_r_gain[0]" cond="low" capture_cond="low"/>
+				</bus>
+				<bus name="dbg_awb_b_gain[19:0]" op="dont_care" capture_op="dont_care">
+					<net name="dbg_awb_b_gain[19]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_b_gain[18]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_b_gain[17]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_b_gain[16]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_b_gain[15]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_b_gain[14]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_b_gain[13]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_b_gain[12]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_b_gain[11]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_b_gain[10]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_b_gain[9]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_b_gain[8]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_b_gain[7]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_b_gain[6]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_b_gain[5]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_b_gain[4]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_b_gain[3]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_b_gain[2]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_b_gain[1]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_b_gain[0]" cond="low" capture_cond="low"/>
+				</bus>
+				<bus name="dbg_awb_stat_beats[31:0]" op="dont_care" capture_op="dont_care">
+					<net name="dbg_awb_stat_beats[31]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[30]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[29]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[28]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[27]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[26]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[25]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[24]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[23]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[22]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[21]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[20]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[19]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[18]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[17]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[16]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[15]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[14]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[13]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[12]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[11]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[10]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[9]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[8]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[7]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[6]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[5]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[4]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[3]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[2]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[1]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_stat_beats[0]" cond="low" capture_cond="low"/>
+				</bus>
+				<bus name="dbg_awb_total_beats[31:0]" op="dont_care" capture_op="dont_care">
+					<net name="dbg_awb_total_beats[31]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[30]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[29]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[28]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[27]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[26]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[25]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[24]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[23]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[22]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[21]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[20]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[19]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[18]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[17]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[16]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[15]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[14]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[13]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[12]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[11]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[10]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[9]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[8]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[7]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[6]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[5]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[4]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[3]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[2]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[1]" cond="low" capture_cond="low"/>
+					<net name="dbg_awb_total_beats[0]" cond="low" capture_cond="low"/>
+				</bus>
+			</watcher_nodes>
+		</signal_vec>
+		<trigger name="u_sc520_watch_awb_trigger" position="127" window_num="1" window_depth="1024">
+			<condition level="1" enabled="yes" type="basic_and" capture_type="basic_and"/>
+		</trigger>
+		<logic_eram name="u_sc520_watch_awb/core/wrapper_cwc_top/U_cwc_ram" width="104" depth="1024">
+			<phy_eram name="u_sc520_watch_awb/core/wrapper_cwc_top/U_cwc_ram/ramread0_syn_51" wid="0X00000222" rid="0X00000222" model_type="AL_PHY_ERAM" width_a="20" width_b="20" debuggable="enable" initialized="enable" width="20" depth="1024" address_offset="0" data_offset="40" address_step="1" num_section="1" section_size="104" width_per_section="20" bytes_in_per_section="1" working_mode_depth="1024" working_mode_width="20" working_mode_ecc="disable" working_mode_num_byte="2" working_mode_super_wide="disable"/>
+			<phy_eram name="u_sc520_watch_awb/core/wrapper_cwc_top/U_cwc_ram/ramread0_syn_30" wid="0X00000227" rid="0X00000227" model_type="AL_PHY_ERAM" width_a="20" width_b="20" debuggable="enable" initialized="enable" width="20" depth="1024" address_offset="0" data_offset="20" address_step="1" num_section="1" section_size="104" width_per_section="20" bytes_in_per_section="1" working_mode_depth="1024" working_mode_width="20" working_mode_ecc="disable" working_mode_num_byte="2" working_mode_super_wide="disable"/>
+			<phy_eram name="u_sc520_watch_awb/core/wrapper_cwc_top/U_cwc_ram/ramread0_syn_9" wid="0X00000223" rid="0X00000223" model_type="AL_PHY_ERAM" width_a="20" width_b="20" debuggable="enable" initialized="enable" width="20" depth="1024" address_offset="0" data_offset="0" address_step="1" num_section="1" section_size="104" width_per_section="20" bytes_in_per_section="1" working_mode_depth="1024" working_mode_width="20" working_mode_ecc="disable" working_mode_num_byte="2" working_mode_super_wide="disable"/>
+			<phy_eram name="u_sc520_watch_awb/core/wrapper_cwc_top/U_cwc_ram/ramread0_syn_114" wid="0X00000224" rid="0X00000224" model_type="AL_PHY_ERAM" width_a="5" width_b="5" debuggable="enable" initialized="enable" width="4" depth="1024" address_offset="0" data_offset="100" address_step="1" num_section="1" section_size="104" width_per_section="4" bytes_in_per_section="1" working_mode_depth="4096" working_mode_width="5" working_mode_ecc="disable" working_mode_num_byte="1" working_mode_super_wide="disable"/>
+			<phy_eram name="u_sc520_watch_awb/core/wrapper_cwc_top/U_cwc_ram/ramread0_syn_72" wid="0X00000420" rid="0X00000420" model_type="AL_PHY_ERAM" width_a="20" width_b="20" debuggable="enable" initialized="enable" width="20" depth="1024" address_offset="0" data_offset="60" address_step="1" num_section="1" section_size="104" width_per_section="20" bytes_in_per_section="1" working_mode_depth="1024" working_mode_width="20" working_mode_ecc="disable" working_mode_num_byte="2" working_mode_super_wide="disable"/>
+			<phy_eram name="u_sc520_watch_awb/core/wrapper_cwc_top/U_cwc_ram/ramread0_syn_93" wid="0X00000421" rid="0X00000421" model_type="AL_PHY_ERAM" width_a="20" width_b="20" debuggable="enable" initialized="enable" width="20" depth="1024" address_offset="0" data_offset="80" address_step="1" num_section="1" section_size="104" width_per_section="20" bytes_in_per_section="1" working_mode_depth="1024" working_mode_width="20" working_mode_ecc="disable" working_mode_num_byte="2" working_mode_super_wide="disable"/>
+		</logic_eram>
+	</instance>
+	<instance name="u_sc520_watch_camera" id="1" ipgen="true" inst_enable="true">
+		<clock clk_name="S_24m_clk"/>
+		<config bram_name="u_sc520_watch_camera/core/wrapper_cwc_top/U_cwc_ram" debughub_name="u_sc520_watch_camera/core/wrapper_debughub" input_pipe_num="1" output_pipe_num="0" pwr_on_trigger="disable" capture_mode="disable" sample_depth="1024"/>
+		<signal_vec>
+			<watcher_nodes>
+				<bus name="dbg_ae[15:0]" op="dont_care" capture_op="dont_care">
+					<net name="dbg_ae[15]" cond="low" capture_cond="low"/>
+					<net name="dbg_ae[14]" cond="low" capture_cond="low"/>
+					<net name="dbg_ae[13]" cond="low" capture_cond="low"/>
+					<net name="dbg_ae[12]" cond="low" capture_cond="low"/>
+					<net name="dbg_ae[11]" cond="low" capture_cond="low"/>
+					<net name="dbg_ae[10]" cond="low" capture_cond="low"/>
+					<net name="dbg_ae[9]" cond="low" capture_cond="low"/>
+					<net name="dbg_ae[8]" cond="low" capture_cond="low"/>
+					<net name="dbg_ae[7]" cond="low" capture_cond="low"/>
+					<net name="dbg_ae[6]" cond="low" capture_cond="low"/>
+					<net name="dbg_ae[5]" cond="low" capture_cond="low"/>
+					<net name="dbg_ae[4]" cond="low" capture_cond="low"/>
+					<net name="dbg_ae[3]" cond="low" capture_cond="low"/>
+					<net name="dbg_ae[2]" cond="low" capture_cond="low"/>
+					<net name="dbg_ae[1]" cond="low" capture_cond="low"/>
+					<net name="dbg_ae[0]" cond="low" capture_cond="low"/>
+				</bus>
+				<bus name="dbg_ag[15:0]" op="dont_care" capture_op="dont_care">
+					<net name="dbg_ag[15]" cond="low" capture_cond="low"/>
+					<net name="dbg_ag[14]" cond="low" capture_cond="low"/>
+					<net name="dbg_ag[13]" cond="low" capture_cond="low"/>
+					<net name="dbg_ag[12]" cond="low" capture_cond="low"/>
+					<net name="dbg_ag[11]" cond="low" capture_cond="low"/>
+					<net name="dbg_ag[10]" cond="low" capture_cond="low"/>
+					<net name="dbg_ag[9]" cond="low" capture_cond="low"/>
+					<net name="dbg_ag[8]" cond="low" capture_cond="low"/>
+					<net name="dbg_ag[7]" cond="low" capture_cond="low"/>
+					<net name="dbg_ag[6]" cond="low" capture_cond="low"/>
+					<net name="dbg_ag[5]" cond="low" capture_cond="low"/>
+					<net name="dbg_ag[4]" cond="low" capture_cond="low"/>
+					<net name="dbg_ag[3]" cond="low" capture_cond="low"/>
+					<net name="dbg_ag[2]" cond="low" capture_cond="low"/>
+					<net name="dbg_ag[1]" cond="low" capture_cond="low"/>
+					<net name="dbg_ag[0]" cond="low" capture_cond="low"/>
+				</bus>
+				<bus name="dbg_sensor_id[15:0]" op="dont_care" capture_op="dont_care">
+					<net name="dbg_sensor_id[15]" cond="low" capture_cond="low"/>
+					<net name="dbg_sensor_id[14]" cond="low" capture_cond="low"/>
+					<net name="dbg_sensor_id[13]" cond="low" capture_cond="low"/>
+					<net name="dbg_sensor_id[12]" cond="low" capture_cond="low"/>
+					<net name="dbg_sensor_id[11]" cond="low" capture_cond="low"/>
+					<net name="dbg_sensor_id[10]" cond="low" capture_cond="low"/>
+					<net name="dbg_sensor_id[9]" cond="low" capture_cond="low"/>
+					<net name="dbg_sensor_id[8]" cond="low" capture_cond="low"/>
+					<net name="dbg_sensor_id[7]" cond="low" capture_cond="low"/>
+					<net name="dbg_sensor_id[6]" cond="low" capture_cond="low"/>
+					<net name="dbg_sensor_id[5]" cond="low" capture_cond="low"/>
+					<net name="dbg_sensor_id[4]" cond="low" capture_cond="low"/>
+					<net name="dbg_sensor_id[3]" cond="low" capture_cond="low"/>
+					<net name="dbg_sensor_id[2]" cond="low" capture_cond="low"/>
+					<net name="dbg_sensor_id[1]" cond="low" capture_cond="low"/>
+					<net name="dbg_sensor_id[0]" cond="low" capture_cond="low"/>
+				</bus>
+				<bus name="dbg_cam_flags[4:0]" op="dont_care" capture_op="dont_care">
+					<net name="dbg_cam_flags[4]" cond="low" capture_cond="low"/>
+					<net name="dbg_cam_flags[3]" cond="low" capture_cond="low"/>
+					<net name="dbg_cam_flags[2]" cond="low" capture_cond="low"/>
+					<net name="dbg_cam_flags[1]" cond="low" capture_cond="low"/>
+					<net name="dbg_cam_flags[0]" cond="low" capture_cond="low"/>
+				</bus>
+			</watcher_nodes>
+		</signal_vec>
+		<trigger name="u_sc520_watch_camera_trigger" position="127" window_num="1" window_depth="1024">
+			<condition level="1" enabled="yes" type="basic_and" capture_type="basic_and"/>
+		</trigger>
+		<logic_eram name="u_sc520_watch_camera/core/wrapper_cwc_top/U_cwc_ram" width="53" depth="1024">
+			<phy_eram name="u_sc520_watch_camera/core/wrapper_cwc_top/U_cwc_ram/ramread0_syn_51" wid="0X00000201" rid="0X00000201" model_type="AL_PHY_ERAM" width_a="20" width_b="20" debuggable="enable" initialized="enable" width="13" depth="1024" address_offset="0" data_offset="40" address_step="1" num_section="1" section_size="53" width_per_section="13" bytes_in_per_section="1" working_mode_depth="1024" working_mode_width="20" working_mode_ecc="disable" working_mode_num_byte="2" working_mode_super_wide="disable"/>
+			<phy_eram name="u_sc520_watch_camera/core/wrapper_cwc_top/U_cwc_ram/ramread0_syn_9" wid="0X00000202" rid="0X00000202" model_type="AL_PHY_ERAM" width_a="20" width_b="20" debuggable="enable" initialized="enable" width="20" depth="1024" address_offset="0" data_offset="0" address_step="1" num_section="1" section_size="53" width_per_section="20" bytes_in_per_section="1" working_mode_depth="1024" working_mode_width="20" working_mode_ecc="disable" working_mode_num_byte="2" working_mode_super_wide="disable"/>
+			<phy_eram name="u_sc520_watch_camera/core/wrapper_cwc_top/U_cwc_ram/ramread0_syn_30" wid="0X00000200" rid="0X00000200" model_type="AL_PHY_ERAM" width_a="20" width_b="20" debuggable="enable" initialized="enable" width="20" depth="1024" address_offset="0" data_offset="20" address_step="1" num_section="1" section_size="53" width_per_section="20" bytes_in_per_section="1" working_mode_depth="1024" working_mode_width="20" working_mode_ecc="disable" working_mode_num_byte="2" working_mode_super_wide="disable"/>
+		</logic_eram>
+	</instance>
+	<instance name="u_sc520_watch_ddr" id="2" ipgen="true" inst_enable="true">
+		<clock clk_name="S_ddr_clk"/>
+		<config bram_name="u_sc520_watch_ddr/core/wrapper_cwc_top/U_cwc_ram" debughub_name="u_sc520_watch_ddr/core/wrapper_debughub" input_pipe_num="1" output_pipe_num="0" pwr_on_trigger="disable" capture_mode="disable" sample_depth="1024"/>
+		<signal_vec>
+			<watcher_nodes>
+				<bus name="dbg_ddr_flags[2:0]" op="dont_care" capture_op="dont_care">
+					<net name="dbg_ddr_flags[2]" cond="low" capture_cond="low"/>
+					<net name="dbg_ddr_flags[1]" cond="low" capture_cond="low"/>
+					<net name="dbg_ddr_flags[0]" cond="low" capture_cond="low"/>
+				</bus>
+			</watcher_nodes>
+		</signal_vec>
+		<trigger name="u_sc520_watch_ddr_trigger" position="127" window_num="1" window_depth="1024">
+			<condition level="1" enabled="yes" type="basic_and" capture_type="basic_and"/>
+		</trigger>
+		<logic_eram name="u_sc520_watch_ddr/core/wrapper_cwc_top/U_cwc_ram" width="3" depth="1024">
+			<phy_eram name="u_sc520_watch_ddr/core/wrapper_cwc_top/U_cwc_ram/ramread0_syn_9" wid="0X00000426" rid="0X00000426" model_type="AL_PHY_ERAM" width_a="5" width_b="5" debuggable="enable" initialized="enable" width="3" depth="1024" address_offset="0" data_offset="0" address_step="1" num_section="1" section_size="3" width_per_section="3" bytes_in_per_section="1" working_mode_depth="4096" working_mode_width="5" working_mode_ecc="disable" working_mode_num_byte="1" working_mode_super_wide="disable"/>
+		</logic_eram>
+	</instance>
+	<instance name="u_sc520_watch_mipi" id="3" ipgen="true" inst_enable="true">
+		<clock clk_name="S_csi_rx_clk"/>
+		<config bram_name="u_sc520_watch_mipi/core/wrapper_cwc_top/U_cwc_ram" debughub_name="u_sc520_watch_mipi/core/wrapper_debughub" input_pipe_num="1" output_pipe_num="0" pwr_on_trigger="disable" capture_mode="disable" sample_depth="1024"/>
+		<signal_vec>
+			<watcher_nodes>
+				<bus name="dbg_frames[31:0]" op="dont_care" capture_op="dont_care">
+					<net name="dbg_frames[31]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[30]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[29]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[28]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[27]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[26]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[25]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[24]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[23]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[22]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[21]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[20]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[19]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[18]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[17]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[16]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[15]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[14]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[13]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[12]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[11]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[10]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[9]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[8]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[7]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[6]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[5]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[4]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[3]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[2]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[1]" cond="low" capture_cond="low"/>
+					<net name="dbg_frames[0]" cond="low" capture_cond="low"/>
+				</bus>
+				<bus name="dbg_lines[10:0]" op="dont_care" capture_op="dont_care">
+					<net name="dbg_lines[10]" cond="low" capture_cond="low"/>
+					<net name="dbg_lines[9]" cond="low" capture_cond="low"/>
+					<net name="dbg_lines[8]" cond="low" capture_cond="low"/>
+					<net name="dbg_lines[7]" cond="low" capture_cond="low"/>
+					<net name="dbg_lines[6]" cond="low" capture_cond="low"/>
+					<net name="dbg_lines[5]" cond="low" capture_cond="low"/>
+					<net name="dbg_lines[4]" cond="low" capture_cond="low"/>
+					<net name="dbg_lines[3]" cond="low" capture_cond="low"/>
+					<net name="dbg_lines[2]" cond="low" capture_cond="low"/>
+					<net name="dbg_lines[1]" cond="low" capture_cond="low"/>
+					<net name="dbg_lines[0]" cond="low" capture_cond="low"/>
+				</bus>
+				<bus name="dbg_mipi_flags[3:0]" op="dont_care" capture_op="dont_care">
+					<net name="dbg_mipi_flags[3]" cond="low" capture_cond="low"/>
+					<net name="dbg_mipi_flags[2]" cond="low" capture_cond="low"/>
+					<net name="dbg_mipi_flags[1]" cond="low" capture_cond="low"/>
+					<net name="dbg_mipi_flags[0]" cond="low" capture_cond="low"/>
+				</bus>
+			</watcher_nodes>
+		</signal_vec>
+		<trigger name="u_sc520_watch_mipi_trigger" position="127" window_num="1" window_depth="1024">
+			<condition level="1" enabled="yes" type="basic_and" capture_type="basic_and"/>
+		</trigger>
+		<logic_eram name="u_sc520_watch_mipi/core/wrapper_cwc_top/U_cwc_ram" width="47" depth="1024">
+			<phy_eram name="u_sc520_watch_mipi/core/wrapper_cwc_top/U_cwc_ram/ramread0_syn_9" wid="0X0000040b" rid="0X0000040b" model_type="AL_PHY_ERAM" width_a="20" width_b="20" debuggable="enable" initialized="enable" width="20" depth="1024" address_offset="0" data_offset="0" address_step="1" num_section="1" section_size="47" width_per_section="20" bytes_in_per_section="1" working_mode_depth="1024" working_mode_width="20" working_mode_ecc="disable" working_mode_num_byte="2" working_mode_super_wide="disable"/>
+			<phy_eram name="u_sc520_watch_mipi/core/wrapper_cwc_top/U_cwc_ram/ramread0_syn_51" wid="0X0000040c" rid="0X0000040c" model_type="AL_PHY_ERAM" width_a="10" width_b="10" debuggable="enable" initialized="enable" width="7" depth="1024" address_offset="0" data_offset="40" address_step="1" num_section="1" section_size="47" width_per_section="7" bytes_in_per_section="1" working_mode_depth="2048" working_mode_width="10" working_mode_ecc="disable" working_mode_num_byte="1" working_mode_super_wide="disable"/>
+			<phy_eram name="u_sc520_watch_mipi/core/wrapper_cwc_top/U_cwc_ram/ramread0_syn_30" wid="0X0000040d" rid="0X0000040d" model_type="AL_PHY_ERAM" width_a="20" width_b="20" debuggable="enable" initialized="enable" width="20" depth="1024" address_offset="0" data_offset="20" address_step="1" num_section="1" section_size="47" width_per_section="20" bytes_in_per_section="1" working_mode_depth="1024" working_mode_width="20" working_mode_ecc="disable" working_mode_num_byte="2" working_mode_super_wide="disable"/>
+		</logic_eram>
+	</instance>
+	<instance name="u_sc520_watch_read" id="4" ipgen="true" inst_enable="true">
+		<clock clk_name="S_hdmi_pixel_clk"/>
+		<config bram_name="u_sc520_watch_read/core/wrapper_cwc_top/U_cwc_ram" debughub_name="u_sc520_watch_read/core/wrapper_debughub" input_pipe_num="1" output_pipe_num="0" pwr_on_trigger="disable" capture_mode="disable" sample_depth="1024"/>
+		<signal_vec>
+			<watcher_nodes>
+				<bus name="dbg_underflow_count[15:0]" op="dont_care" capture_op="dont_care">
+					<net name="dbg_underflow_count[15]" cond="low" capture_cond="low"/>
+					<net name="dbg_underflow_count[14]" cond="low" capture_cond="low"/>
+					<net name="dbg_underflow_count[13]" cond="low" capture_cond="low"/>
+					<net name="dbg_underflow_count[12]" cond="low" capture_cond="low"/>
+					<net name="dbg_underflow_count[11]" cond="low" capture_cond="low"/>
+					<net name="dbg_underflow_count[10]" cond="low" capture_cond="low"/>
+					<net name="dbg_underflow_count[9]" cond="low" capture_cond="low"/>
+					<net name="dbg_underflow_count[8]" cond="low" capture_cond="low"/>
+					<net name="dbg_underflow_count[7]" cond="low" capture_cond="low"/>
+					<net name="dbg_underflow_count[6]" cond="low" capture_cond="low"/>
+					<net name="dbg_underflow_count[5]" cond="low" capture_cond="low"/>
+					<net name="dbg_underflow_count[4]" cond="low" capture_cond="low"/>
+					<net name="dbg_underflow_count[3]" cond="low" capture_cond="low"/>
+					<net name="dbg_underflow_count[2]" cond="low" capture_cond="low"/>
+					<net name="dbg_underflow_count[1]" cond="low" capture_cond="low"/>
+					<net name="dbg_underflow_count[0]" cond="low" capture_cond="low"/>
+				</bus>
+				<net name="dbg_read_corrupt" cond="any" capture_cond="any"/>
+			</watcher_nodes>
+		</signal_vec>
+		<trigger name="u_sc520_watch_read_trigger" position="127" window_num="1" window_depth="1024">
+			<condition level="1" enabled="yes" type="basic_and" capture_type="basic_and"/>
+		</trigger>
+		<logic_eram name="u_sc520_watch_read/core/wrapper_cwc_top/U_cwc_ram" width="17" depth="1024">
+			<phy_eram name="u_sc520_watch_read/core/wrapper_cwc_top/U_cwc_ram/ramread0_syn_9" wid="0X00000401" rid="0X00000401" model_type="AL_PHY_ERAM" width_a="20" width_b="20" debuggable="enable" initialized="enable" width="17" depth="1024" address_offset="0" data_offset="0" address_step="1" num_section="1" section_size="17" width_per_section="17" bytes_in_per_section="1" working_mode_depth="1024" working_mode_width="20" working_mode_ecc="disable" working_mode_num_byte="2" working_mode_super_wide="disable"/>
+		</logic_eram>
+	</instance>
+	<instance name="u_sc520_watch_write" id="5" ipgen="true" inst_enable="true">
+		<clock clk_name="S_csi_rx_clk"/>
+		<config bram_name="u_sc520_watch_write/core/wrapper_cwc_top/U_cwc_ram" debughub_name="u_sc520_watch_write/core/wrapper_debughub" input_pipe_num="1" output_pipe_num="0" pwr_on_trigger="disable" capture_mode="disable" sample_depth="1024"/>
+		<signal_vec>
+			<watcher_nodes>
+				<bus name="dbg_overflow_count[15:0]" op="dont_care" capture_op="dont_care">
+					<net name="dbg_overflow_count[15]" cond="low" capture_cond="low"/>
+					<net name="dbg_overflow_count[14]" cond="low" capture_cond="low"/>
+					<net name="dbg_overflow_count[13]" cond="low" capture_cond="low"/>
+					<net name="dbg_overflow_count[12]" cond="low" capture_cond="low"/>
+					<net name="dbg_overflow_count[11]" cond="low" capture_cond="low"/>
+					<net name="dbg_overflow_count[10]" cond="low" capture_cond="low"/>
+					<net name="dbg_overflow_count[9]" cond="low" capture_cond="low"/>
+					<net name="dbg_overflow_count[8]" cond="low" capture_cond="low"/>
+					<net name="dbg_overflow_count[7]" cond="low" capture_cond="low"/>
+					<net name="dbg_overflow_count[6]" cond="low" capture_cond="low"/>
+					<net name="dbg_overflow_count[5]" cond="low" capture_cond="low"/>
+					<net name="dbg_overflow_count[4]" cond="low" capture_cond="low"/>
+					<net name="dbg_overflow_count[3]" cond="low" capture_cond="low"/>
+					<net name="dbg_overflow_count[2]" cond="low" capture_cond="low"/>
+					<net name="dbg_overflow_count[1]" cond="low" capture_cond="low"/>
+					<net name="dbg_overflow_count[0]" cond="low" capture_cond="low"/>
+				</bus>
+				<net name="dbg_frame_overflow" cond="any" capture_cond="any"/>
+				<net name="dbg_previous_overflow" cond="any" capture_cond="any"/>
+			</watcher_nodes>
+		</signal_vec>
+		<trigger name="u_sc520_watch_write_trigger" position="127" window_num="1" window_depth="1024">
+			<condition level="1" enabled="yes" type="basic_and" capture_type="basic_and"/>
+		</trigger>
+		<logic_eram name="u_sc520_watch_write/core/wrapper_cwc_top/U_cwc_ram" width="18" depth="1024">
+			<phy_eram name="u_sc520_watch_write/core/wrapper_cwc_top/U_cwc_ram/ramread0_syn_9" wid="0X00000412" rid="0X00000412" model_type="AL_PHY_ERAM" width_a="20" width_b="20" debuggable="enable" initialized="enable" width="18" depth="1024" address_offset="0" data_offset="0" address_step="1" num_section="1" section_size="18" width_per_section="18" bytes_in_per_section="1" working_mode_depth="1024" working_mode_width="20" working_mode_ecc="disable" working_mode_num_byte="2" working_mode_super_wide="disable"/>
+		</logic_eram>
+	</instance>
+</chipwatcher>

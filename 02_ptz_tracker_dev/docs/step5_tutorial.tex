@@ -1,0 +1,434 @@
+\documentclass[11pt]{ctexart}
+\usepackage[a4paper,top=2cm,bottom=2cm,left=2.2cm,right=2.2cm]{geometry}
+\usepackage{fancyvrb}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{fontspec}
+\usepackage[most]{tcolorbox}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{hyperref}
+
+\setmonofont{Consolas}
+\setCJKmonofont{SimHei}
+\setlength{\parindent}{0pt}
+\setlist{nosep,leftmargin=1.4em}
+
+% ── Step5 主题色（与 Step1～4 同族、换为深藏青） ──
+\definecolor{deep}{RGB}{30,42,88}        % 主色：深藏青
+\definecolor{accent}{RGB}{62,84,160}     % 强调：藏青
+\definecolor{keyline}{RGB}{90,130,200}   % 知识点：蓝
+\definecolor{keybg}{RGB}{238,244,255}
+\definecolor{warnline}{RGB}{200,120,60}  % 警告：橙
+\definecolor{warnbg}{RGB}{255,243,235}
+\definecolor{okline}{RGB}{26,116,88}     % 成果：绿
+\definecolor{okbg}{RGB}{240,252,244}
+\definecolor{tipline}{RGB}{110,120,180}  % 提示：青灰
+\definecolor{tipbg}{RGB}{240,242,250}
+\definecolor{codebg}{RGB}{249,249,252}   % 代码底
+\definecolor{rowtint}{RGB}{238,240,248}  % 表头浅藏青
+
+\titleformat{\section}{\large\bfseries\color{deep}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{accent}}{\thesubsection}{0.5em}{}
+\titleformat{\part}[display]{\centering\Huge\bfseries\color{deep}}{}{0pt}{\Huge}
+\titlespacing{\section}{0pt}{14pt}{6pt}
+\titlespacing{\subsection}{0pt}{10pt}{4pt}
+
+\newtcolorbox{keybox}[1]{enhanced, colback=keybg, colframe=keyline,
+  boxrule=0.6pt, arc=1.5mm, left=3mm, right=3mm, top=2mm, bottom=2mm,
+  title={\bfseries #1}, fonttitle=\small\bfseries, coltitle=white,
+  colbacktitle=keyline}
+\newtcolorbox{warnbox}[1]{enhanced, colback=warnbg, colframe=warnline,
+  boxrule=0.6pt, arc=1.5mm, left=3mm, right=3mm, top=2mm, bottom=2mm,
+  title={\bfseries #1}, fonttitle=\small\bfseries, coltitle=white,
+  colbacktitle=warnline}
+\newtcolorbox{okbox}[1]{enhanced, colback=okbg, colframe=okline,
+  boxrule=0.6pt, arc=1.5mm, left=3mm, right=3mm, top=2mm, bottom=2mm,
+  title={\bfseries #1}, fonttitle=\small\bfseries, coltitle=white,
+  colbacktitle=okline}
+\newtcolorbox{tipbox}[1]{enhanced, colback=tipbg, colframe=tipline,
+  boxrule=0.5pt, arc=1.5mm, left=3mm, right=3mm, top=1.5mm, bottom=1.5mm,
+  title={\bfseries #1}, fonttitle=\small\bfseries, coltitle=white,
+  colbacktitle=tipline}
+
+\newcommand{\code}[1]{\texttt{#1}}
+\DefineVerbatimEnvironment{Verilog}{Verbatim}{frame=single,fontsize=\small}
+
+\begin{document}
+
+% ==================== 封面 ====================
+\begin{titlepage}
+\centering
+\vspace*{2.2cm}
+{\color{deep}\Huge\bfseries 拓展功能集}\\[6pt]
+{\color{deep}\Large\bfseries 从零手搓 Step5 教程}\\[14pt]
+{\large 2026 FPGA 创新设计赛道（安路）赛题二}\\[6pt]
+{\large 视觉方向 · Step5\_expansion}\\[20pt]
+
+\begin{tcolorbox}[enhanced, colback=codebg, colframe=accent, boxrule=0.8pt,
+  arc=2mm, width=12.5cm, left=4mm, right=4mm, top=3mm, bottom=3mm]
+\centering
+{\small 读者：零基础队员（建议先读完 Step1～4 教程）\\
+目标：把评分表的进阶/扩展项逐个补齐——多算法、运动检测、画质调节、声光\\
+前置要求：完成 Step1～4 的手搓或至少精读\\
+预计学习时间：10～14 天（每天 2～3 小时）}
+\end{tcolorbox}
+
+\vspace{8mm}
+\begin{tcolorbox}[enhanced, colback=tipbg, colframe=tipline, boxrule=0.5pt,
+  arc=2mm, width=12.5cm, left=4mm, right=4mm, top=2mm, bottom=2mm]
+\centering
+{\small\color{deep} \textbf{本教程与你手上的代码是什么关系}\\
+Step1～4 打通了"看 - 认 - 动 - 显"；Step5 是\textbf{加分项集中营}——\\
+官方边缘检测核接入、帧差运动、亮度对比度、三行 OSD、声光反馈。}
+\end{tcolorbox}
+
+\vfill
+{\small\color{black!50} fpga-ptz-tracker 教程系列 · 2026-09}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ============================================================
+\part{从零学习教程}
+
+% ============================================================
+\section{你在造什么}
+
+\subsection{一句话}
+
+\textbf{对着评分表编程：基础项做完之后，每一个进阶/扩展条目都是一个}
+\textbf{独立小功能，这一步把它们一次做齐。}
+
+\subsection{五件套总览}
+
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+\rowcolor{rowtint}\textbf{功能} & \textbf{对应要求} & \textbf{实现} & \textbf{用户看到} \\
+\midrule
+多算法切换 & 进阶（1） & \code{edge\_detect\_96} + 帧首 mux & 按键切边缘图 \\
+延迟可视化 & 进阶（3） & fid 随包传递 & OSD 的 D 字段 \\
+运动检测 & 进阶（4） & \code{motion\_detect} & 橙色包围框 \\
+三行 OSD+跑马灯 & 扩展（1） & \code{osd\_track} v2/v3 & 文字层 \\
+亮度对比度 & 扩展（4） & \code{video\_adj} & 实时调节 \\
+声光反馈 & 演示加分 & \code{led\_buzzer} & 绿灯/蜂鸣 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{做完是什么效果}
+
+按一下按键，画面从"彩色跟踪"切换成"黑白边缘图"（无缝，无撕裂）；
+有人在镜头前挥手，目标框外多出一个\textbf{橙色}运动包围框；拧亮度旋钮，
+画面明暗实时变化且左上角 B/C 字段跟着变；锁定目标时蜂鸣器短鸣一声、
+绿灯常亮。
+
+\begin{okbox}{学完 Step5 你能做到}
+\begin{itemize}
+  \item 把官方例程核"零适配"接进自己的链路
+  \item 实现帧边界无缝的算法切换并解释为什么不能帧中切
+  \item 写 Q6 定点的亮度/对比度流水线
+  \item 用 1bit/像素的块存储器做帧差运动检测
+  \item 说出两处"仿真过了上板翻车"的经典陷阱及防范
+\end{itemize}
+\end{okbox}
+
+% ============================================================
+\section{阶段 0：官方例程当积木（1 天）}
+
+\subsection{edge\_detect\_96 是什么}
+
+官方 Lab2 给了一个 Sobel 3x3 边缘检测核（\code{edge\_detect\_96.v}），
+工作在 96bit AXI-Stream 上（一次 4 像素），输出边缘点白色、
+非边缘黑色。\textbf{端口和官方视频链路完全兼容}：
+tuser/tlast/tready 直通，挂上就能用。
+
+\subsection{接入姿势：并行分支，不是替换}
+
+\begin{Verilog}
+96bit 入 ----+---- 直通（显示主线不动）
+             +---- detect_top（颜色检测分支, 常开）
+             +---- edge_detect_96（边缘分支, 常开）
+                        |
+             mux <- algo_q（帧首锁存的选择信号）
+\end{Verilog}
+
+两个算法分支\textbf{同时运行}，切换只动 mux——不是"停一个启一个"。
+这样切换零启动延迟，也避免了"新算法第一帧还没出图"的尴尬。
+
+\begin{keybox}{读官方代码的三个动作}
+1）读端口和参数（能配置什么）；2）读时序（延迟几拍、tuser/tlast 怎么
+传递）；3）读粒度（它按 4 像素/拍工作，输出 2 个判决再复制成 4 个——
+了解这点才能对上拍）。本工程把它当\textbf{黑盒积木}用，零修改。
+\end{keybox}
+
+\subsection{练习}
+
+\begin{enumerate}
+  \item 画出三分支（直通/检测/边缘）的结构图，标出 mux 位置
+  \item 思考：边缘分支和检测分支各占多少逻辑资源？为什么要"常开"而不是按需启动？
+\end{enumerate}
+
+% ============================================================
+\section{阶段 1：帧边界切换的艺术（2 天）}
+
+\subsection{为什么帧中间切会出事故}
+
+mux 前面是两条\textbf{延迟不同的流水线}：检测链约 9 拍 + 平滑行缓存，
+边缘核约 5 拍。如果在帧中间拨动选择信号：
+
+\begin{Verilog}
+帧中第 300 拍切换:
+  第 0~299 像素: 来自 A 链（当前帧第 0~299 像素）
+  第 300~ 像素:  来自 B 链（同一帧, 但 B 链进度不同 -> 时间错位）
+  -> 画面左右两半来自"不同时刻", 出现垂直错缝
+\end{Verilog}
+
+\subsection{解法：帧首拍锁存}
+
+\begin{Verilog}
+if (I_tvalid && I_tuser)      // 只在每帧第一拍采样按键
+    algo_q <= I_algo_edge;
+// 帧内 mux 恒定 -> 切换永远发生在帧与帧之间
+\end{Verilog}
+
+切换延迟最多 1 帧（16.7ms）——人眼无感，画面无撕裂。
+
+\subsection{练习}
+
+\begin{enumerate}
+  \item 算一算：两条链延迟差 4 拍时，帧中切换的垂直错缝是几个像素？
+  \item 思考：为什么采样条件是 \code{I\_tvalid \&\& I\_tuser} 而不是单独 tuser？
+\end{enumerate}
+
+% ============================================================
+\section{阶段 2：亮度与对比度（1～2 天）}
+
+\subsection{一条公式}
+
+$$out = clamp\big(((c - 128) \times C \gg 6) + 128 + B\big)$$
+
+三个动作：\textbf{居中}（减 128，让"不增不减"的乘法不动中灰）、
+\textbf{缩放}（C 是 Q6 定点，64 表示 1.0 倍）、\textbf{平移}（B 有符号加）。
+最后 clamp 到 0..255。
+
+\begin{Verilog}
+v = c - 128;                    // 居中
+v = (v * C) >>> 6;              // Q6: 64=1.0倍, 192=3.0倍
+v = v + 128 + B;                // 回中 + 亮度
+clamp 到 [0,255]                // 溢出保护
+\end{Verilog}
+
+\subsection{两个设计决定}
+
+\begin{keybox}{决定 1：只放显示路径}
+调节挂在 OSD 之前的显示通路上，\textbf{检测分支吃的是原图}——
+你把画面调到全黑，跟踪照样工作（检测不受显示参数影响）。
+这也是评分表"实时调节\textbf{显示参数}"的本意。
+\end{keybox}
+
+\begin{keybox}{决定 2：单通道函数复用}
+RGB 三通道完全同构，RTL 写一个 \code{adj\_ch} 函数调用三次——
+和 Python 金标准一个函数三处调用的结构完全对应，验证时逐通道等价。
+\end{keybox}
+
+\subsection{练习}
+
+\begin{enumerate}
+  \item 手算：c=100, C=128（2.0 倍）, B=16 时的输出
+  \item 手算：c=128 时任何 C/B 组合下输出是多少？为什么？
+  \item 思考：为什么 C 用 Q6（64=1.0）而不是直接存小数？
+\end{enumerate}
+
+% ============================================================
+\section{阶段 3：帧差运动检测（3 天）}
+
+\subsection{原理：一比特的"不同"}
+
+运动 = 这帧和上帧不一样。对\textbf{二值掩码}（Step2 平滑后的 0/1 图）
+做帧差：
+
+\begin{Verilog}
+diff = cur_mask ^ prev_mask     // 异或: 不一样的地方为 1
+cnt = sum(diff)                 // 变化像素总数
+bbox = diff 的包围框            // 变化发生在哪里
+valid = (cnt >= MOT_TH)         // 变化够多才算"有运动"
+\end{Verilog}
+
+\subsection{代价：一帧的"记忆"}
+
+需要存上一帧完整掩码：1280x720x1bit = 115KB——
+块 RAM（ERAM）刚好装下。核心结构是\textbf{同地址读旧写新}：
+
+\begin{Verilog}
+addr = row_base + x;            // 当前行列
+old  = prev_mem[addr];          // 先读: 上帧的值
+prev_mem[addr] <= I_mask;       // 后写: 本帧的值盖进去
+\end{Verilog}
+
+和 Step2 平滑的索引行缓存同思想——读写同指针，天然对齐。
+
+\subsection{亚门限也要"报告"}
+
+每帧末锁存 cnt/bbox 并输出 1 拍选通脉冲。\textbf{变化少于门限的帧
+照样输出}（valid=0）——下游靠 valid 区分"没运动"和"这帧没算"，
+可以放心清掉运动指示，不会出现"橙色框赖着不走"。
+
+\subsection{练习}
+
+\begin{enumerate}
+  \item 手算：目标从 (10,10) 挪到 (30,20)，8x8 块，diff 像素数是多少？
+    （提示：旧位消失 + 新位出现，两块不重叠）
+  \item 思考：为什么对"掩码"做帧差而不是对原始 RGB？（提示：存储量）
+  \item 估算：如果存 RGB 全帧要做运动检测，需要多少块 RAM？
+\end{enumerate}
+
+% ============================================================
+\section{阶段 4：仿真与综合的"不一致"陷阱（2 天）}
+
+这是 Step5 最有价值的部分：\textbf{两个仿真里完全看不出、上板才爆的坑}，
+都在运动检测模块里真实抓到过。
+
+\subsection{陷阱 1：越界写，仿真沉默、硬件回绕}
+
+帧尾滚动地址 \code{row\_base += W} 后，下一帧 sof 拍若用\textbf{遗留}
+row\_base 算写地址，会越界：
+
+\begin{itemize}
+  \item \textbf{仿真}：越界写被仿真器\textbf{沉默忽略}——什么都不发生，
+    看不出错误；
+  \item \textbf{综合}：地址位宽截断，\textbf{回绕}写进 0 号单元——
+    把 (0,0) 的前帧参考改写，行为悄悄不同。
+\end{itemize}
+
+\begin{warnbox}{铁律一：帧首拍的地址必须显式覆盖}
+sof 拍像素就是 (0,0)，把写地址\textbf{强制为 0}（语义本来就正确），
+绝不信赖上一帧滚出来的遗留值。
+\end{warnbox}
+
+\subsection{陷阱 2：首帧门控靠 X "碰巧"工作}
+
+首帧还没有"上一帧"可比。初版用 \code{started} 标志（首帧 sof 拍置位）：
+
+\begin{itemize}
+  \item \textbf{仿真}：RAM 未初始化读出 X，\code{mask \^{} X = X}，
+    判决恒假——\textbf{碰巧}没报运动；
+  \item \textbf{综合}：RAM 初值默认 0，首帧 diff = mask\^{}0 = mask，
+    \textbf{整帧被误判成运动}，橙色框满天飞。
+\end{itemize}
+
+\begin{warnbox}{铁律二：门控绝不能依赖 X 传播}
+改用 \code{prev\_ready}（\textbf{首帧末行}才置位），首帧不比对不输出。
+X 在仿真里是"薛定谔的守卫"——综合一落地就现原形。
+\end{warnbox}
+
+\subsection{练习}
+
+\begin{enumerate}
+  \item 解释为什么"仿真过、上板错"的 bug 比双边都错的更危险
+  \item 排查你写过的模块：有没有"靠 X 挡"或"靠遗留值"的地方？
+\end{enumerate}
+
+% ============================================================
+\section{阶段 5：三行 OSD 与声光（1～2 天）}
+
+\subsection{OSD 布局}
+
+\begin{Verbatim}
+y=16   TRK0 LOCK X0640Y0360     L1: 算法/组号/锁定态/坐标
+y=40   D03 B+16 C08 M1839       L2: 延迟/亮度/对比度/运动计数
+y=64   2026 FPGA CONTEST - ANLOGIC ...  L3: 跑马灯(青色)
+画面:  绿准星 + 红目标框 + 橙运动框
+优先级: L1 > L2 > L3 > 准星 > 目标框 > 运动框 > 底图
+\end{Verbatim}
+
+L1 前缀随算法变（TRK/EDG），L2 的 D 字段用"显示帧号减包内采集帧号"
+实时算出链路延迟，M 字段直接来自运动检测的 cnt。
+
+\subsection{声光反馈}
+
+\begin{Verilog}
+锁定:  绿灯常亮
+丢失:  红灯 1Hz 闪
+锁定沿: 蜂鸣 200ms (从"丢"变"锁"的那一拍触发)
+\end{Verilog}
+
+GPIO 直驱，无任何协议——演示时"听见哔一声"就是最好的锁定提示。
+
+\subsection{练习}
+
+\begin{enumerate}
+  \item 画出 L1/L2/L3 的像素区域（x 范围、y 范围）
+  \item 思考：为什么"锁定沿"触发蜂鸣而不是"锁定电平"？
+\end{enumerate}
+
+% ============================================================
+\section{阶段 6：跑通回归（1 天）}
+
+\subsection{16 项一键回归}
+
+\begin{Verbatim}
+cd D:\fpga-ptz-tracker\tools
+python run_all.py          # 全量 16 个测试
+\end{Verbatim}
+
+Step5 新增 \code{tb\_motion\_detect}（第 16 项），场景设计覆盖全部
+状态转移：
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\rowcolor{rowtint}\textbf{帧} & \textbf{场景} & \textbf{期望} \\
+\midrule
+f0 & 静止背景 & 只填缓存, 无输出 \\
+f1 & 出现 8x8 块 & cnt=64, bbox(10,10)-(17,17) \\
+f2 & 块移动 & cnt=128（旧位消失 + 新位出现） \\
+f3 & 块消失 & cnt=64（原位置残影） \\
+f4 & 5 个孤立像素 & cnt=5, valid=0（\textbf{亚门限拒报}） \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{okbox}{Step5 学习清单（全部打勾就过关）}
+\begin{itemize}
+  \item 能说清"并行分支 + 帧首 mux"的切换机制
+  \item 能手算 Q6 亮度对比度的一像素变换
+  \item 能解释帧差检测的结构（XOR/累加/门限）与亚门限语义
+  \item 能复述两处仿真/综合不一致陷阱及铁律
+  \item 跑通 16 项回归，说清 motion 测试 5 帧各验什么
+\end{itemize}
+\end{okbox}
+
+\input{step5_impl}
+
+% ============================================================
+\part*{结语}
+\clearpage
+\section*{总结与下一步}
+\addcontentsline{toc}{section}{总结与下一步}
+
+\subsection*{Step5 学到了什么}
+\addcontentsline{toc}{subsection}{Step5 学到了什么}
+\begin{itemize}
+  \item 官方核的复用姿势（端口兼容、粒度对齐、并行常开）
+  \item 帧边界锁存切换：延迟 1 帧换画面无缝
+  \item Q6 定点的亮度/对比度流水线（居中-缩放-平移-clamp）
+  \item 1bit/像素帧差检测：块存储、同地址读旧写新、亚门限语义
+  \item 仿真/综合不一致两陷阱（越界写回绕、X 门控失效）与两条铁律
+  \item 三行 OSD 与声光反馈的集成
+\end{itemize}
+
+\subsection*{下一步做什么}
+\addcontentsline{toc}{subsection}{下一步做什么}
+\begin{itemize}
+  \item \textbf{上板}：五步模块全部挂进官方工程，TD 综合到 PH1P35，
+    板上标定阈值与增益（IF-SERVO-PWM / IF-OSD 的现场流程）
+  \item \textbf{遗留项}：金标准渲染器升级到 v2（三行文本+跑马灯），
+    恢复 tb\_osd\_track 的整帧逐帧比对（详见 Part II"诚实的待办"）
+  \item \textbf{答辩}：五册教程 + 全部迭代记录就是最好的过程性证据
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,1 @@
+已将SC500CS   Lab1、Lab2、Lab3 工程统一更新为 原厂 1280×720@60fps 的HD配置  并在Lab1工程中额外保留了1920×1080@30fps  FHD模式的寄存器表（"\lab_ex1_mipi_hdmi_SC500_720P\lab_ex1_mipi_hdmi\user_source\hdl_source\uics500_cfg\uics500reg_1080p30.v"）

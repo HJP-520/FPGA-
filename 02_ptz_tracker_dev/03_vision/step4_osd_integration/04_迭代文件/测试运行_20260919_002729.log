@@ -1,0 +1,375 @@
+===== tb_ser96to24 : PASS =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_ser96to24 -do "run -all; quit -f" 
+# Start time: 00:26:49 on Sep 19,2026
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# TB_RESULT: PASS (pixels=1536)
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step1_video_link/03_project/tb/tb_ser96to24.v(72)
+#    Time: 23023 ns  Iteration: 1  Instance: /tb_ser96to24
+# End time: 00:26:51 on Sep 19,2026, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 0
+
+===== tb_tpg : PASS =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_tpg -do "run -all; quit -f" 
+# Start time: 00:26:52 on Sep 19,2026
+# ** Note: (vsim-8009) Loading existing optimized design _opt
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# TB_RESULT: PASS (geometry 2 frames)
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step1_video_link/03_project/tb/tb_tpg.v(56)
+#    Time: 25804877 ns  Iteration: 1  Instance: /tb_tpg
+# End time: 00:26:55 on Sep 19,2026, Elapsed time: 0:00:03
+# Errors: 0, Warnings: 0
+
+===== tb_pulse_sync : PASS =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_pulse_sync -do "run -all; quit -f" 
+# Start time: 00:26:57 on Sep 19,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# TB_RESULT: PASS (sent=100 got=100)
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step1_video_link/03_project/tb/tb_pulse_sync.v(42)
+#    Time: 23193 ns  Iteration: 0  Instance: /tb_pulse_sync
+# End time: 00:26:58 on Sep 19,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+
+===== tb_cdc4phase : PASS =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_cdc4phase -do "run -all; quit -f" 
+# Start time: 00:27:00 on Sep 19,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# TB_RESULT: PASS (sent=200 got=200)
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step1_video_link/03_project/tb/tb_cdc4phase.v(65)
+#    Time: 33063 ns  Iteration: 0  Instance: /tb_cdc4phase
+# End time: 00:27:02 on Sep 19,2026, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 0
+
+===== tb_rgb2hsv : PASS =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_rgb2hsv -do "run -all; quit -f" 
+# Start time: 00:27:03 on Sep 19,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# TB_RESULT: PASS (vectors=10010)
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step2_color_centroid/03_project/tb/tb_rgb2hsv.v(61)
+#    Time: 140301 ns  Iteration: 1  Instance: /tb_rgb2hsv
+# End time: 00:27:05 on Sep 19,2026, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 0
+
+===== tb_hsv_threshold : PASS =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_hsv_threshold -do "run -all; quit -f" 
+# Start time: 00:27:06 on Sep 19,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# TB_RESULT: PASS (vectors=4000)
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step2_color_centroid/03_project/tb/tb_hsv_threshold.v(60)
+#    Time: 56133 ns  Iteration: 1  Instance: /tb_hsv_threshold
+# End time: 00:27:08 on Sep 19,2026, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 0
+
+===== tb_bin_smooth : PASS =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_bin_smooth -do "run -all; quit -f" 
+# Start time: 00:27:10 on Sep 19,2026
+# ** Note: (vsim-8009) Loading existing optimized design _opt2
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# TB_RESULT: PASS (pixels=12288)
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step2_color_centroid/03_project/tb/tb_bin_smooth.v(64)
+#    Time: 172109 ns  Iteration: 1  Instance: /tb_bin_smooth
+# End time: 00:27:11 on Sep 19,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+
+===== tb_centroid : FAIL =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_centroid -do "run -all; quit -f" 
+# Start time: 00:27:13 on Sep 19,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# MISM frame=0 got v=0 cnt=2 cx=0 cy=0 x[0..0] y[0..0]
+#                  exp v=1 cnt=2880 cx=91 cy=39 x[56..127] y[20..59]
+# MISM frame=1 got v=0 cnt=0 cx=0 cy=0 x[0..0] y[0..0]
+#                  exp v=1 cnt=444 cx=91 cy=21 x[1..126] y[0..71]
+# FRAME2 OK v=0 cnt=9 cx=0 cy=0 lost=3
+# TB_RESULT: FAIL mism=2
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step2_color_centroid/03_project/tb/tb_centroid.v(82)
+#    Time: 387163 ns  Iteration: 1  Instance: /tb_centroid
+# End time: 00:27:14 on Sep 19,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+
+===== tb_detect_chain : FAIL =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_detect_chain -do "run -all; quit -f" 
+# Start time: 00:27:16 on Sep 19,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# ** Error (suppressible): (vsim-3009) [TSCALE] - Module 'sim_video_src' does not have a timeunit/timeprecision specification in effect, but other modules do.
+#    Time: 0 ns  Iteration: 0  Instance: /tb_detect_chain/u_src File: D:/fpga-ptz-tracker/03_vision/step1_video_link/03_project/rtl/sim_video_src.v
+# Error loading design
+# End time: 00:27:18 on Sep 19,2026, Elapsed time: 0:00:02
+# Errors: 1, Warnings: 0
+Error loading design
+
+===== tb_gimbal : FAIL =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_gimbal -do "run -all; quit -f" 
+# Start time: 00:27:20 on Sep 19,2026
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# STEP0 OK x=1570 y=1500 lost=0
+# STEP1 OK x=1640 y=1500 lost=0
+# STEP2 OK x=1731 y=1483 lost=0
+# STEP3 OK x=1752 y=1439 lost=0
+# STEP4 OK x=1752 y=1439 lost=0
+# MISM i=5 got x=1752 y=1439 lost=1 st=00000111 | exp x=1752 y=1439 lost=1 dz=0000000000000000000000000000000000000000000000000000000000000000
+# STEP6 OK x=1752 y=1439 lost=2
+# STEP7 OK x=1562 y=1504 lost=0
+# STEP8 OK x=1562 y=1504 lost=0
+# STEP9 OK x=1562 y=1504 lost=0
+# TB_RESULT: FAIL mism=1
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step3_closed_loop/03_project/tb/tb_gimbal.v(60)
+#    Time: 890 ns  Iteration: 1  Instance: /tb_gimbal
+# End time: 00:27:21 on Sep 19,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+
+===== tb_pwm : FAIL =====
+-- compile --
+** Error: (vlog-13025) D:\fpga-ptz-tracker\03_vision\step3_closed_loop\03_project\tb\tb_pwm.v(46): near ":": Syntax error. Statement labels are only allowed in SystemVerilog.
+-- sim tail --
+
+
+===== tb_osd_track : FAIL =====
+-- compile --
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_osd_track.v(37): Illegal bit-select into scalar variable "v_in".
+-- sim tail --
+
+
+===== tb_vision_top : FAIL =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_vision_top -do "run -all; quit -f" 
+# Start time: 00:27:23 on Sep 19,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# DUTY_REPORT: x=1500 y=1500 lost=1 status=00000100 passthru_mism=0
+# TB_RESULT: PASS (duty_x=1500, expect python frame compare)
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step4_osd_integration/03_project/tb/tb_vision_top.v(84)
+#    Time: 25804905 ns  Iteration: 1  Instance: /tb_vision_top
+# End time: 00:27:27 on Sep 19,2026, Elapsed time: 0:00:04
+# Errors: 0, Warnings: 0
+
+===== tb_closed_loop : FAIL =====
+-- compile --
+** Error (suppressible): D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_closed_loop.v(38): (vlog-2388) 'duty_x' already declared in this scope (tb_closed_loop).
+-- sim tail --
+
+

@@ -1,0 +1,35 @@
+===== tb_pwm : FAIL =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_pwm -do "run -all; quit -f" 
+# Start time: 00:58:20 on Sep 19,2026
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# MISM tick=1 got x=0 y=0 len=0 | exp x=75000 y=75000 len=1000000
+# MISM tick=2 got x=74999 y=74999 len=999999 | exp x=75000 y=75000 len=1000000
+# MISM tick=4 got x=74999 y=74999 len=999999 | exp x=60000 y=100000 len=1000000
+# MISM tick=5 got x=59999 y=99999 len=999999 | exp x=60000 y=100000 len=1000000
+# TB_RESULT: FAIL mism=4
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step3_closed_loop/03_project/tb/tb_pwm.v(73)
+#    Time: 100000070 ns  Iteration: 1  Instance: /tb_pwm
+# End time: 00:58:24 on Sep 19,2026, Elapsed time: 0:00:04
+# Errors: 0, Warnings: 0
+

@@ -1,0 +1,24 @@
+===== tb_osd_track : FAIL =====
+-- compile --
+** Error (suppressible): D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\rtl\osd_track.v(300): (vlog-2388) 'g1' already declared in this scope (osd_track).
+
+** Error (suppressible): D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\rtl\osd_track.v(309): (vlog-2388) 'g2' already declared in this scope (osd_track).
+-- sim tail --
+
+
+===== tb_vision_top : FAIL =====
+-- compile --
+** Error (suppressible): D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\rtl\osd_track.v(300): (vlog-2388) 'g1' already declared in this scope (osd_track).
+
+** Error (suppressible): D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\rtl\osd_track.v(309): (vlog-2388) 'g2' already declared in this scope (osd_track).
+-- sim tail --
+
+
+===== tb_algo_switch : FAIL =====
+-- compile --
+** Error (suppressible): D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\rtl\osd_track.v(300): (vlog-2388) 'g1' already declared in this scope (osd_track).
+
+** Error (suppressible): D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\rtl\osd_track.v(309): (vlog-2388) 'g2' already declared in this scope (osd_track).
+-- sim tail --
+
+

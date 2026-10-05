@@ -1,0 +1,65 @@
+===== tb_pwm : FAIL =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_pwm -do "run -all; quit -f" 
+# Start time: 00:55:20 on Sep 19,2026
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# MISM meas=0 got x=1 y=1 len=1 | exp x=75000 y=75000 len=1000000
+# MISM meas=1 got x=1 y=1 len=1 | exp x=60000 y=100000 len=1000000
+# TB_RESULT: FAIL mism=2
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step3_closed_loop/03_project/tb/tb_pwm.v(64)
+#    Time: 80000070 ns  Iteration: 1  Instance: /tb_pwm
+# End time: 00:55:23 on Sep 19,2026, Elapsed time: 0:00:03
+# Errors: 0, Warnings: 0
+
+===== tb_vision_top : FAIL =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_vision_top -do "run -all; quit -f" 
+# Start time: 00:55:25 on Sep 19,2026
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# DUTY_REPORT: x=1428 y=1500 lost=0 status=00000010 passthru_mism=0
+# TB_RESULT: PASS (duty_x=1428, expect python frame compare)
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step4_osd_integration/03_project/tb/tb_vision_top.v(84)
+#    Time: 64512105 ns  Iteration: 1  Instance: /tb_vision_top
+# End time: 00:55:34 on Sep 19,2026, Elapsed time: 0:00:09
+# Errors: 0, Warnings: 0
+

@@ -1,0 +1,311 @@
+同前（接着上一条消息的修复复核）。这是**第二批**代码：检测/运动/串化三模块的修复后版本。
+重点：
+(1) motion_detect v3（同步读流水重写）——old_r 与 mask_d/x_d/y_d 的对齐、(0,0) 排除、
+    首帧 prev_ready 门控、cnt==0 时 bbox 清零、addr_safe 越界保护，是否与头部注释语义一致；
+(2) video_adj W1（bright 符号修复）——是否还有残留符号/位宽问题；
+(3) ser96to24 v3（深度 128、丢弃计数、标志门控）——满载丢弃时输出流连续性、指针回绕。
+格式：[严重度] 模块.位置: 问题 → 建议；确认无问题的项明确写"通过"。代码：
+
+// ===== 文件: motion_detect.v =====
+// =============================================================================
+// motion_detect.v —— 帧差运动检测（进阶④，v3 流水版 2026-10-03）
+// 输入：平滑后的二值掩码流（与 centroid 同源同拍）。
+// 结构：整帧 1bit 前帧缓存（W*H bit，TD 映射 ERAM），同步读一级流水：
+//       第 1 拍发地址/写新值，第 2 拍取读出旧值与延迟一拍的掩码比对。
+//       —— v2 用组合读 prev_mem[addr]，行为仿真可行但 TD ERAM(Block RAM)
+//          不支持组合读，上板综合会失败；v3 改为同步读 + 信号对齐流水。
+// 输出：每帧末锁存 运动像素计数 + 运动包围框，O_mot_valid 拉高 1 拍作为
+//       "帧结果就绪"选通；该帧是否判定为运动由 valid=(cnt≥MOT_TH) 表达
+//       （亚门限帧也更新 cnt/bbox 并出选通，下游可据此清运动指示）。
+//
+// 版本要点：
+//   v2 [1] sof 拍写地址强制 0（不再用上一帧遗留 row_base 算地址）；
+//      [2] 首帧门控用 prev_ready（首帧不比对、不输出）；
+//   v3 [3] 同步读流水（TD 可实现）；[4] addr 越界保护；
+//      [5] cnt==0 时 bbox 锁存 0（与金标准 frame_diff_motion 语义一致）。
+// 已知约定：(0,0) 像素每帧只写缓存、不参与比对（sof 拍结构，1/921600）。
+// =============================================================================
+module motion_detect #(
+    parameter IMG_WIDTH  = 1280,
+    parameter IMG_HEIGHT = 720,
+    parameter MOT_TH     = 64
+)(
+    input  wire        I_clk,
+    input  wire        I_rst_n,
+    input  wire        I_valid,
+    input  wire        I_sof,
+    input  wire        I_eol,
+    input  wire        I_mask,
+    output reg         O_mot_valid,
+    output reg  [13:0] O_mot_cnt,
+    output reg  [10:0] O_mot_minx,
+    output reg  [10:0] O_mot_maxx,
+    output reg  [9:0]  O_mot_miny,
+    output reg  [9:0]  O_mot_maxy
+);
+    localparam TOTAL = IMG_WIDTH * IMG_HEIGHT;
+
+    (* ram_style = "block" *) reg prev_mem [0:TOTAL-1];
+
+    // ---------------- 坐标计数（输入拍） ----------------
+    reg [10:0] x;
+    reg [9:0]  y;
+    reg [20:0] row_base;
+    reg        prev_ready;   // 首帧缓存填满后置位；首帧不比对、不输出
+
+    // sof 拍像素是 (0,0)：写地址强制 0（见 v2[1]）
+    wire [20:0] addr = I_sof ? 21'd0 : (row_base + {10'd0, x});
+    wire [20:0] addr_safe = (addr < TOTAL) ? addr : 21'd0;   // v3[4] 越界保护
+
+    always @(posedge I_clk or negedge I_rst_n) begin
+        if (!I_rst_n) begin
+            x <= 11'd0; y <= 10'd0; row_base <= 21'd0; prev_ready <= 1'b0;
+        end else if (I_valid) begin
+            if (I_sof) begin
+                x <= 11'd1; y <= 10'd0; row_base <= 21'd0;
+            end else if (I_eol) begin
+                x <= 11'd0;
+                y <= (y == IMG_HEIGHT - 1) ? 10'd0 : y + 10'd1;
+                row_base <= row_base + IMG_WIDTH;
+                if (y == IMG_HEIGHT - 1) prev_ready <= 1'b1;  // 首帧末行：缓存已填满
+            end else begin
+                x <= x + 11'd1;
+            end
+        end
+    end
+
+    // ---------------- 一级流水：ERAM 同步读 + 信号对齐（v3[3]） ----------------
+    reg        old_r;                          // 前帧掩码（同步读输出）
+    reg        v_d, sof_d, eol_d, mask_d, ready_d;
+    reg [10:0] x_d;
+    reg [9:0]  y_d;
+
+    always @(posedge I_clk or negedge I_rst_n) begin
+        if (!I_rst_n) begin
+            old_r <= 1'b0;
+            v_d <= 1'b0; sof_d <= 1'b0; eol_d <= 1'b0;
+            mask_d <= 1'b0; ready_d <= 1'b0;
+            x_d <= 11'd0; y_d <= 10'd0;
+        end else begin
+            old_r <= prev_mem[addr_safe];              // 同步读（读旧）
+            if (I_valid) prev_mem[addr_safe] <= I_mask; // 写新（另一端口）
+            v_d   <= I_valid; sof_d <= I_sof; eol_d <= I_eol;
+            mask_d <= I_mask; ready_d <= prev_ready;
+            x_d   <= x; y_d <= y;
+        end
+    end
+
+    wire diff = mask_d ^ old_r;    // 与 x_d/y_d/v_d 同拍对齐
+
+    // ---------------- 帧内累加（延迟域） ----------------
+    reg [13:0] cnt;
+    reg        seen;
+    reg [10:0] bmin_x, bmax_x;
+    reg [9:0]  bmin_y, bmax_y;
+
+    always @(posedge I_clk or negedge I_rst_n) begin
+        if (!I_rst_n) begin
+            cnt <= 14'd0; seen <= 1'b0;
+            bmin_x <= 11'd0; bmax_x <= 11'd0; bmin_y <= 10'd0; bmax_y <= 10'd0;
+        end else if (v_d && sof_d) begin
+            cnt <= 14'd0; seen <= 1'b0;            // 帧首清零（sof 像素不比对）
+        end else if (v_d && ready_d && diff) begin
+            cnt <= (cnt == 14'h3FFF) ? cnt : cnt + 14'd1;   // 饱和（14bit 接口）
+            if (!seen) begin
+                seen   <= 1'b1;
+                bmin_x <= x_d; bmax_x <= x_d; bmin_y <= y_d; bmax_y <= y_d;
+            end else begin
+                if (x_d < bmin_x) bmin_x <= x_d;
+                if (x_d > bmax_x) bmax_x <= x_d;
+                if (y_d < bmin_y) bmin_y <= y_d;
+                if (y_d > bmax_y) bmax_y <= y_d;
+            end
+        end
+    end
+
+    // ---------------- 帧末锁存（延迟域；首帧 prev_ready=0 不输出） ----------------
+    wire last_eol_d = v_d && eol_d && (y_d == IMG_HEIGHT - 1);
+
+    always @(posedge I_clk or negedge I_rst_n) begin
+        if (!I_rst_n) begin
+            O_mot_valid <= 1'b0;
+            O_mot_cnt <= 14'd0;
+            O_mot_minx <= 11'd0; O_mot_maxx <= 11'd0;
+            O_mot_miny <= 10'd0; O_mot_maxy <= 10'd0;
+        end else begin
+            O_mot_valid <= 1'b0;
+            if (last_eol_d && ready_d) begin
+                O_mot_valid <= (cnt >= MOT_TH);
+                O_mot_cnt   <= cnt;
+                // v3[5] cnt==0 时 bbox 全 0（与金标准一致）
+                O_mot_minx  <= (cnt == 14'd0) ? 11'd0 : bmin_x;
+                O_mot_maxx  <= (cnt == 14'd0) ? 11'd0 : bmax_x;
+                O_mot_miny  <= (cnt == 14'd0) ? 10'd0 : bmin_y;
+                O_mot_maxy  <= (cnt == 14'd0) ? 10'd0 : bmax_y;
+            end
+        end
+    end
+
+endmodule
+
+// ===== 文件: video_adj.v =====
+// =============================================================================
+// video_adj.v —— 显示参数调节（扩展④）：亮度/对比度
+// out = clamp( ((c - 128) * C >> 6) + 128 + B )
+//   C: 对比度 64..192（64 = 1.0 倍，Q6 定点）；B: 亮度 -64..+64
+// 应用点：显示路径（OSD 之前），检测分支不受影响（扩展④"调节显示参数"）。
+// 1 拍流水；参数同域直连（vision_top 内 pix 域）。
+// =============================================================================
+module video_adj (
+    input  wire        I_clk,
+    input  wire        I_rst_n,
+    input  wire        I_valid,
+    input  wire [23:0] I_data,        // {R,G,B}
+    input  wire [6:0]  I_bright,      // 有符号：-64..+63（二补码）
+    input  wire [7:0]  I_contrast,    // 无符号：64..192（Q6）
+    output reg         O_valid,
+    output reg  [23:0] O_data
+);
+    // 单通道处理函数
+    function [7:0] adj_ch;
+        input [7:0] c;
+        input [6:0] bright;
+        input [7:0] contrast;
+        reg signed [16:0] v;
+        begin
+            v = $signed({1'b0, c}) - 17'sd128;       // 居中
+            v = (v * $signed({1'b0, contrast})) >>> 6;
+            // 外脑评审修复: bright 是 7bit 有符号(-64..+63), 原 {1'b0,bright}
+            // 零扩展会把负数当正数(-64 -> +64); 用 $signed 直接符号扩展
+            v = v + 17'sd128 + $signed(bright);
+            if (v < 0)        adj_ch = 8'd0;
+            else if (v > 255) adj_ch = 8'd255;
+            else              adj_ch = v[7:0];
+        end
+    endfunction
+
+    wire [7:0] r_adj = adj_ch(I_data[23:16], I_bright, I_contrast);
+    wire [7:0] g_adj = adj_ch(I_data[15:8],  I_bright, I_contrast);
+    wire [7:0] b_adj = adj_ch(I_data[7:0],   I_bright, I_contrast);
+
+    always @(posedge I_clk or negedge I_rst_n) begin
+        if (!I_rst_n) begin
+            O_valid <= 1'b0;
+            O_data  <= 24'd0;
+        end else begin
+            O_valid <= I_valid;
+            O_data  <= {r_adj, g_adj, b_adj};
+        end
+    end
+endmodule
+
+// ===== 文件: ser96to24.v =====
+// =============================================================================
+// ser96to24.v —— 96bit(4像素/拍) AXI4-Stream 视频 -> 1像素/拍 vpix 流 串化器
+// -----------------------------------------------------------------------------
+// 视觉方向自研检测链路的入口适配层。官方 ISP 链路（awb 之后）为 96bit 总线
+// （pix0=[95:72], pix1=[71:48], pix2=[47:24], pix3=[23:0]，AXI-S 约定
+// tuser=帧起始、tlast=行尾、仅有效像素）。本模块将其拆为单像素流：
+//   O_sof：帧首像素；O_eol：行尾像素；O_valid：数据有效。
+// 无反压设计（O_tready 恒 1，旁路窃流语义）：输出每拍最多消耗 1 像素，
+// 输入每拍最多写入 4 像素。缓冲深度 128 拍（外脑评审加固）：
+// 平均输入率 1 拍/4clk 时零压力；对 ISP/AWB 输出的行级突发
+// （最坏 ~320 拍/行）提供充分吸收，残余超限仅计数不再"必死"。
+// 上板时挂在 detect 分支入口。
+// =============================================================================
+module ser96to24 (
+    input  wire        I_clk,
+    input  wire        I_rst_n,
+    // 96bit AXI4-Stream 视频输入（仅有效像素拍）
+    input  wire [95:0] I_tdata,
+    input  wire        I_tvalid,
+    input  wire        I_tuser,
+    input  wire        I_tlast,
+    output wire        O_tready,
+    // 1 像素/拍 vpix 输出
+    output reg         O_valid,
+    output reg         O_sof,
+    output reg         O_eol,
+    output reg  [23:0] O_data,
+    // 调试：因缓冲满被拒的 beat 计数（饱和）
+    output reg  [15:0] O_drop_cnt
+);
+
+    localparam DEPTH = 128;               // 像素缓冲深度（beat 数）
+    localparam PW    = 7;                 // 指针位宽
+    localparam CW    = 8;                 // 计数位宽（0..128）
+
+    assign O_tready = 1'b1;   // 窃流分支，绝不反压上游
+
+    // 像素缓冲（数据+标志同址；LUTRAM 组合读）
+    (* ram_style = "distributed" *) reg [23:0] mem   [0:DEPTH-1];
+    (* ram_style = "distributed" *) reg        sof_q [0:DEPTH-1];
+    (* ram_style = "distributed" *) reg        eol_q [0:DEPTH-1];
+    reg [PW-1:0] wp;            // 写指针
+    reg [PW-1:0] rp;            // 读指针
+    reg [CW-1:0] cnt;           // 缓冲像素数（0..DEPTH）
+
+    wire        do_wr = I_tvalid & O_tready & (cnt <= (DEPTH - 4));  // 有余量才写
+    wire        do_rd = (cnt != {CW{1'b0}});   // 每拍最多读 1 像素
+    wire [PW-1:0] wp_n  = wp + 7'd1;
+    wire [PW-1:0] wp_n2 = wp + 7'd2;
+    wire [PW-1:0] wp_n3 = wp + 7'd3;
+    wire [PW-1:0] rp_n  = rp + 7'd1;
+
+    wire [23:0] p0 = I_tdata[95:72];
+    wire [23:0] p1 = I_tdata[71:48];
+    wire [23:0] p2 = I_tdata[47:24];
+    wire [23:0] p3 = I_tdata[23:0];
+
+    always @(posedge I_clk or negedge I_rst_n) begin
+        if (!I_rst_n) begin
+            wp  <= {PW{1'b0}};
+            rp  <= {PW{1'b0}};
+            cnt <= {CW{1'b0}};
+            O_drop_cnt <= 16'd0;
+        end else begin
+            if (do_wr) begin
+                mem[wp]   <= p0;
+                mem[wp_n] <= p1;
+                // 4像素入队（赛题分辨率宽为4的倍数，末拍必满4像素）
+                mem[wp_n2] <= p2;
+                mem[wp_n3] <= p3;
+                sof_q[wp]   <= I_tuser;
+                sof_q[wp_n] <= 1'b0;
+                sof_q[wp_n2]<= 1'b0;
+                sof_q[wp_n3]<= 1'b0;
+                eol_q[wp]   <= 1'b0;
+                eol_q[wp_n] <= 1'b0;
+                eol_q[wp_n2]<= 1'b0;
+                eol_q[wp_n3]<= I_tlast;
+                wp <= wp + 7'd4;
+            end
+            if (do_rd)
+                rp <= rp_n;
+            case ({do_wr, do_rd})
+                2'b10:   cnt <= cnt + 8'd4;
+                2'b01:   cnt <= cnt - 8'd1;
+                2'b11:   cnt <= cnt + 8'd3;
+                default: cnt <= cnt;
+            endcase
+            if (I_tvalid && !do_wr && (O_drop_cnt != 16'hFFFF))
+                O_drop_cnt <= O_drop_cnt + 16'd1;   // 缓冲满导致的丢弃（饱和计数）
+        end
+    end
+
+    // 组合读出（分布式 RAM 读，速度充裕；标志仅在有效读拍输出）
+    always @(*) begin
+        O_valid = do_rd;
+        O_data  = mem[rp];
+        O_sof   = do_rd && sof_q[rp];
+        O_eol   = do_rd && eol_q[rp];
+    end
+
+    // synthesis translate_off
+    always @(posedge I_clk) begin
+        if (I_rst_n && (cnt > (DEPTH - 4)) && I_tvalid)
+            $display("SER96TO24_DROP: buffer full cnt=%0d t=%0t", cnt, $time);
+    end
+    // synthesis translate_on
+
+endmodule

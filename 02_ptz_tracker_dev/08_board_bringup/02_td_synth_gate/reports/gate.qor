@@ -1,0 +1,68 @@
+-----------------------------------------------------------
+| QoR metrics               |         value               |
+-----------------------------------------------------------
+| Timing                    |                             |
+|     Setup WNS             |         2441                |
+|     Setup TNS             |            0                |
+|     Num of violated S-EP  |            0                |
+|     Hold WNS              |          502                |
+|     Hold TNS              |            0                |
+|     Num of violated H-EP  |            0                |
+-----------------------------------------------------------
+| Utilization               |                             |
+|     #registers            |         1963                |
+|     #luts                 |         2431                |
+|     #lut1                 |           17                |
+|     #lut1(~A)             |           17                |
+|     #slices               |          748                |
+|     slices percentage     |        3.53%                |
+|     #RAMs                 |           62                |
+|     #DSPs                 |            8                |
+|     #f7mux                |        0.20%                |
+|     #MACROs               |           78                |
+|     #insts in MACRO       |          808                |
+-----------------------------------------------------------
+| kept_net                  |                             |
+|     #syn_keep             |            0                |
+|     #keep_hier            |            0                |
+|     #dont_touch           |            0                |
+|     #mark_debug           |            0                |
+|     #max_fanout_keep      |            0                |
+|     #async_reg            |            0                |
+-----------------------------------------------------------
+| Top 10% datanet fanout#   |        83.89                |
+| dff(single fanout)->dff   |          596                |
+| dff(single fanout)->dram  |            0                |
+-----------------------------------------------------------
+| Over-quota path num*      |                             |
+|     Total                 |            0                |
+-----------------------------------------------------------
+| Rent**                    |                             |
+-----------------------------------------------------------
+Note*: Over-quota path shows the over-path-level-threshold path number of each clock.
+       The clock will not be shown if no path is with path level over the threshold.
+       The threshold is defined as worst path_margin / 800ps.
+Note**: Rent shows the rent exponent value of the modules whose rent value exceeds the threshold.
+        Only modules under top are reported, and the threshold is defined as 0.7.
+
+Logic Level Distribution
+-------------------------------------------------------------------------------------------------------------------------------------
+  Clock    |  Period            |  0     |  1     |  2    |  3    |  4    |  5    |  6    |  7   |  8    |  9   |  10  |  11  |  12
+-------------------------------------------------------------------------------------------------------------------------------------
+  pix_clk  |  13.468ns (74MHz)  |  2885  |  1883  |  294  |  317  |  151  |  409  |  961  |  41  |  150  |  17  |  17  |  24  |  8
+  pwm_clk  |  20.000ns (50MHz)  |  293   |  41    |  16   |  44   |  25   |  14   |  1    |  1   |  1    |  1   |  12  |  12  |  0
+  Total    |  NA                |  3178  |  1924  |  310  |  361  |  176  |  423  |  962  |  42  |  151  |  18  |  29  |  36  |  8
+-------------------------------------------------------------------------------------------------------------------------------------
+Hierarchical Rent Exponent Report
++-------------------------------------------------------------------+
+|Inst       |Model           |Rent     |Cell     |Pin     |Term     |
++-------------------------------------------------------------------+
+|top        |vision_gate_top |0.00     |5332     |31664   |6        |
+|  u_vision |vision_top_1    |0.45     |5009     |30519   |274      |
++-------------------------------------------------------------------+
+Note: Cell represents total number of cells inside module; Pin represents total number of pins
+      which have net connection inside module; Term represents total number of PIs and POs of module.
+      Rent represents the relationship between number of terms and number of cells in module.
+      A module with higher rent corresponds to highly connected logic and strong connectivity with others.
+Report gate stage QoR done.
+

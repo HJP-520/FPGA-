@@ -1,0 +1,17 @@
+Model Technology ModelSim SE-64 vlog 10.4 Compiler 2014.12 Dec  3 2014
+Start time: 14:57:50 on Oct 05,2026
+vlog -sv D:\SC520_display_burnpack\02_TD_project_rebuild\lab_ex1\user_source\hdl_source\awb.v D:\SC520_display_burnpack\04_codex_validation\support\divider_gate_sim.v D:\SC520_display_burnpack\04_codex_validation\support\ph1p_logic_eram_stub.v D:\SC520_display_burnpack\02_TD_project_rebuild\lab_ex1\user_source\hdl_source\signal_delay.v D:\SC520_display_burnpack\02_TD_project_rebuild\lab_ex1\user_source\ip_source\blk_mem_gen_awb_delay_signal\blk_mem_gen_awb_delay_signal.v D:\SC520_display_burnpack\02_TD_project_rebuild\lab_ex1\user_source\ip_source\blk_mem_gen_awb_delay_signal\ram_f84573da5ab5.v D:\SC520_display_burnpack\04_codex_validation\tb_awb_regression.v 
+-- Compiling module awb
+-- Compiling module divider
+-- Compiling module PH1P_LOGIC_ERAM
+-- Compiling module PH1_LOGIC_ERAM
+-- Compiling module signal_delay
+-- Compiling module blk_mem_gen_awb_delay_signal
+-- Compiling module ram_f84573da5ab5
+-- Compiling module tb_awb_regression
+
+Top level modules:
+	PH1_LOGIC_ERAM
+	tb_awb_regression
+End time: 14:57:50 on Oct 05,2026, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0

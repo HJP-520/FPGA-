@@ -1,0 +1,43 @@
+===== tb_algo_switch : PASS =====
+-- sim tail --
+# vsim -c -quiet tb_algo_switch -do "run -all; quit -f" 
+# Start time: 18:12:12 on Oct 03,2026
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# ** Warning: D:\fpga-ptz-tracker\03_vision\step2_color_centroid\03_project\rtl\detect_top.v(70): (vopt-2685) [TFMPC] - Too few port connections for 'u_ser'.  Expected 12, found 11.
+# 
+# ** Warning: D:\fpga-ptz-tracker\03_vision\step2_color_centroid\03_project\rtl\detect_top.v(70): (vopt-2718) [TFMPC] - Missing connection for port 'O_drop_cnt'.
+# 
+# ** Warning: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\rtl\vision_top.v(128): (vopt-2685) [TFMPC] - Too few port connections for 'u_ser_edge'.  Expected 12, found 11.
+# 
+# ** Warning: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\rtl\vision_top.v(128): (vopt-2718) [TFMPC] - Missing connection for port 'O_drop_cnt'.
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# CENTROID_ALIGN_WARN: sof at x=1324 y=0 t=12902575000
+# WIN 3: sof=2 eol=720 ???��??��????��=2
+# WIN 4: sof=1 eol=720 ???��??��????��=0
+# WIN 5: sof=1 eol=719 ???��??��????��=0
+# WIN 6: sof=1 eol=720 ???��??��????��=2
+# WIN 7: sof=1 eol=720 ???��??��????��=2
+# WIN 8: sof=1 eol=720 ???��??��????��=2
+# WIN 9: sof=1 eol=720 ???��??��????��=2
+# TB_RESULT: PASS windows=7 gray=2 color=5 switch=1
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step4_osd_integration/03_project/tb/tb_algo_switch.v(138)
+#    Time: 129024105 ns  Iteration: 1  Instance: /tb_algo_switch
+# End time: 18:12:39 on Oct 03,2026, Elapsed time: 0:00:27
+# Errors: 0, Warnings: 4
+

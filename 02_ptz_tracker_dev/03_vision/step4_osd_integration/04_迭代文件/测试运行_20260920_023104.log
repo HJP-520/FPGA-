@@ -1,0 +1,43 @@
+===== tb_osd_track : FAIL =====
+-- sim tail --
+# DBG pos=13 in_now=808080 out=808080
+# DBG pos=14 in_now=808080 out=808080
+# DBG pos=15 in_now=808080 out=808080
+# DBG pos=16 in_now=808080 out=808080
+# DBG pos=17 in_now=808080 out=808080
+# DBG pos=18 in_now=808080 out=808080
+# DBG pos=19 in_now=808080 out=808080
+# DBG pos=20 in_now=808080 out=808080
+# DBG pos=21 in_now=808080 out=808080
+# DBG pos=22 in_now=808080 out=808080
+# DBG pos=23 in_now=808080 out=808080
+# DBG pos=24 in_now=808080 out=808080
+# DBG pos=25 in_now=808080 out=808080
+# DBG pos=26 in_now=808080 out=808080
+# DBG pos=27 in_now=808080 out=808080
+# DBG pos=28 in_now=808080 out=808080
+# DBG pos=29 in_now=808080 out=808080
+# DBG pos=30 in_now=808080 out=808080
+# DBG pos=31 in_now=808080 out=808080
+# DBG pos=32 in_now=808080 out=808080
+# DBG pos=33 in_now=808080 out=808080
+# DBG pos=34 in_now=3185a5 out=808080
+# DBG pos=35 in_now=808080 out=3185a5
+# DBG pos=36 in_now=808080 out=808080
+# DBG pos=37 in_now=808080 out=808080
+# DBG pos=38 in_now=808080 out=808080
+# DBG pos=39 in_now=808080 out=808080
+# DBG pos=40 in_now=808080 out=808080
+# DBG pos=41 in_now=808080 out=808080
+# DBG pos=42 in_now=808080 out=808080
+# DBG pos=43 in_now=808080 out=808080
+# DBG pos=44 in_now=808080 out=808080
+# DBG pos=45 in_now=808080 out=808080
+# DBG pos=46 in_now=808080 out=808080
+# DBG pos=47 in_now=808080 out=808080
+# TB_RESULT: PASS (dumped=2764800, 3-frame bit compare via run_all)
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step4_osd_integration/03_project/tb/tb_osd_track.v(92)
+#    Time: 38707263 ns  Iteration: 1  Instance: /tb_osd_track
+# End time: 02:31:03 on Sep 20,2026, Elapsed time: 0:00:03
+# Errors: 0, Warnings: 0
+

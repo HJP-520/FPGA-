@@ -1,0 +1,94 @@
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -onfinish exit tb_awb_regression -do "onbreak {quit -code 1 -f}; onerror {quit -code 1 -f}; run -all; quit -f" 
+# Start time: 14:57:52 on Oct 05,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# 
+# ** Warning: D:\SC520_display_burnpack\02_TD_project_rebuild\lab_ex1\user_source\ip_source\blk_mem_gen_awb_delay_signal\ram_f84573da5ab5.v(60): (vopt-2241) Connection width does not match width of port 'ecc_sbiterrinj'. The port definition is at: D:\SC520_display_burnpack\04_codex_validation\support\ph1p_logic_eram_stub.v(71).
+# 
+# ** Warning: D:\SC520_display_burnpack\02_TD_project_rebuild\lab_ex1\user_source\ip_source\blk_mem_gen_awb_delay_signal\ram_f84573da5ab5.v(60): (vopt-2241) Connection width does not match width of port 'ecc_dbiterrinj'. The port definition is at: D:\SC520_display_burnpack\04_codex_validation\support\ph1p_logic_eram_stub.v(72).
+# 
+# ** Warning: D:\SC520_display_burnpack\02_TD_project_rebuild\lab_ex1\user_source\hdl_source\signal_delay.v(120): (vopt-2685) [TFMPC] - Too few port connections for 'blk_mem_gen_awb_delay_signal_d'.  Expected 10, found 7.
+# 
+# ** Warning: D:\SC520_display_burnpack\02_TD_project_rebuild\lab_ex1\user_source\hdl_source\signal_delay.v(120): (vopt-2718) [TFMPC] - Missing connection for port 'web'.
+# 
+# ** Warning: D:\SC520_display_burnpack\02_TD_project_rebuild\lab_ex1\user_source\hdl_source\signal_delay.v(120): (vopt-2718) [TFMPC] - Missing connection for port 'dib'.
+# 
+# ** Warning: D:\SC520_display_burnpack\02_TD_project_rebuild\lab_ex1\user_source\hdl_source\signal_delay.v(120): (vopt-2718) [TFMPC] - Missing connection for port 'doa'.
+# 
+# ** Warning: D:\SC520_display_burnpack\02_TD_project_rebuild\lab_ex1\user_source\hdl_source\awb.v(180): (vopt-2685) [TFMPC] - Too few port connections for 'div_gen_G_R_r1'.  Expected 8, found 7.
+# 
+# ** Warning: D:\SC520_display_burnpack\02_TD_project_rebuild\lab_ex1\user_source\hdl_source\awb.v(180): (vopt-2718) [TFMPC] - Missing connection for port 'remainder'.
+# 
+# ** Warning: D:\SC520_display_burnpack\02_TD_project_rebuild\lab_ex1\user_source\hdl_source\awb.v(190): (vopt-2685) [TFMPC] - Too few port connections for 'divide_G_B_r1'.  Expected 8, found 7.
+# 
+# ** Warning: D:\SC520_display_burnpack\02_TD_project_rebuild\lab_ex1\user_source\hdl_source\awb.v(190): (vopt-2718) [TFMPC] - Missing connection for port 'remainder'.
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# Loading sv_std.std
+# Loading work.tb_awb_regression(fast)
+# onbreak {quit -code 1 -f}
+#  Warning: onbreak command for use within macro
+#  onerror {quit -code 1 -f}
+#  Warning: onerror command for use within macro
+#  run -all
+# ERAM_STUB_WARN: unknown (X/Z) on addr/enable pins @ tb_awb_regression.u_awb.signal_delay_d.blk_mem_gen_awb_delay_signal_d.ram_f84573da5ab5_Inst.username_inst (t=7000)
+# CHECK OK   [F01 reset 1.0]: gain_R=10000  gain_B=10000
+# CHECK OK   [F02 no-prev still 1.0]: gain_R=10000  gain_B=10000
+# CHECK OK   [F03 first step +-0.125]: gain_R=12000  gain_B=0e000
+# CHECK OK   [F04 B hits 0.75]: gain_R=14000  gain_B=0c000
+# CHECK OK   [F05]: gain_R=16000  gain_B=0c000
+# CHECK OK   [F06 R hits ~1.5]: gain_R=17fff  gain_B=0c000
+# CHECK OK   [F06 intra-frame constant]: intra-frame constant R=17fff B=0c000
+# CHECK OK   [F07 steady]: gain_R=17fff  gain_B=0c000
+# CHECK OK   [F08 steady]: gain_R=17fff  gain_B=0c000
+# CHECK OK   [F09 lag-2 frames (hold)]: gain_R=17fff  gain_B=0c000
+# CHECK OK   [F10 lag-1 frame (hold)]: gain_R=17fff  gain_B=0c000
+# CHECK OK   [F11 climb]: gain_R=19fff  gain_B=0c000
+# CHECK OK   [F12]: gain_R=1bfff  gain_B=0c000
+# CHECK OK   [F13]: gain_R=1dfff  gain_B=0c000
+# CHECK OK   [F14]: gain_R=1ffff  gain_B=0c000
+# CHECK OK   [F15]: gain_R=21fff  gain_B=0c000
+# CHECK OK   [F16]: gain_R=23fff  gain_B=0c000
+# CHECK OK   [F17]: gain_R=25fff  gain_B=0c000
+# CHECK OK   [F18]: gain_R=27fff  gain_B=0c000
+# CHECK OK   [F19]: gain_R=29fff  gain_B=0c000
+# CHECK OK   [F20]: gain_R=2bfff  gain_B=0c000
+# CHECK OK   [F21]: gain_R=2dfff  gain_B=0c000
+# CHECK OK   [F22]: gain_R=2ffff  gain_B=0c000
+# CHECK OK   [F23 CLAMP -> exactly 3.0x]: gain_R=30000  gain_B=0c000
+# CHECK OK   [F24 clamp hold]: gain_R=30000  gain_B=0c000
+# CHECK OK   [F25 before switch]: gain_R=30000  gain_B=0c000
+# CHECK OK   [25 intra-frame constant (switch ignored)]: intra-frame constant R=30000 B=0c000
+# CHECK OK   [F26 lag -> hold 3.0x]: gain_R=30000  gain_B=0c000
+# CHECK OK   [G1 min-1 rejected]: gain_R=10000  gain_B=10000
+# CHECK OK   [G1 next step ok]: gain_R=12000  gain_B=0e000
+# CHECK OK   [G2 min+1 committed]: gain_R=12000  gain_B=0e000
+# CHECK OK   [H bright excluded]: gain_R=10000  gain_B=10000
+# CHECK OK   [H2 dark excluded]: gain_R=10000  gain_B=10000
+# CHECK OK   [H2 dark-control ok]: gain_R=12000  gain_B=0e000
+# CHECK OK   [J oversize rejected]: gain_R=10000  gain_B=10000
+# CHECK OK   [K bad-frame rejected]: gain_R=10000  gain_B=10000
+# CHECK OK   [K gate recovers]: gain_R=12000  gain_B=0e000
+# CHECK OK   [L reset-mid-frame]: gain_R=10000  gain_B=10000
+# ============================================================
+# TB_RESULT: PASS  (0 fail)  AWB frame-sync behavior confirmed
+# ** Note: $finish    : D:/SC520_display_burnpack/04_codex_validation/tb_awb_regression.v(238)
+#    Time: 20541717 ns  Iteration: 1  Instance: /tb_awb_regression
+# End time: 14:57:56 on Oct 05,2026, Elapsed time: 0:00:04
+# Errors: 0, Warnings: 10

@@ -1,0 +1,37 @@
+===== tb_centroid : PASS =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_centroid -do "run -all; quit -f" 
+# Start time: 01:14:09 on Sep 19,2026
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# TICK y=0 cnt=3600 seen=1 sumx=268200 i=9218
+# FRAME0 OK v=1 cnt=3600 cx=74 cy=39 lost=0
+# TICK y=0 cnt=444 seen=1 sumx=40613 i=18434
+# FRAME1 OK v=1 cnt=444 cx=91 cy=21 lost=0
+# TICK y=0 cnt=9 seen=1 sumx=279 i=27648
+# FRAME2 OK v=0 cnt=9 cx=0 cy=0 lost=1
+# TB_RESULT: PASS (frames=3)
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step2_color_centroid/03_project/tb/tb_centroid.v(83)
+#    Time: 387163 ns  Iteration: 1  Instance: /tb_centroid
+# End time: 01:14:10 on Sep 19,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+

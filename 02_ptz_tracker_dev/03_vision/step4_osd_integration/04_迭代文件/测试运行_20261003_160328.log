@@ -1,0 +1,241 @@
+===== tb_uart_telemetry : FAIL =====
+-- compile --
+** Error: (vlog-13069) D:\fpga-ptz-tracker\04_embedded\03_project\rtl\uart_telemetry.v(91): near "endmodule": syntax error, unexpected endmodule.
+
+** Error: D:\fpga-ptz-tracker\04_embedded\03_project\tb\uart_rx_mon.v(14): Declarations not allowed in unnamed block.
+** Error: D:\fpga-ptz-tracker\04_embedded\03_project\tb\uart_rx_mon.v(15): Illegal declaration after the statement near line '13'.  Declarations must precede statements.  Look for stray semicolons.
+** Error (suppressible): D:\fpga-ptz-tracker\04_embedded\03_project\tb\uart_rx_mon.v(22): (vlog-2388) 'shifter' already declared in this scope (uart_telemetry).
+
+** Error: D:\fpga-ptz-tracker\04_embedded\03_project\tb\uart_rx_mon.v(30): (vlog-2730) Undefined variable: 'O_byte'.
+
+** Error: D:\fpga-ptz-tracker\04_embedded\03_project\tb\uart_rx_mon.v(30): (vlog-2730) Undefined variable: 'O_valid'.
+-- sim tail --
+
+
+===== tb_gimbal : PASS =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_gimbal -do "run -all; quit -f" 
+# Start time: 16:02:59 on Oct 03,2026
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# STEP0 OK x=1515 y=1500 lost=0
+# STEP1 OK x=1530 y=1500 lost=0
+# STEP2 OK x=1550 y=1495 lost=0
+# STEP3 OK x=1554 y=1483 lost=0
+# STEP4 OK x=1554 y=1483 lost=0
+# STEP5 OK x=1554 y=1483 lost=1
+# STEP6 OK x=1554 y=1483 lost=2
+# STEP7 OK x=1511 y=1499 lost=0
+# STEP8 OK x=1511 y=1499 lost=0
+# STEP9 OK x=1511 y=1499 lost=0
+# TB_RESULT: PASS (steps=10)
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step3_closed_loop/03_project/tb/tb_gimbal.v(60)
+#    Time: 890 ns  Iteration: 1  Instance: /tb_gimbal
+# End time: 16:03:01 on Oct 03,2026, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 0
+
+===== tb_pwm : PASS =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_pwm -do "run -all; quit -f" 
+# Start time: 16:03:03 on Oct 03,2026
+# ** Note: (vsim-8009) Loading existing optimized design _opt1
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# MEAS tick=2 OK x=75000 y=75000 len=1000000
+# MEAS tick=5 OK x=60000 y=100000 len=1000000
+# TB_RESULT: PASS
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step3_closed_loop/03_project/tb/tb_pwm.v(80)
+#    Time: 100000070 ns  Iteration: 1  Instance: /tb_pwm
+# End time: 16:03:07 on Oct 03,2026, Elapsed time: 0:00:04
+# Errors: 0, Warnings: 0
+
+===== tb_detect_chain : PASS =====
+-- sim tail --
+# 
+# ** Warning: D:\fpga-ptz-tracker\03_vision\step2_color_centroid\03_project\tb\tb_detect_chain.v(31): (vopt-2685) [TFMPC] - Too few port connections for 'dut'.  Expected 36, found 29.
+# 
+# ** Warning: D:\fpga-ptz-tracker\03_vision\step2_color_centroid\03_project\tb\tb_detect_chain.v(31): (vopt-2718) [TFMPC] - Missing connection for port 'O_fid'.
+# 
+# ** Warning: D:\fpga-ptz-tracker\03_vision\step2_color_centroid\03_project\tb\tb_detect_chain.v(31): (vopt-2718) [TFMPC] - Missing connection for port 'O_mot_maxy'.
+# 
+# ** Warning: D:\fpga-ptz-tracker\03_vision\step2_color_centroid\03_project\tb\tb_detect_chain.v(31): (vopt-2718) [TFMPC] - Missing connection for port 'O_mot_miny'.
+# 
+# ** Warning: D:\fpga-ptz-tracker\03_vision\step2_color_centroid\03_project\tb\tb_detect_chain.v(31): (vopt-2718) [TFMPC] - Missing connection for port 'O_mot_maxx'.
+# 
+# ** Warning: D:\fpga-ptz-tracker\03_vision\step2_color_centroid\03_project\tb\tb_detect_chain.v(31): (vopt-2718) [TFMPC] - Missing connection for port 'O_mot_minx'.
+# 
+# ** Warning: D:\fpga-ptz-tracker\03_vision\step2_color_centroid\03_project\tb\tb_detect_chain.v(31): (vopt-2718) [TFMPC] - Missing connection for port 'O_mot_cnt'.
+# 
+# ** Warning: D:\fpga-ptz-tracker\03_vision\step2_color_centroid\03_project\tb\tb_detect_chain.v(31): (vopt-2718) [TFMPC] - Missing connection for port 'O_mot_valid'.
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# FRAME0 OK v=1 cnt=8096 cx=604 cy=345
+# FRAME1 OK v=1 cnt=32592 cx=644 cy=391
+# FRAME2 OK v=1 cnt=221 cx=107 cy=108
+# TB_RESULT: PASS (frames=3 passthru_ok)
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step2_color_centroid/03_project/tb/tb_detect_chain.v(95)
+#    Time: 80000035 ns  Iteration: 0  Instance: /tb_detect_chain
+# End time: 16:03:18 on Oct 03,2026, Elapsed time: 0:00:09
+# Errors: 0, Warnings: 8
+
+===== tb_osd_track : FAIL =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_osd_track -do "run -all; quit -f" 
+# Start time: 16:03:20 on Oct 03,2026
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# SCAN scanned=7 v_in=1 cx=604 cy=345 x0=560 x1=649 y0=301 y1=390
+# TB_RESULT: PASS (dumped=2764800 w0=921600 w1=921600 w2=921600)
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step4_osd_integration/03_project/tb/tb_osd_track.v(114)
+#    Time: 38707277 ns  Iteration: 1  Instance: /tb_osd_track
+# End time: 16:03:25 on Oct 03,2026, Elapsed time: 0:00:05
+# Errors: 0, Warnings: 0
+
+===== tb_vision_top : FAIL =====
+-- compile --
+-tracker\03_vision\step4_osd_integration\03_project\tb\tb_vision_top.v(37): (vlog-2730) Undefined variable: 'pt_user'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_vision_top.v(37): (vlog-2730) Undefined variable: 'pt_last'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_vision_top.v(38): (vlog-2730) Undefined variable: 'osd_valid'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_vision_top.v(38): (vlog-2730) Undefined variable: 'osd_sof'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_vision_top.v(39): (vlog-2730) Undefined variable: 'osd_eol'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_vision_top.v(39): (vlog-2730) Undefined variable: 'osd_data'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_vision_top.v(42): (vlog-2730) Undefined variable: 'pwm_x'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_vision_top.v(42): (vlog-2730) Undefined variable: 'pwm_y'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_vision_top.v(43): (vlog-2730) Undefined variable: 'duty_x'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_vision_top.v(43): (vlog-2730) Undefined variable: 'duty_y'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_vision_top.v(44): (vlog-2730) Undefined variable: 'lost'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_vision_top.v(44): (vlog-2730) Undefined variable: 'status'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_vision_top.v(45): Checker 'vision_top' not found.  Instantiation 'dut' must be of a visible checker.
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_vision_top.v(47): (vlog-2730) Undefined variable: 'frame_dump24'.
+
+** Error: (vlog-13069) D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_vision_top.v(47): near "#": syntax error, unexpected '#'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_vision_top.v(52): Declarations not allowed in unnamed block.
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_vision_top.v(53): Declarations not allowed in unnamed block.
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_vision_top.v(54): Illegal declaration after the statement near line '50'.  Declarations must precede statements.  Look for stray semicolons.
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_vision_top.v(57): Declarations not allowed in unnamed block.
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_vision_top.v(58): Illegal declaration after the statement near line '54'.  Declarations must precede statements.  Look for stray semicolons.
+-- sim tail --
+
+
+===== tb_closed_loop : FAIL =====
+-- compile --
+: (vlog-2730) Undefined variable: 'tpg_720p'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_closed_loop.v(31): (vlog-2730) Undefined variable: 'tdata'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_closed_loop.v(31): (vlog-2730) Undefined variable: 'tvalid'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_closed_loop.v(31): (vlog-2730) Undefined variable: 'tuser'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_closed_loop.v(31): (vlog-2730) Undefined variable: 'tlast'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_closed_loop.v(33): (vlog-2730) Undefined variable: 'osd_valid'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_closed_loop.v(33): (vlog-2730) Undefined variable: 'osd_sof'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_closed_loop.v(34): (vlog-2730) Undefined variable: 'osd_eol'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_closed_loop.v(34): (vlog-2730) Undefined variable: 'osd_data'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_closed_loop.v(38): (vlog-2730) Undefined variable: 'duty_x'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_closed_loop.v(40): Checker 'vision_top' not found.  Instantiation 'dut' must be of a visible checker.
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_closed_loop.v(43): Declarations not allowed in unnamed block.
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_closed_loop.v(44): Declarations not allowed in unnamed block.
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_closed_loop.v(45): Declarations not allowed in unnamed block.
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_closed_loop.v(46): Declarations not allowed in unnamed block.
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_closed_loop.v(47): Declarations not allowed in unnamed block.
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_closed_loop.v(48): Illegal declaration after the statement near line '40'.  Declarations must precede statements.  Look for stray semicolons.
+** Error: (vlog-13069) D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_closed_loop.v(84): near "end": syntax error, unexpected end.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_closed_loop.v(92): (vlog-13161) unexpected '$display'
+
+** Error: D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_closed_loop.v(93): (vlog-13161) unexpected '$finish'
+
+** Error: (vlog-13069) D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_closed_loop.v(94): near "end": syntax error, unexpected end.
+-- sim tail --
+
+

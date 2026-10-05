@@ -1,0 +1,92 @@
+===== tb_ser96to24 : FAIL =====
+-- compile --
+** Error: D:\fpga-ptz-tracker\03_vision\step1_video_link\03_project\tb\tb_ser96to24.v(40): (vlog-2730) Undefined variable: 'do'.
+
+** Error: (vlog-13069) D:\fpga-ptz-tracker\03_vision\step1_video_link\03_project\tb\tb_ser96to24.v(40): near "begin": syntax error, unexpected begin.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step1_video_link\03_project\tb\tb_ser96to24.v(44): 'While' statement found with an empty body.  This is permitted in SystemVerilog, but not permitted in Verilog.  Please look for any stray semicolons.
+** Error: (vlog-13069) D:\fpga-ptz-tracker\03_vision\step1_video_link\03_project\tb\tb_ser96to24.v(57): near "@": syntax error, unexpected '@'.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step1_video_link\03_project\tb\tb_ser96to24.v(61): (vlog-13161) unexpected '$display'
+
+** Error: D:\fpga-ptz-tracker\03_vision\step1_video_link\03_project\tb\tb_ser96to24.v(63): (vlog-13161) unexpected '$display'
+
+** Error: D:\fpga-ptz-tracker\03_vision\step1_video_link\03_project\tb\tb_ser96to24.v(64): (vlog-13161) unexpected '$finish'
+
+** Error: (vlog-13069) D:\fpga-ptz-tracker\03_vision\step1_video_link\03_project\tb\tb_ser96to24.v(65): near "end": syntax error, unexpected end.
+
+** Error: D:\fpga-ptz-tracker\03_vision\step1_video_link\03_project\tb\tb_ser96to24.v(84): (vlog-13161) unexpected '$display'
+
+** Error: D:\fpga-ptz-tracker\03_vision\step1_video_link\03_project\tb\tb_ser96to24.v(85): (vlog-13161) unexpected '$finish'
+
+** Error: (vlog-13069) D:\fpga-ptz-tracker\03_vision\step1_video_link\03_project\tb\tb_ser96to24.v(86): near "end": syntax error, unexpected end.
+-- sim tail --
+
+
+===== tb_pulse_sync : PASS =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_pulse_sync -do "run -all; quit -f" 
+# Start time: 23:28:55 on Sep 18,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# TB_RESULT: PASS (sent=100 got=100)
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step1_video_link/03_project/tb/tb_pulse_sync.v(42)
+#    Time: 23193 ns  Iteration: 0  Instance: /tb_pulse_sync
+# End time: 23:28:56 on Sep 18,2026, Elapsed time: 0:00:01
+# Errors: 0, Warnings: 0
+
+===== tb_cdc4phase : FAIL =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_cdc4phase -do "run -all; quit -f" 
+# Start time: 23:28:58 on Sep 18,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# MISM got=3380b7 exp=46a18c
+# MISM got=55a75d exp=3380b7
+# MISM got=379f3c exp=55a75d
+# MISM got=73a028 exp=379f3c
+# MISM got=1043e1 exp=146c1b
+# TB_RESULT: FAIL sent=200 got=108 mism=107
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step1_video_link/03_project/tb/tb_cdc4phase.v(61)
+#    Time: 19497 ns  Iteration: 0  Instance: /tb_cdc4phase
+# End time: 23:29:00 on Sep 18,2026, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 0
+

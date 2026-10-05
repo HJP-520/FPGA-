@@ -1,0 +1,606 @@
+% ============================================================
+\part{工程设计详解：Step1 的实现分析}
+
+\section{工程总览}
+
+\subsection{文件清单}
+
+Step1 的全部工程文件位于 \texttt{03\_vision/step1\_video\_link/03\_project/}：
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{llll}
+\toprule
+\textbf{文件} & \textbf{行数} & \textbf{类型} & \textbf{作用} \\
+\midrule
+ser96to24.v & 96 & 可综合 & 96bit 转 1 像素/拍串化器 \\
+tpg\_720p.v & 105 & 可综合 & 720p 测试图案发生器 \\
+pulse\_sync.v & 37 & 可综合 & 单 bit 脉冲跨时钟域 \\
+cdc\_4phase.v & 78 & 可综合 & 多 bit 数据 4 相握手跨域 \\
+sim\_video\_src.v & 73 & 仅仿真 & 回放文件向量 \\
+frame\_dump24.v & 68 & 仅仿真 & 帧转储为 hex（供 Python 比对）\\
+tb\_ser96to24.v & 90 & 测试 & 串化器 TB \\
+tb\_tpg.v & 72 & 测试 & TPG 几何断言 + 帧比对 \\
+tb\_pulse\_sync.v & 45 & 测试 & 跨域脉冲 1:1 \\
+tb\_cdc4phase.v & 63 & 测试 & 跨域数据完整性 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{数据流}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+                    ┌──────────────────────────────┐
+ 96bit AXI-S  ─────>│  ser96to24                   │─────> 1 像素/拍 24bit
+ (4 像素/拍)        │  (拆包 + 8 深 FIFO)          │       (给检测链)
+                    └──────────────────────────────┘
+
+ 无摄像头时，用 tpg_720p 替代上游：
+                    ┌──────────────────────────────┐
+ tpg_720p     ─────>│  ser96to24（同一模块）        │─────> 1 像素/拍
+ (测试图案)         └──────────────────────────────┘
+
+ 跨时钟域（两个方向共用）:
+   pulse_sync : 单 bit 脉冲（帧拍）        74MHz -> 50MHz
+   cdc_4phase : 多 bit 数据（目标包）      74MHz -> 50MHz
+\end{Verbatim}
+
+\subsection{三条设计原则}
+
+\begin{okbox}{贯穿全工程的设计原则}
+\begin{enumerate}
+  \item \textbf{窃流旁路}：视觉分支绝不反压主线（\texttt{O\_tready} 恒 1），
+        出错可随时摘除，显示链路行为与官方例程完全一致
+  \item \textbf{结构自对齐优先}：能用"读写同指针"解决对齐，就不用"移位+手工推相位"
+        （后者在 Step2 的平滑模块上让团队返工了四版）
+  \item \textbf{金标准驱动}：所有算术先在 Python 建位精确模型，RTL 逐位复刻并回归验证
+\end{enumerate}
+\end{okbox}
+
+% ============================================================
+\section{模块详解：ser96to24}
+
+\subsection{为什么需要它}
+
+摄像头/ISP 输出的是 4 像素打包（96bit/拍），这样布线少、带宽高。
+但后续检测链（HSV 变换、阈值、平滑）每拍只能处理 1 个像素——
+如果按 4 像素写，就要 4 份并行逻辑：资源 $\times$4、调试难度 $\times$10。
+
+\textbf{设计决策：在链路入口做一次"降速"，把 4 像素/拍拆成 1 像素/拍。}
+
+\subsection{核心结构：FIFO}
+
+\begin{Verbatim}[frame=single,fontsize=\small,numbers=left]
+// 8 深缓冲：数据与标志同址存放
+reg [23:0] mem   [0:7];     // 像素数据
+reg        sof_q [0:7];     // 帧首标志
+reg        eol_q [0:7];     // 行尾标志
+reg [2:0]  wp, rp;          // 写指针 / 读指针
+reg [3:0]  cnt;             // 当前存了几个
+\end{Verbatim}
+
+\textbf{为什么深度是 8？}\quad
+输入每 4 拍来 4 像素（$+4$），输出每拍取 1 像素（$-1$）。
+最坏情况净积压 $+3$/拍；考虑行尾边界与读空闲，实测峰值深度 7。
+深度 8 留 1 格余量，且 8 是 2 的幂——指针用 3bit 自然回绕，无需取模。
+
+\subsection{写入逻辑（4 像素一次性入队）}
+
+\begin{Verbatim}[frame=single,fontsize=\small,numbers=left]
+wire do_wr = I_tvalid & O_tready;   // O_tready 恒 1，故等价于 I_tvalid
+
+always @(posedge I_clk or negedge I_rst_n) begin
+    if (!I_rst_n) begin
+        wp <= 3'd0; rp <= 3'd0; cnt <= 4'd0;
+    end else begin
+        if (do_wr) begin
+            mem[wp]      <= p0;         // 像素 0（最左）
+            mem[wp_n]    <= p1;
+            mem[wp_n2]   <= p2;
+            mem[wp_n3]   <= p3;         // 像素 3（最右）
+            sof_q[wp]    <= I_tuser;    // 帧首标志只挂第 1 个像素
+            eol_q[wp_n3] <= I_tlast;    // 行尾标志只挂第 4 个像素
+            wp <= wp + 4'd4;
+        end
+        ...
+\end{Verbatim}
+
+\begin{keybox}{关键点 1：标志与像素严格绑定}
+\texttt{tuser} 表示"这一拍是帧首"，但展开后真正的帧首只有 4 个像素中的\textbf{第 1 个}。
+所以 \texttt{sof\_q[wp]} 只给第 1 格，其余 3 格给 0。
+\texttt{tlast} 同理，只给第 4 个像素。\\[4pt]
+这一步如果写错（比如给整拍 4 个像素都置位），下游的帧计数会变成 4 倍。
+\end{keybox}
+
+\textbf{关键点 2：指针步进 4}\quad
+一次写入占 4 格，所以 \texttt{wp += 4}。指针位宽 3bit（0\textasciitilde 7），
+加 4 后自然回绕，无需额外逻辑。
+
+\subsection{读出逻辑（每拍 1 像素）}
+
+\begin{Verbatim}[frame=single,fontsize=\small,numbers=left]
+wire do_rd = (cnt != 4'd0);     // 有数据就读
+
+always @(*) begin
+    O_valid = do_rd;            // 组合输出
+    O_data  = mem[rp];
+    O_sof   = sof_q[rp];
+    O_eol   = eol_q[rp];
+end
+\end{Verbatim}
+
+\textbf{为什么用组合读出而不是寄存输出？}\quad
+分布式 RAM 的组合读延迟很短（几个 LUT），在 74MHz 下时序满足。
+若改成寄存器输出，整个检测链会多延迟 1 拍，给帧内对齐带来额外复杂度。
+
+\subsection{计数器更新（同时读写）}
+
+\begin{Verbatim}[frame=single,fontsize=\small,numbers=left]
+case ({do_wr, do_rd})
+    2'b10:   cnt <= cnt + 4'd4;    // 只写
+    2'b01:   cnt <= cnt - 4'd1;    // 只读
+    2'b11:   cnt <= cnt + 4'd3;    // 同时读写：+4-1 = +3
+    default: cnt <= cnt;
+endcase
+\end{Verbatim}
+
+\begin{warnbox}{新手最容易写错的地方}
+分开写两个 \texttt{if} 会出错：
+\begin{Verbatim}[fontsize=\small]
+if (do_wr) cnt <= cnt + 4;
+if (do_rd) cnt <= cnt - 1;   // ← 错误！后一句覆盖前一句
+\end{Verbatim}
+同时发生时，后者把前者的结果覆盖掉，计数逐渐跑偏（每拍少加 4 或多减 1）。
+\textbf{必须用 case 把四种组合合并处理}——这是 FIFO 的标准写法。
+\end{warnbox}
+
+\subsection{溢出保护（仅仿真）}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+// synthesis translate_off
+always @(posedge I_clk) begin
+    if (I_rst_n && (cnt > 4'd7))
+        $display("SER96TO24_FATAL: overflow cnt=%0d t=%0t", cnt, $time);
+end
+// synthesis translate_on
+\end{Verbatim}
+
+\texttt{translate\_off/on} 之间的代码只在仿真时存在，综合时被完全忽略——
+既能第一时间暴露问题，又不占任何硬件资源。
+
+\begin{warnbox}{这个保护立刻抓到了真 bug}
+首版仿真时 TB 和 TPG 都以\textbf{满速}发 beat（相当于 4 倍像素率），
+断言立刻报 \texttt{overflow cnt=13}。\\[4pt]
+\textbf{根因}：真实 AXI-S 总线上 beat 占空比是 1/4（beat 率 = 像素率/4），
+不是每拍都发。720p60 的像素率 55.3Mpx/s ÷ 4 = 13.8M beat/s，
+在 74.25MHz 下就是"每 4 拍 1 个 beat"。\\[4pt]
+\textbf{修正}：TPG / TB / sim\_video\_src 统一加 4 分频节拍。
+这个 bug 如果留到上板，现象会是"画面偶尔丢像素"，极难定位。
+\end{warnbox}
+
+% ============================================================
+\section{模块详解：tpg\_720p}
+
+\subsection{三个用途}
+
+\begin{enumerate}
+  \item \textbf{无摄像头演示}：板子上没插摄像头时也能出图，独立演示视觉链路
+  \item \textbf{闭环仿真驱动}：方块位置由外部输入控制，TB 可用云台模型实时改变它（相机在环）
+  \item \textbf{确定性测试源}：图案完全可预测，Python 能算出期望帧做逐像素比对
+\end{enumerate}
+
+\subsection{图案设计：为什么是这 8 个颜色}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{llll}
+\toprule
+\textbf{竖条} & \textbf{RGB} & \textbf{HSV（近似）} & \textbf{为什么选它} \\
+\midrule
+灰 1 & 404040 & H=0, S=0, V=64 & 无饱和度，不触发任何颜色阈值 \\
+灰 2 & 808080 & H=0, S=0, V=128 & 同上，验证中灰 \\
+灰 3 & C0C0C0 & H=0, S=0, V=192 & 同上，验证亮灰 \\
+灰 4 & E0E0E0 & H=0, S=0, V=224 & 高亮但无色——测"高亮无饱和"边界 \\
+蓝   & 2020E0 & H=240 & 与红色（H=0）相差最远的色相 \\
+绿   & 20E020 & H=120 & 三基色之一，验证中间色相 \\
+深绿 & 106010 & H=120, V=96 & 低亮度绿色——测暗色 \\
+深蓝 & 101060 & H=240, V=96 & 低亮度蓝色——测暗色 \\
+\midrule
+\textbf{红方块} & E02020 & H=0, S=192, V=224 & \textbf{唯一目标}，高饱和高亮度红 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{设计要点：所有背景色都避开了红色阈值窗（H$\in$[335,25] 且 S$\geq$80 且 V$\geq$60）。}\quad
+灰阶 S=0 不满足饱和度条件；蓝色 H=240、绿色 H=120 都不在色相窗内。
+这样检测链一眼锁定红方块，不受背景干扰——这是后面"逐像素金标准比对"能通过的前提。
+
+\subsection{几何计数器与颜色函数}
+
+\begin{Verbatim}[frame=single,fontsize=\small,numbers=left]
+localparam BEATS_PER_LINE = IMG_WIDTH / 4;   // 1280/4 = 320
+
+reg [10:0] beat_x;   // 0..319（打包坐标）
+reg [9:0]  y;        // 0..719（行坐标）
+reg [1:0]  pres;     // 4 分频节拍
+
+function [23:0] px_color;
+    input [12:0] px;    // 真实像素列号
+    input [9:0]  py;
+    begin
+        if (BOX_EN && (px >= I_box_x) && (px < I_box_x + BOX_W) &&
+            (py >= I_box_y) && (py < I_box_y + BOX_H))
+            px_color = 24'hE0_20_20;              // 红方块
+        else if (px < 13'd160)  px_color = 24'h40_40_40;
+        else if (px < 13'd320)  px_color = 24'h80_80_80;
+        ...  // 共 8 段
+    end
+endfunction
+\end{Verbatim}
+
+\begin{warnbox}{这里曾经写错过一次}
+首版用位切片判竖条：\texttt{case (px[12:8])}。
+但 160 不是 2 的幂，位切片得到的分段与 160px 等宽完全不符。\\[4pt]
+\textbf{修正}：改用比较链（\texttt{px < 160 / px < 320 / ...}）。
+综合器会把比较链优化成并联比较器，资源几乎不变。
+\end{warnbox}
+
+\subsection{4 分频节拍（关键设计）}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+reg [1:0] pres;
+wire do_send = (pres == 2'd0) & (~GAP_EN | ...);
+
+always @(posedge I_clk) begin
+    pres <= pres + 2'd1;          // 0,1,2,3,0,1,2,3...
+    if (do_send) begin
+        // 输出一个 beat（4 像素）
+    end
+end
+\end{Verbatim}
+
+\textbf{为什么必须 4 分频？}\quad
+720p60 的像素率 55.3Mpx/s，在 74.25MHz 时钟下 beat 率只有 13.8M/s，
+即\textbf{每 4 拍 1 个 beat}。如果 TPG 满速发，下游 FIFO 立刻溢出
+（这就是上一节那个真 bug）。
+
+\begin{warnbox}{踩过的坑：复位遗漏}
+首版 \texttt{pres} 忘了写进复位分支，上电后是 X（未知态），
+\texttt{pres == 2'd0} 永远不成立 $\to$ TPG 一个像素都不输出。
+\\[4pt]
+\textbf{教训：每个寄存器都必须有复位值。}这是新手最常犯的错误，
+而且现象往往是"完全没输出"，很难联想到复位。
+\end{warnbox}
+
+\subsection{帧同步标志}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+O_tuser <= (beat_x == 0) && (y == 0);           // 整帧仅一拍为 1
+O_tlast <= (beat_x == BEATS_PER_LINE - 1);      // 每行最后一拍
+\end{Verbatim}
+
+\texttt{tuser} 只在"第 0 行第 0 拍"为 1——即一帧的最开头；
+\texttt{tlast} 在每行第 319 拍为 1——即一行的最右端。
+
+\subsection{LFSR 随机空闲（可选，锻炼鲁棒性）}
+
+\texttt{GAP\_EN=1} 时用线性反馈移位寄存器产生约 7\% 概率的空闲拍，
+模拟真实总线的随机间隙：
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+lfsr <= {lfsr[14:0], lfsr[15] ^ lfsr[13] ^ lfsr[12] ^ lfsr[10]};
+wire do_send = (pres == 2'd0) && (~GAP_EN | (lfsr[0] | (lfsr[7:0] == 8'h00)));
+\end{Verbatim}
+
+% ============================================================
+\section{模块详解：pulse\_sync（单 bit 脉冲跨域）}
+
+\subsection{问题}
+
+一个 74.25MHz 域的"单拍脉冲"（例如每帧一次的帧拍），要传给 50MHz 域。
+直接连一根线会出两个问题：
+
+\begin{itemize}
+  \item 50MHz 采样时可能采到脉冲的\textbf{边沿} $\to$ 亚稳态
+  \item 74.25MHz 的单拍脉冲只有 13.5ns 宽，50MHz 周期是 20ns——
+        可能被\textbf{完全错过}（一次都采不到）
+\end{itemize}
+
+\subsection{解决方案：toggle + 边沿还原}
+
+\begin{Verbatim}[frame=single,fontsize=\small,numbers=left]
+// 源域：每来一个脉冲，翻转一次电平
+reg toggle_src;
+always @(posedge I_clk_src or negedge I_rst_src_n) begin
+    if (!I_rst_src_n)     toggle_src <= 1'b0;
+    else if (I_pulse_src) toggle_src <= ~toggle_src;
+end
+
+// 目标域：3 级同步 + 边沿检测
+reg [2:0] sync_dst;
+always @(posedge I_clk_dst or negedge I_rst_dst_n) begin
+    if (!I_rst_dst_n) sync_dst <= 3'b000;
+    else              sync_dst <= {sync_dst[1:0], toggle_src};
+end
+
+assign O_pulse_dst = sync_dst[1] ^ sync_dst[2];   // 电平变化 = 一个脉冲
+\end{Verbatim}
+
+\textbf{原理}\quad
+电平（持续高或持续低）比单拍脉冲"宽"，容易安全采样。
+目标域检测到电平发生翻转（\texttt{sync\_dst[1] != sync\_dst[2]}），
+就知道"源域发了一个脉冲"，于是产生自己域内的一个单拍脉冲。
+
+\begin{keybox}{约束条件（必须满足）}
+源脉冲之间的间隔必须大于目标域 3 个时钟周期，
+否则两次翻转来不及被同步，会漏脉冲。\\[4pt]
+本项目用于"每帧一次"的帧拍——帧间隔 16.7ms，远大于 60ns，绝对安全。
+\end{keybox}
+
+% ============================================================
+\section{模块详解：cdc\_4phase（多 bit 数据跨域）}
+
+\subsection{问题}
+
+目标包（68bit，拓展后 135bit）要从检测域传到显示域/云台域。
+多 bit 不能像单 bit 那样简单同步——因为每根线的延迟略有差异，
+接收方可能采到"新旧混合"的值（例如高 8 位是新坐标、低 8 位是旧坐标）。
+
+\subsection{解决方案：4 相握手}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+源域                                      目标域
+────                                       ────
+1. 数据放总线上（保持不动）
+2. 翻转 req  ──────────────────────────> 3. 检测到 req 变化
+                                          4. 锁存数据（此时数据已稳定）
+                                          5. 翻转 ack
+6. 检测到 ack 变化 <──────────────────────┘
+7. 解除 busy，可以发下一包
+\end{Verbatim}
+
+\textbf{为什么能保证数据正确？}\quad
+关键是\textbf{数据在 req 翻转之前就已稳定，且整个握手期间保持不变}。
+目标域在检测到 req 变化后的任意时刻采样，都采到完整的新数据。
+
+\begin{keybox}{类比：寄快递签收}
+你把包裹放门口（数据），贴一张"已放件"标签（req 翻转）。
+快递员取走包裹，贴一张"已取件"回执（ack 翻转）。
+你看到回执才放下一个包裹——绝不会出现"包裹只放了一半就被取走"。
+\end{keybox}
+
+\subsection{关键实现与一个真实 bug}
+
+\begin{Verbatim}[frame=single,fontsize=\small,numbers=left]
+// 源域：busy 的解除条件
+if (!busy) begin
+    if (I_src_load) begin
+        data_hold <= I_src_data;   // 1. 先锁存数据
+        req       <= ~req;         // 2. 再翻转 req
+        busy      <= 1'b1;
+    end
+end else if (ack_2ff == req) begin
+    busy <= 1'b0;                  // 3. 用"电平比较"判断对方已应答
+end
+\end{Verbatim}
+
+\begin{warnbox}{真实 bug：TB 驱动的同沿竞态}
+首版仿真发现\textbf{每隔一包丢一包}（1,3,5,7\ldots 收到，2,4,6 丢失）。\\[4pt]
+\textbf{根因不在 RTL，在测试平台}：\texttt{wait(!busy)} 在 busy 被置位的\textbf{同一个时钟沿}
+就通过了（因为非阻塞赋值此时还未生效），于是第二个包在 DUT 仍忙时发出，被丢弃。\\[4pt]
+\textbf{修正}：驱动侧改为"先等 busy 上升 $\to$ 再等 busy 下降"的稳健时序。\\[4pt]
+\textbf{教训}：跨域模块的 TB 必须显式等待握手完成，不能假设一个时钟沿就够。
+定位这个 bug 用了逐拍波形追踪（打印 req/busy/ack 的每拍值），
+最后靠"数据序列号"看出是隔包丢失——如果是随机数据根本看不出规律。
+\end{warnbox}
+
+\subsection{验证}
+
+\texttt{tb\_cdc4phase} 用两个异步时钟（周期 14ns 与 20ns，无固定相位关系），
+发送 200 个随机 23bit 数据，逐个校验完整性。全部通过。
+
+% ============================================================
+\section{仿真专用模块}
+
+\subsection{sim\_video\_src（文件回放源）}
+
+从 \texttt{chain\_beats.hex}（96bit 拍数据）与 \texttt{chain\_flags.hex}（标志位）读入
+Python 生成的确定性场景，按帧重复播放。
+
+\begin{warnbox}{踩过的坑：readmemh 的位宽限制}
+首版 flags 文件每行写两个字符（如 \texttt{"10"} 表示 tuser=1, tlast=0），
+但 TB 里声明的是 \texttt{reg [1:0] flags}——只允许 \textbf{1 位}十六进制数字，
+readmemh 直接截断，所有标志位全毁（tuser/tlast 永远为 0）。\\[4pt]
+\textbf{修正}：改成单字符格式（值 0\textasciitilde 3：\texttt{2}=tuser、\texttt{1}=tlast、\texttt{3}=两者）。\\[4pt]
+\textbf{教训}：hex 向量文件的字段宽度 = 向量位宽/4，宁可浪费一位也不要溢出。
+\end{warnbox}
+
+\subsection{frame\_dump24（帧转储）}
+
+把 vpix 流（1 像素/拍）写成 hex 文件，每行一个像素的 RGB888：
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+$fwrite(fd, "%02X%02X%02X\n", I_data[23:16], I_data[15:8], I_data[7:0]);
+\end{Verbatim}
+
+\begin{tipbox}{小陷阱：ModelSim 的 \%X 输出小写}
+Python 比对时要注意：\texttt{c0c0c0} 与 \texttt{C0C0C0} 是同一个颜色。
+\texttt{run\_all.py} 里统一做了 \texttt{.upper()} 归一化，避免这类假失配。
+\end{tipbox}
+
+% ============================================================
+\section{测试平台设计}
+
+\subsection{四层验证策略}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{lll}
+\toprule
+\textbf{层次} & \textbf{方法} & \textbf{能抓到的错误} \\
+\midrule
+模块级 & 随机向量 + 逐位比对 & 算术错误、标志错位 \\
+帧级   & 整帧 921,600 像素比对 & 几何错误、边界处理错误 \\
+协议级 & 异步双钟 + 随机数据 & 跨域丢包、亚稳态 \\
+系统级 & 端到端场景 & 模块间接口不匹配 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{tb\_ser96to24 的关键设计：唯一数据编码}
+
+\begin{Verbatim}[frame=single,fontsize=\small,numbers=left]
+// 期望队列：把输入展开后逐像素压入
+for (k = 0; k < 4; k = k + 1) begin
+    exp_d[push_n + k] = 24'h100000 * f + b * 4 + k;  // 唯一编码
+    exp_s[push_n + k] = (b == 0) && (k == 0);         // 帧首只在第 1 像素
+    exp_e[push_n + k] = (k == 3) && ((b % BEATS) == BEATS-1); // 行尾只在第 4 像素
+end
+\end{Verbatim}
+
+\textbf{设计要点：数据用唯一编码}\quad
+第 $f$ 帧、第 $b$ 拍、第 $k$ 个像素的值 = \texttt{0x100000*f + b*4 + k}。
+每个像素值全网唯一——出错时一眼看出是\textbf{哪个像素}错位了，
+而不只是知道"有错误"。这比随机数据强大得多。
+
+\subsection{tb\_tpg 的双重验证}
+
+\begin{enumerate}
+  \item \textbf{几何断言}：每帧必须恰好 1 次 tuser、720 次 tlast、921,600 个像素
+  \item \textbf{帧转储比对}：写出的 \texttt{tpg\_act\_0.hex} 与 Python 生成的
+        \texttt{tpg\_exp.hex} 逐像素一致
+\end{enumerate}
+
+Python 侧的期望帧用\textbf{同一个颜色表}生成（\texttt{gen\_vectors.py::tpg\_frame}），
+保证"设计意图"与"RTL 实现"完全对齐——这是自动化验证的前提。
+
+\subsection{tb\_cdc4phase 的时序陷阱}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+// 正确的驱动时序（修正同沿竞态后）
+data_v = WIDTH'($urandom());
+s_data <= data_v;
+exp_q[wp] <= data_v;
+s_load <= 1'b1;
+@(posedge clk_s);
+s_load <= 1'b0;
+@(posedge clk_s);            // 等一拍，让 busy 有条件拉高
+wait (s_busy === 1'b1);      // 显式等 busy 拉高（受理）
+wait (s_busy === 1'b0);      // 显式等握手完成
+sent = sent + 1;
+\end{Verbatim}
+
+% ============================================================
+\section{验证结果}
+
+\subsection{回归输出}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+$ python tools/run_all.py
+
+--- tb_ser96to24 ...
+    ==> PASS
+--- tb_tpg ...
+    ==> PASS
+--- tb_pulse_sync ...
+    ==> PASS
+--- tb_cdc4phase ...
+    ==> PASS
+...
+==== 汇总: 18/18 PASS ====   ← 当前仓库全量（Step1 阶段为 15 项）
+\end{Verbatim}
+
+\subsection{Step1 四项测试细节}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{lll}
+\toprule
+\textbf{测试} & \textbf{验证内容} & \textbf{结果} \\
+\midrule
+tb\_ser96to24 & 随机空拍 + 3 帧，队列自检（数据/sof/eol 逐像素） & PASS \\
+tb\_tpg & 几何计数断言 + 921,600 像素逐像素比对 & PASS \\
+tb\_pulse\_sync & 异步双钟 100 脉冲 1:1 传递 & PASS \\
+tb\_cdc4phase & 异步双钟 200 个随机 23bit 数据完整性 & PASS \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Step1 阶段抓到的 5 个真缺陷}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{clp{7.5cm}}
+\toprule
+\textbf{\#} & \textbf{现象} & \textbf{根因与修复} \\
+\midrule
+1 & 串化器溢出（cnt=13） & 源满速发 beat（应为 1/4 占空）$\to$ 全体加 4 分频 \\
+2 & CDC 隔包丢 & TB \texttt{wait(!busy)} 同沿竞态 $\to$ 显式等握手完成 \\
+3 & TPG 无输出 & \texttt{pres} 漏复位（上电 X）$\to$ 补复位分支 \\
+4 & flags 全毁 & hex 字段 2 字符超过 2bit 向量限制 $\to$ 改单字符 \\
+5 & TB 编译错 & 缺 \texttt{`timescale} 指令 $\to$ 补上 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{okbox}{这 5 个缺陷的价值}
+全部 5 个都在\textbf{仿真阶段}发现并修复，没有一个留到上板。\\[4pt]
+这正是"金标准 + 逐位比对 + 严格 TB"方法论的价值——
+上板调试一次的成本（综合 20 分钟 + 下载 + 示波器测量 + 重新综合）
+远高于在仿真里跑几十秒定位问题。
+\end{okbox}
+
+% ============================================================
+\section{上板挂载说明}
+
+\subsection{在官方例程中的位置}
+
+Step1 的模块\textbf{不改变}官方 ISP$\to$DDR$\to$HDMI 主线，是纯旁路分支：
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+isp_top 输出（96bit AXI-S）
+    │
+    ├──> data_96bit_to_128bit ──> DDR2 ──> HDMI（主线，原封不动）
+    │
+    └──> detect_top（视觉分支）
+             │
+             ├── ser96to24 ──> 1ppc ──> HSV/阈值/平滑/质心（Step2）
+             │
+             └── 直通输出（与输入逐拍一致，TB 已断言 passthru_mism=0）
+\end{Verbatim}
+
+\subsection{挂载步骤（给上板组）}
+
+\begin{enumerate}
+  \item 在 \texttt{design\_top\_wrapper.v} 中找到 \texttt{isp\_top} 的实例
+  \item 把它的输出（\texttt{O\_tdata / O\_tvalid / O\_tuser / O\_tlast}）
+        \textbf{并线}接到 \texttt{detect\_top} 的输入（并线，不是串联）
+  \item \texttt{detect\_top} 的 \texttt{O\_tready} 悬空或接常量 1（模块内部已固定为 1）
+  \item 综合：确认无新警告
+  \item 上板：用 ChipWatcher 抓 \texttt{t\_valid} 与 \texttt{t\_tick}，确认每帧有脉冲
+\end{enumerate}
+
+\subsection{资源占用}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{lll}
+\toprule
+\textbf{模块} & \textbf{资源估算} & \textbf{说明} \\
+\midrule
+ser96to24 & $<$ 200 LUT + 8$\times$26bit 分布式 RAM & FIFO 很小 \\
+tpg\_720p & $<$ 300 LUT & 只有计数器与比较器 \\
+pulse\_sync & $<$ 10 LUT & 4 个触发器 \\
+cdc\_4phase & $<$ 100 LUT & 握手逻辑 \\
+\midrule
+\textbf{Step1 合计} & \textbf{$<$ 610 LUT} & 约占 PH1P35 的 1.6\% \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{tipbox}{为什么资源这么少}
+因为 Step1 只做"搬运"——没有乘法、没有除法、没有大缓存。\\[4pt]
+真正的资源消耗在后面：
+HSV 查表（256$\times$12 ROM）、行缓存（2$\times$1280bit）、
+运动检测帧缓存（115KB ERAM）。
+\end{tipbox}

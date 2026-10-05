@@ -1,0 +1,103 @@
+[
+  {
+    "group": "awb",
+    "time": "2026-10-05T08:51:13.582Z",
+    "source": "ChipWatcher accessibility value table",
+    "fields": {
+      "dbg_awb_b_gain[19:0]": 71133,
+      "dbg_awb_r_gain[19:0]": 67065,
+      "dbg_awb_stat_beats[31:0]": 230400,
+      "dbg_awb_total_beats[31:0]": 230400
+    },
+    "binary": {
+      "dbg_awb_b_gain[19:0]": "00010001010111011101",
+      "dbg_awb_r_gain[19:0]": "00010000010111111001",
+      "dbg_awb_stat_beats[31:0]": "00000000000000111000010000000000",
+      "dbg_awb_total_beats[31:0]": "00000000000000111000010000000000"
+    }
+  },
+  {
+    "group": "ddr",
+    "time": "2026-10-05T08:55:32.865Z",
+    "source": "ChipWatcher accessibility value table",
+    "fields": {
+      "dbg_ddr_flags[2:0]": 6
+    },
+    "binary": {
+      "dbg_ddr_flags[2:0]": "110"
+    }
+  },
+  {
+    "group": "mipi",
+    "time": "2026-10-05T08:56:57.430Z",
+    "source": "ChipWatcher accessibility value table",
+    "fields": {
+      "dbg_frames[31:0]": 57304,
+      "dbg_lines[10:0]": 157,
+      "dbg_mipi_flags[3:0]": 8
+    },
+    "binary": {
+      "dbg_frames[31:0]": "00000000000000001101111111011000",
+      "dbg_lines[10:0]": "00010011101",
+      "dbg_mipi_flags[3:0]": "1000"
+    }
+  },
+  {
+    "group": "read",
+    "time": "2026-10-05T08:58:16.547Z",
+    "source": "ChipWatcher accessibility value table",
+    "fields": {
+      "dbg_read_corrupt": 0,
+      "dbg_underflow_count[15:0]": 1
+    },
+    "binary": {
+      "dbg_read_corrupt": "0",
+      "dbg_underflow_count[15:0]": "0000000000000001"
+    }
+  },
+  {
+    "group": "write",
+    "time": "2026-10-05T08:59:20.673Z",
+    "source": "ChipWatcher accessibility value table",
+    "fields": {
+      "dbg_frame_overflow": 0,
+      "dbg_overflow_count[15:0]": 0,
+      "dbg_previous_overflow": 0
+    },
+    "binary": {
+      "dbg_frame_overflow": "0",
+      "dbg_overflow_count[15:0]": "0000000000000000",
+      "dbg_previous_overflow": "0"
+    }
+  },
+  {
+    "group": "read",
+    "time": "2026-10-05T09:02:17.350Z",
+    "source": "ChipWatcher accessibility value table",
+    "fields": {
+      "dbg_read_corrupt": 0,
+      "dbg_underflow_count[15:0]": 1
+    },
+    "binary": {
+      "dbg_read_corrupt": "0",
+      "dbg_underflow_count[15:0]": "0000000000000001"
+    }
+  },
+  {
+    "group": "camera",
+    "time": "2026-10-05T09:05:45.021Z",
+    "source": "ChipWatcher accessibility value table",
+    "fields": {
+      "dbg_ae[15:0]": 1991,
+      "dbg_ag[15:0]": 80,
+      "dbg_cam_flags[4:0]": 27,
+      "dbg_sensor_id[15:0]": 61003
+    },
+    "binary": {
+      "dbg_ae[15:0]": "0000011111000111",
+      "dbg_ag[15:0]": "0000000001010000",
+      "dbg_cam_flags[4:0]": "11011",
+      "dbg_sensor_id[15:0]": "1110111001001011"
+    }
+  }
+]

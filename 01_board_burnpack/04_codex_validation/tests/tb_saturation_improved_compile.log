@@ -1,0 +1,16 @@
+Model Technology ModelSim SE-64 vlog 10.4 Compiler 2014.12 Dec  3 2014
+Start time: 14:57:56 on Oct 05,2026
+vlog -sv D:\SC520_display_burnpack\02_TD_project_rebuild\lab_ex1\user_source\hdl_source\isp\isp_top.v D:\SC520_display_burnpack\04_codex_validation\tb_saturation_improved.sv 
+-- Compiling module isp_top
+-- Compiling module axis_gamma_rgb96
+-- Compiling module axis_crop_rgb96
+-- Compiling module axis_saturation_rgb96
+-- Compiling module tb_saturation_improved
+
+Top level modules:
+	isp_top
+	axis_gamma_rgb96
+	axis_crop_rgb96
+	tb_saturation_improved
+End time: 14:57:56 on Oct 05,2026, Elapsed time: 0:00:00
+Errors: 0, Warnings: 0

@@ -1,0 +1,63 @@
+# ---- 安路 TD 工具链产物（可由工具链重新生成，不入库）----
+*.db
+*.qdb
+*.wlf
+*.jou
+*.timing
+*.timingsummary
+*.xdv
+*.ipc
+*.status
+*.rpt.bak
+
+# TD 运行目录 / 布局布线中间态
+*_Runs/
+*_build/
+td_project/log/
+td_project/chip_debugger/
+**/cw/compiled.bit
+
+# ---- ModelSim 仿真工作区 ----
+work/
+work_build/
+sim_out/
+transcript
+modelsim.ini
+vsim.wlf
+*.logw
+
+# ---- 构建 / 生成型测试向量（由 tools/gen_vectors.py 重新生成）----
+# 单个 >1MB 的 .hex 是逐像素/逐拍展开的向量，体积大且完全可再生
+sim/*.hex
+**/sim/*.hex
+*.hex.raw
+
+# ---- Python / Node 依赖与缓存 ----
+__pycache__/
+*.pyc
+node_modules/
+package-lock.json
+
+# ---- LaTeX 中间产物 ----
+*.aux
+*.fls
+*.fdb_latexmk
+*.out
+*.toc
+*.xdv
+
+# ---- 编辑器 / 系统 ----
+.vscode/
+.idea/
+*.bak
+*.tmp
+*~
+~$*
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# ---- 厂商大体量原始压缩包（官方渠道可再下载，不入库）----
+# 例程 zip / ModelSim 安装包 / IPUG / SWUG 等，见 docs/03_收录与排除清单.md
+*.zip
+!docs/**/*.zip

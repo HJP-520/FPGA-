@@ -1,0 +1,139 @@
+===== tb_pwm : FAIL =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_pwm -do "run -all; quit -f" 
+# Start time: 00:43:51 on Sep 19,2026
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# MISM meas=0 got x=74999 y=74999 len=999999 | exp x=75000 y=75000 len=1000000
+# MISM meas=1 got x=59999 y=99999 len=999999 | exp x=60000 y=100000 len=1000000
+# TB_RESULT: FAIL mism=2
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step3_closed_loop/03_project/tb/tb_pwm.v(64)
+#    Time: 80000070 ns  Iteration: 1  Instance: /tb_pwm
+# End time: 00:43:54 on Sep 19,2026, Elapsed time: 0:00:03
+# Errors: 0, Warnings: 0
+
+===== tb_detect_chain : FAIL =====
+-- sim tail --
+# CENTROID_ALIGN_WARN: sof at x=1340 y=0 t=79020221000
+# CENTROID_ALIGN_WARN: sof at x=1339 y=0 t=79048893000
+# CENTROID_ALIGN_WARN: sof at x=1338 y=0 t=79077565000
+# CENTROID_ALIGN_WARN: sof at x=1337 y=0 t=79106237000
+# CENTROID_ALIGN_WARN: sof at x=1336 y=0 t=79134909000
+# CENTROID_ALIGN_WARN: sof at x=1335 y=0 t=79163581000
+# CENTROID_ALIGN_WARN: sof at x=1334 y=0 t=79192253000
+# CENTROID_ALIGN_WARN: sof at x=1333 y=0 t=79220925000
+# CENTROID_ALIGN_WARN: sof at x=1332 y=0 t=79249597000
+# CENTROID_ALIGN_WARN: sof at x=1331 y=0 t=79278269000
+# CENTROID_ALIGN_WARN: sof at x=1330 y=0 t=79306941000
+# CENTROID_ALIGN_WARN: sof at x=1329 y=0 t=79335613000
+# CENTROID_ALIGN_WARN: sof at x=1328 y=0 t=79364285000
+# CENTROID_ALIGN_WARN: sof at x=1327 y=0 t=79392957000
+# CENTROID_ALIGN_WARN: sof at x=1326 y=0 t=79421629000
+# CENTROID_ALIGN_WARN: sof at x=1325 y=0 t=79450301000
+# CENTROID_ALIGN_WARN: sof at x=1324 y=0 t=79478973000
+# CENTROID_ALIGN_WARN: sof at x=1323 y=0 t=79507645000
+# CENTROID_ALIGN_WARN: sof at x=1322 y=0 t=79536317000
+# CENTROID_ALIGN_WARN: sof at x=1321 y=0 t=79564989000
+# CENTROID_ALIGN_WARN: sof at x=1320 y=0 t=79593661000
+# CENTROID_ALIGN_WARN: sof at x=1319 y=0 t=79622333000
+# CENTROID_ALIGN_WARN: sof at x=1318 y=0 t=79651005000
+# CENTROID_ALIGN_WARN: sof at x=1317 y=0 t=79679677000
+# CENTROID_ALIGN_WARN: sof at x=1316 y=0 t=79708349000
+# CENTROID_ALIGN_WARN: sof at x=1315 y=0 t=79737021000
+# CENTROID_ALIGN_WARN: sof at x=1314 y=0 t=79765693000
+# CENTROID_ALIGN_WARN: sof at x=1313 y=0 t=79794365000
+# CENTROID_ALIGN_WARN: sof at x=1312 y=0 t=79823037000
+# CENTROID_ALIGN_WARN: sof at x=1311 y=0 t=79851709000
+# CENTROID_ALIGN_WARN: sof at x=1310 y=0 t=79880381000
+# CENTROID_ALIGN_WARN: sof at x=1309 y=0 t=79909053000
+# CENTROID_ALIGN_WARN: sof at x=1308 y=0 t=79937725000
+# CENTROID_ALIGN_WARN: sof at x=1307 y=0 t=79966397000
+# CENTROID_ALIGN_WARN: sof at x=1306 y=0 t=79995069000
+# TB_RESULT: FAIL frames=0 mism=0 passthru_mism=0
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step2_color_centroid/03_project/tb/tb_detect_chain.v(94)
+#    Time: 80000035 ns  Iteration: 0  Instance: /tb_detect_chain
+# End time: 00:44:03 on Sep 19,2026, Elapsed time: 0:00:07
+# Errors: 0, Warnings: 1
+
+===== tb_vision_top : FAIL =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_vision_top -do "run -all; quit -f" 
+# Start time: 00:44:05 on Sep 19,2026
+# ** Note: (vsim-3813) Design is being optimized due to module recompilation...
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# DUTY_REPORT: x=1500 y=1500 lost=1 status=00000100 passthru_mism=0
+# TB_RESULT: PASS (duty_x=1500, expect python frame compare)
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step4_osd_integration/03_project/tb/tb_vision_top.v(84)
+#    Time: 25804905 ns  Iteration: 1  Instance: /tb_vision_top
+# End time: 00:44:09 on Sep 19,2026, Elapsed time: 0:00:04
+# Errors: 0, Warnings: 0
+
+===== tb_closed_loop : FAIL =====
+-- sim tail --
+Reading D:/ModelSim/tcl/vsim/pref.tcl
+
+# 10.4
+
+# vsim -c -quiet tb_closed_loop -do "run -all; quit -f" 
+# Start time: 00:44:12 on Sep 19,2026
+# ** Note: (vsim-3812) Design is being optimized...
+# 
+# //  ModelSim SE-64 10.4 Dec  3 2014 
+# //
+# //  Copyright 1991-2014 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# run -all
+# TB_RESULT: FAIL timeout frame=9
+# ** Note: $finish    : D:/fpga-ptz-tracker/03_vision/step4_osd_integration/03_project/tb/tb_closed_loop.v(91)
+#    Time: 120000110 ns  Iteration: 0  Instance: /tb_closed_loop
+# End time: 00:44:23 on Sep 19,2026, Elapsed time: 0:00:11
+# Errors: 0, Warnings: 0
+

@@ -1,0 +1,30 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dD:/fpga-ptz-tracker/03_vision/step2_color_centroid/03_project/sim
+vprobe
+!s110 1789745976
+!i10b 1
+!s100 cnDFj6daofeVNeFV@@@9?0
+I:DfZ1:@Y4b2bAY@l`ZeI=0
+VDg1SIo80bB@j0V0VzS_@n1
+R0
+w1789745976
+8probe.v
+Fprobe.v
+L0 1
+OL;L;10.4;61
+r1
+!s85 0
+31
+!s108 1789745976.804000
+!s107 probe.v|
+!s90 -quiet|-work|work_p|probe.v|
+!i113 0
+o-quiet -work work_p -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
