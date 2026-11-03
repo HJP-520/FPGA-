@@ -1,0 +1,14 @@
+{
+  "256": {
+    "local_dark_stroke_recall": 1.0,
+    "global_dark_stroke_recall": 0.6442622950819672,
+    "local_background_white": 0.9493866310606692,
+    "global_background_white": 0.5030459818075607
+  },
+  "1280": {
+    "local_dark_stroke_recall": 1.0,
+    "global_dark_stroke_recall": 0.6530416666666666,
+    "local_background_white": 0.9999810606060606,
+    "global_background_white": 0.5032809714795009
+  }
+}

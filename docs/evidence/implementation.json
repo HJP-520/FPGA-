@@ -1,0 +1,28 @@
+{
+  "baseline": "view_manual_v17, 2026-11-01",
+  "production_source_count": 215,
+  "recorded_rtl_tasks": 65,
+  "packaged_current_only_rtl_tasks": 41,
+  "slices": 20068,
+  "slice_capacity": 21216,
+  "eram": 71,
+  "eram_capacity": 108,
+  "dsp": 28,
+  "dsp_capacity": 40,
+  "registers": 17964,
+  "register_capacity": 42432,
+  "setup_wns_ps": 250,
+  "hold_wns_ps": 20,
+  "sta_coverage_percent": 95.53,
+  "bit_sha256": "e0c147ed5133b1bdc336799fa405b0aab4d65b9b33572a5eb34633a473f3b020",
+  "bit_bytes": 1789493,
+  "original_records_sha256": {
+    "01_bit/manifest.json": "cad9a96443729fc7956e1908d0440fb79233e298ba1b4387f69132b2d8499053",
+    "reports/verification.json": "919d3ac4044277fa0eb07133cd478c8eda2993ad96f550de067708ffa8f3c76d",
+    "reports/syn.json": "6b97bc656b319f04d0bf06584e86df5895ed5f07943d426247c280446548a21f",
+    "reports/phy_seed9.json": "475a852a83e32e0643ad1121413d1fada583f3833d308f1fbd597b723d1f528d",
+    "reports/seed9/final_timing.rpt": "30c95f20adb422809a71e12209bde5557967327cbd52be4f21c9c4e4cad4df43",
+    "reports/seed9/guardband_timing.rpt": "d5a7da649a9d34803477ce4105637794b1bf4c7e668a99fff22c21580a2b842c"
+  },
+  "packaging_scope": "RTL is byte-identical; original paths, logs, historical reference implementations and old firmware are not included. Build/verification wrappers adapted for a clean checkout."
+}

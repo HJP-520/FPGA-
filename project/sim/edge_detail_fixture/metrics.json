@@ -1,0 +1,75 @@
+{
+  "scope": "deterministic synthetic RGB scenes; edge-pair counts, not measured camera accuracy",
+  "threshold": 60,
+  "small_image": [
+    128,
+    64
+  ],
+  "scenes": {
+    "noise6": {
+      "old_pairs": 31,
+      "new_pairs": 19,
+      "old_pairs_retained": 19
+    },
+    "noise10": {
+      "old_pairs": 579,
+      "new_pairs": 439,
+      "old_pairs_retained": 439
+    },
+    "noise14": {
+      "old_pairs": 1421,
+      "new_pairs": 1147,
+      "old_pairs_retained": 1144
+    },
+    "isolated": {
+      "old_pairs": 0,
+      "new_pairs": 0,
+      "old_pairs_retained": 0
+    },
+    "weak_vertical": {
+      "old_pairs": 124,
+      "new_pairs": 124,
+      "old_pairs_retained": 124
+    },
+    "weak_horizontal": {
+      "old_pairs": 124,
+      "new_pairs": 124,
+      "old_pairs_retained": 124
+    },
+    "weak_diagonal": {
+      "old_pairs": 123,
+      "new_pairs": 123,
+      "old_pairs_retained": 123
+    },
+    "thin_vertical": {
+      "old_pairs": 124,
+      "new_pairs": 124,
+      "old_pairs_retained": 124
+    },
+    "thin_horizontal": {
+      "old_pairs": 124,
+      "new_pairs": 124,
+      "old_pairs_retained": 124
+    },
+    "thin_diagonal": {
+      "old_pairs": 0,
+      "new_pairs": 62,
+      "old_pairs_retained": 0
+    },
+    "circle": {
+      "old_pairs": 227,
+      "new_pairs": 227,
+      "old_pairs_retained": 227
+    },
+    "corner": {
+      "old_pairs": 123,
+      "new_pairs": 123,
+      "old_pairs_retained": 123
+    },
+    "mixed": {
+      "old_pairs": 587,
+      "new_pairs": 542,
+      "old_pairs_retained": 500
+    }
+  }
+}

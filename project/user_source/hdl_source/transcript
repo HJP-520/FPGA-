@@ -1,0 +1,8 @@
+# vsim -c -onfinish exit tb_edge_mode -do "onbreak {quit -code 1 -f}; onerror {quit -code 1 -f}; run -all; quit -f" 
+# Start time: 23:20:51 on Oct 08,2026
+# ** Error: (vsim-19) Failed to access library 'work' at "work".
+# 
+# No such file or directory. (errno = ENOENT)
+# Error loading design
+# End time: 23:20:51 on Oct 08,2026, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 0

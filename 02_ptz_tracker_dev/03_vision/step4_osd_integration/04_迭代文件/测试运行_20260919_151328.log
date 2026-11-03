@@ -1,8 +1,0 @@
-===== tb_osd_track : FAIL =====
--- compile --
-** Error: (vlog-13069) D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_osd_track.v(57): near "end": syntax error, unexpected end, expecting ')' or ','.
-
-** Error: (vlog-13069) D:\fpga-ptz-tracker\03_vision\step4_osd_integration\03_project\tb\tb_osd_track.v(72): near "else": syntax error, unexpected else.
--- sim tail --
-
-

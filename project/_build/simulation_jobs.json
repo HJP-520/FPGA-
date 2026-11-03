@@ -1,0 +1,458 @@
+[
+  {
+    "name": "VIEW_MANUAL_KEYS",
+    "files": [
+      "user_source/hdl_source/axis_edge_mode_rgb96.v",
+      "sim/tb_view_manual.sv"
+    ],
+    "top": "tb_view_manual_keys",
+    "flags": []
+  },
+  {
+    "name": "VIEW_MANUAL_CTRL",
+    "files": [
+      "user_source/hdl_source/axis_edge_mode_rgb96.v",
+      "user_source/hdl_source/vision_track.v",
+      "user_source/hdl_source/servo/gimbal_center.v",
+      "user_source/hdl_source/servo/pwm_servo.v",
+      "user_source/hdl_source/servo/track_servo_ctrl.v",
+      "sim/tb_view_manual.sv"
+    ],
+    "top": "tb_view_manual_ctrl",
+    "flags": []
+  },
+  {
+    "name": "EDGE_DETAIL720P",
+    "files": [
+      "user_source/hdl_source/axis_edge_mode_rgb96.v",
+      "user_source/hdl_source/isp/edge_detect_96.v",
+      "sim/tb_edge_detail.sv"
+    ],
+    "top": "tb_edge_detail720p",
+    "flags": [
+      "-DEDGE_RAM_SIM"
+    ]
+  },
+  {
+    "name": "MANUAL_SMOOTH_UNIT",
+    "files": [
+      "user_source/hdl_source/servo/track_servo_ctrl.v",
+      "sim/tb_manual_smooth_unit.sv"
+    ],
+    "top": "tb_manual_smooth_unit",
+    "flags": []
+  },
+  {
+    "name": "MANUAL_SMOOTH_CTRL",
+    "files": [
+      "user_source/hdl_source/vision_track.v",
+      "user_source/hdl_source/servo/gimbal_center.v",
+      "user_source/hdl_source/servo/pwm_servo.v",
+      "user_source/hdl_source/servo/track_servo_ctrl.v",
+      "sim/tb_manual_smooth_ctrl.sv"
+    ],
+    "top": "tb_manual_smooth_ctrl",
+    "flags": []
+  },
+  {
+    "name": "MANUAL_SMOOTH_PWM",
+    "files": [
+      "user_source/hdl_source/vision_track.v",
+      "user_source/hdl_source/servo/gimbal_center.v",
+      "user_source/hdl_source/servo/pwm_servo.v",
+      "user_source/hdl_source/servo/track_servo_ctrl.v",
+      "sim/tb_manual_smooth_pwm.sv"
+    ],
+    "top": "tb_manual_smooth_pwm",
+    "flags": []
+  },
+  {
+    "name": "LOCAL_PROTOCOL",
+    "files": [
+      "user_source/hdl_source/axis_edge_mode_rgb96.v",
+      "sim/tb_local_protocol.sv"
+    ],
+    "top": "tb_local_protocol",
+    "flags": [
+      "-DBINARY_DETAIL_SIM"
+    ]
+  },
+  {
+    "name": "BINARY_DETAIL",
+    "files": [
+      "user_source/hdl_source/axis_edge_mode_rgb96.v",
+      "sim/tb_binary_detail.sv"
+    ],
+    "top": "tb_binary_detail",
+    "flags": [
+      "-DBINARY_DETAIL_SIM"
+    ]
+  },
+  {
+    "name": "BINARY_DETAIL720P",
+    "files": [
+      "user_source/hdl_source/axis_edge_mode_rgb96.v",
+      "sim/tb_binary_detail.sv"
+    ],
+    "top": "tb_binary_detail",
+    "flags": [
+      "-DBINARY_DETAIL_SIM",
+      "-Ptb_binary_detail.W=1280",
+      "-Ptb_binary_detail.H=720",
+      "-Ptb_binary_detail.F=3"
+    ]
+  },
+  {
+    "name": "DETAIL_CHAIN",
+    "files": [
+      "user_source/hdl_source/axis_edge_mode_rgb96.v",
+      "user_source/hdl_source/isp/edge_detect_96.v",
+      "user_source/hdl_source/data_96bit_to_128bit.v",
+      "sim/tb_detail_chain.sv"
+    ],
+    "top": "tb_detail_chain",
+    "flags": [
+      "-DBINARY_DETAIL_SIM",
+      "-DEDGE_RAM_SIM"
+    ]
+  },
+  {
+    "name": "SMOOTH_UNIT",
+    "files": [
+      "user_source/hdl_source/servo/track_servo_ctrl.v",
+      "sim/tb_smooth_unit.sv"
+    ],
+    "top": "tb_smooth_unit",
+    "flags": []
+  },
+  {
+    "name": "SMOOTH_PWM",
+    "files": [
+      "user_source/hdl_source/servo/track_servo_ctrl.v",
+      "user_source/hdl_source/servo/pwm_servo.v",
+      "sim/tb_smooth_unit.sv"
+    ],
+    "top": "tb_smooth_pwm",
+    "flags": []
+  },
+  {
+    "name": "SMOOTH_CTRL",
+    "files": [
+      "user_source/hdl_source/vision_track.v",
+      "user_source/hdl_source/servo/gimbal_center.v",
+      "user_source/hdl_source/servo/pwm_servo.v",
+      "user_source/hdl_source/servo/track_servo_ctrl.v",
+      "sim/tb_smooth_ctrl.sv"
+    ],
+    "top": "tb_smooth_ctrl",
+    "flags": []
+  },
+  {
+    "name": "CHASE_CTRL",
+    "files": [
+      "user_source/hdl_source/vision_track.v",
+      "user_source/hdl_source/servo/gimbal_center.v",
+      "user_source/hdl_source/servo/pwm_servo.v",
+      "user_source/hdl_source/servo/track_servo_ctrl.v",
+      "sim/tb_chase_ctrl.sv"
+    ],
+    "top": "tb_chase_ctrl",
+    "flags": []
+  },
+  {
+    "name": "BINARY_720P",
+    "files": [
+      "user_source/hdl_source/axis_edge_mode_rgb96.v",
+      "sim/tb_adaptive_binary.sv"
+    ],
+    "top": "tb_binary_720p",
+    "flags": []
+  },
+  {
+    "name": "BINARY_CONTROLS",
+    "files": [
+      "user_source/hdl_source/axis_edge_mode_rgb96.v",
+      "sim/tb_binary_controls.sv"
+    ],
+    "top": "tb_binary_controls",
+    "flags": []
+  },
+  {
+    "name": "BINARY_HUD",
+    "files": [
+      "user_source/hdl_source/ui_hud_v17_r1.v",
+      "sim/tb_binary_controls.sv"
+    ],
+    "top": "tb_binary_hud",
+    "flags": [
+      "-DUI_FONT_SIM"
+    ]
+  },
+  {
+    "name": "HOME110",
+    "files": [
+      "user_source/hdl_source/vision_track.v",
+      "user_source/hdl_source/servo/gimbal_center.v",
+      "user_source/hdl_source/servo/pwm_servo.v",
+      "user_source/hdl_source/servo/track_servo_ctrl.v",
+      "sim/tb_home110.sv"
+    ],
+    "top": "tb_home110",
+    "flags": []
+  },
+  {
+    "name": "HOME110_CTRL",
+    "files": [
+      "user_source/hdl_source/vision_track.v",
+      "user_source/hdl_source/servo/gimbal_center.v",
+      "user_source/hdl_source/servo/pwm_servo.v",
+      "user_source/hdl_source/servo/track_servo_ctrl.v",
+      "sim/tb_home110_ctrl.sv"
+    ],
+    "top": "tb_home110_ctrl",
+    "flags": []
+  },
+  {
+    "name": "BLUE_THRESHOLD",
+    "files": [
+      "user_source/hdl_source/vision_track.v",
+      "sim/tb_blue_threshold.sv"
+    ],
+    "top": "tb_blue_threshold",
+    "flags": []
+  },
+  {
+    "name": "COLOUR_REGIONS",
+    "files": [
+      "user_source/hdl_source/vision_track.v",
+      "sim/tb_colour_regions.sv"
+    ],
+    "top": "tb_colour_regions",
+    "flags": [
+      "-DTRACK_RAM_SIM"
+    ]
+  },
+  {
+    "name": "COLOUR_RGB",
+    "files": [
+      "user_source/hdl_source/vision_track.v",
+      "sim/tb_colour_rgb.sv"
+    ],
+    "top": "tb_colour_rgb",
+    "flags": [
+      "-DTRACK_RAM_SIM"
+    ]
+  },
+  {
+    "name": "BLUE_720P",
+    "files": [
+      "user_source/hdl_source/vision_track.v",
+      "sim/tb_blue_720p.sv"
+    ],
+    "top": "tb_blue_720p",
+    "flags": [
+      "-DTRACK_RAM_SIM"
+    ]
+  },
+  {
+    "name": "FONT_COMPACT",
+    "files": [
+      "user_source/hdl_source/ui_hud_v17_r1.v",
+      "sim/tb_font_compact.sv"
+    ],
+    "top": "tb_font_compact",
+    "flags": [
+      "-DUI_FONT_SIM"
+    ]
+  },
+  {
+    "name": "VIDEO_CHAIN",
+    "files": [
+      "user_source/hdl_source/axis_edge_mode_rgb96.v",
+      "user_source/hdl_source/isp/edge_detect_96.v",
+      "user_source/hdl_source/data_96bit_to_128bit.v",
+      "sim/tb_video_chain.sv"
+    ],
+    "top": "tb_video_chain",
+    "flags": [
+      "-DEDGE_RAM_SIM"
+    ]
+  },
+  {
+    "name": "CENTER_CTRL",
+    "files": [
+      "user_source/hdl_source/vision_track.v",
+      "user_source/hdl_source/servo/gimbal_center.v",
+      "user_source/hdl_source/servo/pwm_servo.v",
+      "user_source/hdl_source/servo/track_servo_ctrl.v",
+      "sim/tb_center_ctrl.sv"
+    ],
+    "top": "tb_center_ctrl",
+    "flags": []
+  },
+  {
+    "name": "MANUAL_FAST",
+    "files": [
+      "user_source/hdl_source/vision_track.v",
+      "user_source/hdl_source/servo/gimbal_center.v",
+      "user_source/hdl_source/servo/pwm_servo.v",
+      "user_source/hdl_source/servo/track_servo_ctrl.v",
+      "sim/tb_manual_fast.sv"
+    ],
+    "top": "tb_manual_fast",
+    "flags": []
+  },
+  {
+    "name": "SERVO_DELAY",
+    "files": [
+      "user_source/hdl_source/servo/gimbal_center.v",
+      "sim/tb_servo_delay.sv"
+    ],
+    "top": "tb_servo_delay",
+    "flags": []
+  },
+  {
+    "name": "SETTLED_CTRL",
+    "files": [
+      "user_source/hdl_source/vision_track.v",
+      "user_source/hdl_source/servo/gimbal_center.v",
+      "user_source/hdl_source/servo/pwm_servo.v",
+      "user_source/hdl_source/servo/track_servo_ctrl.v",
+      "sim/tb_settled_ctrl.sv"
+    ],
+    "top": "tb_settled_ctrl",
+    "flags": []
+  },
+  {
+    "name": "MANUAL_PROFILE",
+    "files": [
+      "user_source/hdl_source/vision_track.v",
+      "user_source/hdl_source/servo/gimbal_center.v",
+      "user_source/hdl_source/servo/pwm_servo.v",
+      "user_source/hdl_source/servo/track_servo_ctrl.v",
+      "sim/tb_manual_profile.sv"
+    ],
+    "top": "tb_manual_profile",
+    "flags": []
+  },
+  {
+    "name": "RED_REGIONS",
+    "files": [
+      "user_source/hdl_source/vision_track.v",
+      "sim/tb_red_regions.sv"
+    ],
+    "top": "tb_red_regions",
+    "flags": [
+      "-DTRACK_RAM_SIM"
+    ]
+  },
+  {
+    "name": "RED_720P",
+    "files": [
+      "user_source/hdl_source/vision_track.v",
+      "sim/tb_red_720p.sv"
+    ],
+    "top": "tb_red_720p",
+    "flags": [
+      "-DTRACK_RAM_SIM"
+    ]
+  },
+  {
+    "name": "TRACKING_KEYS",
+    "files": [
+      "user_source/hdl_source/axis_edge_mode_rgb96.v",
+      "user_source/hdl_source/vision_track.v",
+      "user_source/hdl_source/servo/gimbal_center.v",
+      "user_source/hdl_source/servo/pwm_servo.v",
+      "user_source/hdl_source/servo/track_servo_ctrl.v",
+      "sim/tb_tracking_keys.sv"
+    ],
+    "top": "tb_tracking_keys",
+    "flags": []
+  },
+  {
+    "name": "DISPLAY_CONTROLS",
+    "files": [
+      "user_source/hdl_source/ui_hud_v17_r1.v",
+      "sim/tb_display_controls.sv"
+    ],
+    "top": "tb_display_controls",
+    "flags": [
+      "-DUI_FONT_SIM"
+    ]
+  },
+  {
+    "name": "TRACK_SERVO",
+    "files": [
+      "user_source/hdl_source/vision_track.v",
+      "user_source/hdl_source/servo/gimbal_center.v",
+      "user_source/hdl_source/servo/pwm_servo.v",
+      "user_source/hdl_source/servo/track_servo_ctrl.v",
+      "sim/tb_track_servo.sv"
+    ],
+    "top": "tb_track_servo",
+    "flags": []
+  },
+  {
+    "name": "MANUAL",
+    "files": [
+      "user_source/hdl_source/vision_track.v",
+      "user_source/hdl_source/servo/gimbal_center.v",
+      "user_source/hdl_source/servo/pwm_servo.v",
+      "user_source/hdl_source/servo/track_servo_ctrl.v",
+      "sim/tb_manual.sv"
+    ],
+    "top": "tb_manual",
+    "flags": []
+  },
+  {
+    "name": "COLOUR",
+    "files": [
+      "user_source/hdl_source/vision_track.v",
+      "sim/tb_colour.sv"
+    ],
+    "top": "tb_colour",
+    "flags": []
+  },
+  {
+    "name": "SERVO_PWM",
+    "files": [
+      "user_source/hdl_source/servo/pwm_servo.v",
+      "sim/tb_pwm.sv"
+    ],
+    "top": "tb_pwm",
+    "flags": []
+  },
+  {
+    "name": "LOGO",
+    "files": [
+      "user_source/hdl_source/ui/logo_rom.v",
+      "user_source/hdl_source/ui/ui_logo_page.v",
+      "sim/tb_logo.sv"
+    ],
+    "top": "tb_logo",
+    "flags": []
+  },
+  {
+    "name": "HUD_TITLE",
+    "files": [
+      "user_source/hdl_source/ui_hud_v17_r1.v",
+      "sim/tb_hud_title.sv"
+    ],
+    "top": "tb_hud_title",
+    "flags": [
+      "-DUI_FONT_SIM"
+    ]
+  },
+  {
+    "name": "NATIVE_TITLE",
+    "files": [
+      "user_source/hdl_source/ui_hud_v17_r1.v",
+      "sim/tb_title.sv"
+    ],
+    "top": "tb_title",
+    "flags": [
+      "-DUI_FONT_SIM"
+    ]
+  }
+]
